@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Arrays.asList;
 
 public class DataStreams {
     String[] hymn = {
@@ -93,7 +94,7 @@ public class DataStreams {
 //                Arrays.stream(words).forEach(System.out::print);
 //                System.out.println(String.join(",", words));
 //                w += words.length;
-                List<String> list = Arrays.asList(words);
+                List<String> list = asList(words);
 //                ll += list.size();
                 Set<String> set = new HashSet<>(list);
 //                System.out.println(set);

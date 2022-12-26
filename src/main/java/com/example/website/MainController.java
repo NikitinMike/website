@@ -9,23 +9,28 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
 public class MainController extends DataStreams {
-    static final Set<String> words = readWordBookFile(new File("D:\\DBWords\\wordbook.txt"));
+//    static final Set<String> words = readWordBookFile(new File("D:\\DBWords\\wordbook.txt"));
     WordsBookRepository repository=null;
     Combiner data = new Combiner("вихри враждебные веют над_нами", null);
+    Hashtable<String,String> wordTable = new Hashtable<>();
 
     public MainController(WordsBookRepository repository) {
-        this.repository = repository;
+//        this.repository = repository;
         System.out.println("ПОБЕДА");
-//        for (String word : words) System.out.print(word+",");
 //        words.stream().sorted().forEach(s -> System.out.print(s + ","));
+        for (String word :  readWordBookFile(new File("D:\\DBWords\\wordbook.txt"))){
+//            System.out.print(word+",");
+            wordTable.put(word.trim().replaceAll("'",""),word);
+        }
+//        wordTable.forEach((k,v) -> System.out.print(k + ":"+v+","));
         System.out.println("победа");
-        System.out.printf("Wordbook %s words%n", words.size());
+        System.out.printf("Wordbook %s words%n", wordTable.size());
     }
 
     @GetMapping("/random")
@@ -48,7 +53,7 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView startPage(Model model) {
         List<String> text = getText("Pushkin.txt").stream()
-                .map(s -> new Combiner(s, repository).randomOut(0))
+                .map(s -> new Combiner(s, repository).randomOut(1))
                 .collect(Collectors.toList());
 //        list.stream().map(Utils::wordSplit).forEach(System.out::println);
         System.out.println("*" + text.size());
