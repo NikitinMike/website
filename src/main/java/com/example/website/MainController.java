@@ -15,17 +15,17 @@ import java.util.stream.Collectors;
 
 @Controller
 public class MainController extends DataStreams {
-//    static final Set<String> words = readWordBook(new File("C:\\DBWords\\wordbook.txt"));
+    static final Set<String> words = readWordBookFile(new File("D:\\DBWords\\wordbook.txt"));
     WordsBookRepository repository=null;
     Combiner data = new Combiner("вихри враждебные веют над_нами", null);
 
     public MainController(WordsBookRepository repository) {
-//        this.repository = repository;
+        this.repository = repository;
         System.out.println("ПОБЕДА");
+//        for (String word : words) System.out.print(word+",");
 //        words.stream().sorted().forEach(s -> System.out.print(s + ","));
         System.out.println("победа");
-//        for (String word : words) System.out.println(word);
-//        System.out.printf("Wordbook %s words%n", words.size());
+        System.out.printf("Wordbook %s words%n", words.size());
     }
 
     @GetMapping("/random")
@@ -47,7 +47,7 @@ public class MainController extends DataStreams {
     @GetMapping("/")
     @ResponseBody
     public ModelAndView startPage(Model model) {
-        List<String> text = getText("NewYear.txt").stream()
+        List<String> text = getText("Pushkin.txt").stream()
                 .map(s -> new Combiner(s, repository).randomOut(0))
                 .collect(Collectors.toList());
 //        list.stream().map(Utils::wordSplit).forEach(System.out::println);

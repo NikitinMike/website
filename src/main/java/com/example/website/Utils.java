@@ -2,7 +2,7 @@ package com.example.website;
 
 public class Utils {
 
-    static int[] f = {1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880};
+    static int[] f = {1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880}; // 0!-9!
 
     static int factorial(int n) {
         if (n < 10) return f[n];
@@ -41,7 +41,7 @@ public class Utils {
     }
 
     public static String wordSplit(String word) {
-        return "[" + String.join("-", word
+        return "[" + String.join("-", word.trim().toLowerCase()
                 .replaceAll("([ёуеыаоэяию])", "$1=")
                 .replaceAll("=([^ёуеыаоэяию]+)$", "$1")
                 .replaceAll("(=[^ёуеыаоэяию]*)([^ёуеыаоэяию])", "$1=$2")
@@ -49,19 +49,4 @@ public class Utils {
                 .replaceAll("=([ьъ])", "$1=")
                 .split("=+")) + "]";
     }
-
-    public static String wordSplit2(String word) {
-//                String.join("-",
-//        words = word.trim().toLowerCase().split("\\s+");
-        word = word.trim().toLowerCase().replaceAll("([ёуеыаоэяию])", "$1=");
-//                        .replaceAll("(#[^ёуеыаоэяию]*)([^ёуеыаоэяию])", "$1#$2")
-//                        .replaceAll("=([^ёуеыаоэяию]*)#", "$1#")
-//                        .replaceAll("=([ьъ])", "$1=")
-//                        .replaceAll("=([^ёуеыаоэяию]+)$", "$1")
-//                        .replaceAll("(^[^ёуеыаоэяию]+)=", "$1")
-//                        .replaceAll("^=+", "")
-        return '[' + word.replaceAll("=+$", "") + ']';
-//                .split("=+"))
-    }
-
 }

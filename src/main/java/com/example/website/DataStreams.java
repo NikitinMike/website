@@ -1,10 +1,11 @@
 package com.example.website;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class DataStreams {
     String[] hymn = {
@@ -69,7 +70,7 @@ public class DataStreams {
                 wordsBookEntities = Collections.singletonList(new WordsBookEntity(word));
 //            System.out.println(wordsBookEntities);
 //            WordsBookEntity [] wordBook = (WordsBookEntity[]) wordsBookEntities.toArray();
-            wordsEntityHashMap.put(word,wordsBookEntities);
+            wordsEntityHashMap.put(word, wordsBookEntities);
         }
 //        for (WordsBookEntity word : wordsEntityList) System.out.println(word);
         //            wordsEntityHashMap.put(word.getWord(),word);
@@ -77,7 +78,7 @@ public class DataStreams {
 //        return null;
     }
 
-    static Set<String> readWordBook(File fileIn) {
+    static Set<String> readWordBookFile(File fileIn) {
         try (BufferedReader reader = Files.newBufferedReader(fileIn.toPath())) {
 //            long l = 0, ll = 0, ls = 0, w = 0;
             Set<String> wordSet = new HashSet<>();
@@ -87,7 +88,7 @@ public class DataStreams {
                 String[] lines = line.split("#");
 //                System.out.print(lines[0]+",");
                 String[] words = lines[1]
-                        .replaceAll("[^ёуеыаоэяию,']","")
+//                        .replaceAll("[^ёуеыаоэяию,']","")
                         .split(",");
 //                Arrays.stream(words).forEach(System.out::print);
 //                System.out.println(String.join(",", words));
@@ -112,10 +113,10 @@ public class DataStreams {
     List<String> getText(String fileName) {
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName)) {
             assert inputStream != null;
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, UTF_8));
             return reader.lines() // .map(s -> s.replaceAll("[-\"'_,!.—?:;\\d\\s]+", " ")
                     .map(s -> s.replaceAll("[^а-яА-ЯёЁ]+", " ")
-                    .trim()).filter(p -> !p.isEmpty())
+                            .trim()).filter(p -> !p.isEmpty())
                     .collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
