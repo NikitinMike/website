@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
 import java.util.Arrays;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,19 +16,12 @@ public class MainController extends DataStreams {
 //    static final Set<String> words = readWordBookFile(new File("D:\\DBWords\\wordbook.txt"));
     WordsBookRepository repository=null;
     Combiner data = new Combiner("вихри враждебные веют над_нами", null);
-    Hashtable<String,String> wordTable = new Hashtable<>();
 
     public MainController(WordsBookRepository repository) {
 //        this.repository = repository;
-        System.out.println("ПОБЕДА");
+//        System.out.println("ПОБЕДА");
 //        words.stream().sorted().forEach(s -> System.out.print(s + ","));
-        for (String word :  readWordBookFile(new File("D:\\DBWords\\wordbook.txt"))){
-//            System.out.print(word+",");
-            wordTable.put(word.trim().replaceAll("'",""),word);
-        }
-//        wordTable.forEach((k,v) -> System.out.print(k + ":"+v+","));
-        System.out.println("победа");
-        System.out.printf("Wordbook %s words%n", wordTable.size());
+//        System.out.println("победа");
     }
 
     @GetMapping("/random")
@@ -53,7 +44,7 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView startPage(Model model) {
         List<String> text = getText("Pushkin.txt").stream()
-                .map(s -> new Combiner(s, repository).randomOut(1))
+                .map(s -> new Combiner(s, repository).randomOut(0))
                 .collect(Collectors.toList());
 //        list.stream().map(Utils::wordSplit).forEach(System.out::println);
         System.out.println("*" + text.size());

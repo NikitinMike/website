@@ -22,6 +22,7 @@ public class Combiner {
     String[] words; // слова
     int[] parts; // какой части речи принадлежит
     Hashtable<String, List<WordsBookEntity>> wordsEntityHashMap;
+    static private Dictionary dictionary = new Dictionary();
 
     public Combiner(String str, WordsBookRepository repository) {
 //        System.out.println(str);
@@ -36,7 +37,8 @@ public class Combiner {
 
     String out(int[] a) {
 //        return stream(a).mapToObj(j -> wordSplit(words[j]) + ' ').collect(joining());
-        return stream(a).mapToObj(j -> words[j] + ' ').collect(joining());
+//        return stream(a).mapToObj(j -> words[j] + ' ').collect(joining());
+        return stream(a).mapToObj(j -> dictionary.getWord(words[j]) + ' ').collect(joining());
     }
 
     int combiner(int n) {
