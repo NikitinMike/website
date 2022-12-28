@@ -40,13 +40,19 @@ public class Utils {
         return out;
     }
 
-    public static String wordSplit(String word) {
-        return "[" + String.join("-", word.trim().toLowerCase()
+    static String tag(String word) {
+        return word.trim().toLowerCase()
                 .replaceAll("([ёуеыаоэяию])", "$1=")
                 .replaceAll("=([^ёуеыаоэяию]+)$", "$1")
                 .replaceAll("(=[^ёуеыаоэяию]*)([^ёуеыаоэяию])", "$1=$2")
                 .replaceAll("=([^ёуеыаоэяию]+)=", "$1=")
                 .replaceAll("=([ьъ])", "$1=")
-                .split("=+")) + "]";
+//                .replaceAll("='","'=")
+//                .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]","")
+                ;
+    }
+
+    public static String wordSplit(String word) {
+        return String.join("-", tag(word).split("=+")).replaceAll("-'","'-");
     }
 }
