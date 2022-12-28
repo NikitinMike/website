@@ -19,7 +19,12 @@ public class Dictionary {
 
     public String getWord(String word) {
 //        System.out.println(word);
-        if (wordTable.containsKey(word)) return wordTable.get(word);
+        if (wordTable.containsKey(word)) word = wordTable.get(word);
+        //            if (word.matches(".*([её]).*"))
+        if (!word.contains("'"))
+            if (word.replaceAll("[^ёуеыаоэяию]+", "").length() == 1)
+                word = word.replaceFirst("([ёуеыаоэяию])", "$1'");
+            else word = word.replaceFirst("([ёе])", "$1'");
         return word;
     }
 }

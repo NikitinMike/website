@@ -43,9 +43,10 @@ public class MainController extends DataStreams {
     @GetMapping("/")
     @ResponseBody
     public ModelAndView startPage(Model model) {
-        List<String> text = getText("Pushkin.txt").stream()
-                .map(s -> new Combiner(s, repository).randomOut(0))
-                .collect(Collectors.toList());
+        List<String> text = getText("Esenin.txt").stream()
+                .map(s -> new Combiner(s, repository).randomOut(0)
+//                        .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб\\s]","")
+                ).collect(Collectors.toList());
 //        list.stream().map(Utils::wordSplit).forEach(System.out::println);
         System.out.println("*" + text.size());
         model.addAttribute("messages", text);
