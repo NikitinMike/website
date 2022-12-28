@@ -40,10 +40,10 @@ public class MainController extends DataStreams {
         return new ModelAndView("page");
     }
 
-    @GetMapping("/")
+    @GetMapping("/file/{file}")
     @ResponseBody
-    public ModelAndView startPage(Model model) {
-        List<String> text = getText("Esenin.txt").stream()
+    public ModelAndView startPage(Model model, @PathVariable String file) {
+        List<String> text = getText(file+".txt").stream()
                 .map(s -> new Combiner(s, repository).randomOut(0)
 //                        .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб\\s]","")
                 ).collect(Collectors.toList());

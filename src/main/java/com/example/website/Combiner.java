@@ -6,8 +6,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import static com.example.website.DataStreams.readWordsBookDB;
-import static com.example.website.Utils.factorial;
-import static com.example.website.Utils.swapClone;
+import static com.example.website.Utils.*;
 import static java.lang.Math.random;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
@@ -38,7 +37,7 @@ public class Combiner {
     String out(int[] a) {
 //        return stream(a).mapToObj(j -> wordSplit(words[j]) + ' ').collect(joining());
 //        return stream(a).mapToObj(j -> words[j] + ' ').collect(joining());
-        return stream(a).mapToObj(j -> dictionary.getWord(words[j]) + ' ').collect(joining());
+        return stream(a).mapToObj(j -> wordSplit(dictionary.getWord(words[j])) + ' ').collect(joining());
     }
 
     int combiner(int n) {
