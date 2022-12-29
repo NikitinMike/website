@@ -48,11 +48,15 @@ public class Utils {
                 .replaceAll("=([^ёуеыаоэяию]+)=", "$1=")
                 .replaceAll("=([ьъ])", "$1=")
 //                .replaceAll("='","'=")
-//                .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]","")
+                .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]","")
                 ;
     }
 
     public static String wordSplit(String word) {
-        return String.join("-", tag(word).split("=+")).replaceAll("-'","'-");
+        return String.join("-", tag(word).split("=+"))
+                .replaceAll("-'","'-")
+                .replaceAll("[ёуеыаоэяию]'","@")
+                .replaceAll("-","|")
+                ;
     }
 }

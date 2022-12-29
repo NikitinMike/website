@@ -37,7 +37,8 @@ public class Combiner {
     String out(int[] a) {
 //        return stream(a).mapToObj(j -> wordSplit(words[j]) + ' ').collect(joining());
 //        return stream(a).mapToObj(j -> words[j] + ' ').collect(joining());
-        return stream(a).mapToObj(j -> wordSplit(dictionary.getWord(words[j])) + ' ').collect(joining());
+        return stream(a).mapToObj(j -> wordSplit(dictionary.getWord(words[j])))
+                .filter(p->!p.isEmpty()).collect(joining("|"));
     }
 
     int combiner(int n) {
