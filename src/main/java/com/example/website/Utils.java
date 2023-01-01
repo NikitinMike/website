@@ -1,7 +1,7 @@
 package com.example.website;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public class Utils {
 
@@ -52,25 +52,24 @@ public class Utils {
                 .replaceAll("=([^ёуеыаоэяию]+)=", "$1=")
                 .replaceAll("=([ьъ])", "$1=")
 //                .replaceAll("(.)'","`$1")
+//                .replaceAll("`(.)","$1")
 //                .replaceAll("`=","=`")
-//                .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]","")
-//                .replaceAll("[ёуеыаоэяию]","")
-                .replaceAll("=+'", "'=");
+//                .replaceAll("-'","'-")
+//                .replaceAll("-","|")
+                .replaceAll("=+'", "'=")
+//                .replaceAll("[ёуеыаоэяию]","@")
+                .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]", "");
     }
 
     public static String wordAnalyse(String word) {
-        return String.join("|", tag(word).split("=+"));
+        return Arrays.stream(tag(word).split("=+"))
+                .map(s -> s.matches(".'|`.") ? s.toUpperCase() : s) // new Locale("en", "EN")
+                .collect(Collectors.joining("|"))
+                .replaceAll("'", "");
     }
 
-    public static Stream<String> wordAnalyseSplit(String word) {
-        return Arrays.stream(tag(word).split("=+"))
-                .map(s->s.matches(".'|`.")?s.toUpperCase():s) // new Locale("en", "EN")
-//                .replaceAll("(.)'","`$1")
-//                .replaceAll("'","")
-//                .replaceAll("-'","'-")
+    public static String wordAnalyseSplit(String word) {
+        return String.join("|", tag(word).split("=+"));
 //                .replaceAll("[ёуеыаоэяию]'","$1")
-//                .replaceAll("-","|")
-//                .replaceAll("`(.)","$1")
-        ;
     }
 }
