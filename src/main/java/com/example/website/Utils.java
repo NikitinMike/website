@@ -1,5 +1,8 @@
 package com.example.website;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class Utils {
 
     static int[] f = {1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880}; // 0!-9!
@@ -49,15 +52,21 @@ public class Utils {
                 .replaceAll("=([ьъ])", "$1=")
 //                .replaceAll("='","'=")
 //                .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]","")
+//                .replaceAll("[ёуеыаоэяию]","")
                 ;
     }
 
     public static String wordSplit(String word) {
-        return String.join("-", tag(word).split("=+"))
-                .replaceAll("-'","'-")
+        return String.join("-", Arrays.stream(tag(word)
+                        .split("=+")).map(s->s.matches(".'")?s.toUpperCase():s)
+                        .collect(Collectors.joining())
+                )
+//                .replaceAll("'","")
+//                .replaceAll("-'","'-")
 //                .replaceAll("[ёуеыаоэяию]'","$1")
-                .replaceAll("-","|")
-                .replaceAll("(.)'","`$1")
+//                .replaceAll("-","|")
+//                .replaceAll("(.)'","$1")
                 ;
+//                .toUpperCase() new java.util.Locale("en", "EN")
     }
 }
