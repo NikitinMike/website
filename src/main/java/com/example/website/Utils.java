@@ -51,21 +51,22 @@ public class Utils {
                 .replaceAll("=([^ёуеыаоэяию]+)=", "$1=")
                 .replaceAll("=([ьъ])", "$1=")
 //                .replaceAll("='","'=")
-//                .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]","")
+                .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]","")
 //                .replaceAll("[ёуеыаоэяию]","")
                 ;
     }
 
     public static String wordSplit(String word) {
         return String.join("-", Arrays.stream(tag(word)
-                        .split("=+")).map(s->s.matches(".'")?s.toUpperCase():s)
+                        .split("=+")).map(s->s.matches(".'|`.")?s.toUpperCase():s)
                         .collect(Collectors.joining())
                 )
 //                .replaceAll("'","")
 //                .replaceAll("-'","'-")
 //                .replaceAll("[ёуеыаоэяию]'","$1")
 //                .replaceAll("-","|")
-//                .replaceAll("(.)'","$1")
+                .replaceAll("(.)'","$1")
+                .replaceAll("`(.)","$1")
                 ;
 //                .toUpperCase() new java.util.Locale("en", "EN")
     }
