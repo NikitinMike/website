@@ -1,7 +1,7 @@
 package com.example.website;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Utils {
 
@@ -45,29 +45,32 @@ public class Utils {
 
     static String tag(String word) {
         return word.trim().toLowerCase()
+                .replaceAll("`(.)", "$1'") // from lopatin's wordbook
                 .replaceAll("([ёуеыаоэяию])", "$1=")
                 .replaceAll("=([^ёуеыаоэяию]+)$", "$1")
                 .replaceAll("(=[^ёуеыаоэяию]*)([^ёуеыаоэяию])", "$1=$2")
                 .replaceAll("=([^ёуеыаоэяию]+)=", "$1=")
                 .replaceAll("=([ьъ])", "$1=")
-//                .replaceAll("='","'=")
-                .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]","")
+//                .replaceAll("(.)'","`$1")
+//                .replaceAll("`=","=`")
+//                .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]","")
 //                .replaceAll("[ёуеыаоэяию]","")
-                ;
+                .replaceAll("=+'", "'=");
     }
 
-    public static String wordSplit(String word) {
-        return String.join("-", Arrays.stream(tag(word)
-                        .split("=+")).map(s->s.matches(".'|`.")?s.toUpperCase():s)
-                        .collect(Collectors.joining())
-                )
+    public static String wordAnalyse(String word) {
+        return String.join("|", tag(word).split("=+"));
+    }
+
+    public static Stream<String> wordAnalyseSplit(String word) {
+        return Arrays.stream(tag(word).split("=+"))
+                .map(s->s.matches(".'|`.")?s.toUpperCase():s) // new Locale("en", "EN")
+//                .replaceAll("(.)'","`$1")
 //                .replaceAll("'","")
 //                .replaceAll("-'","'-")
 //                .replaceAll("[ёуеыаоэяию]'","$1")
 //                .replaceAll("-","|")
-                .replaceAll("(.)'","$1")
-                .replaceAll("`(.)","$1")
-                ;
-//                .toUpperCase() new java.util.Locale("en", "EN")
+//                .replaceAll("`(.)","$1")
+        ;
     }
 }

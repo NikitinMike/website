@@ -87,7 +87,7 @@ public class WordsBookEntity {
     @Override
     public String toString() {
         return "{" + word + ":" +
-                Utils.wordSplit(word)
+                Utils.wordAnalyse(word)
 //                + "iid=" + iid
 //                + ", word='" + word + '\''
                 + notNull("", code)
