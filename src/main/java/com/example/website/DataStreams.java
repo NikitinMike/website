@@ -123,4 +123,20 @@ public class DataStreams {
             throw new RuntimeException(e);
         }
     }
+
+    static Set<String> readLopatinFile(File fileIn) {
+        try (BufferedReader reader = Files.newBufferedReader(fileIn.toPath())) {
+            Set<String> wordSet = new HashSet<>();
+            do {
+                String line = reader.readLine();
+                String[] lines = line.split("%");
+                String[] words = lines[0].split("#");
+//                System.out.print(words[1]+",");
+                wordSet.add(words[1]);
+            } while (reader.ready());
+            return wordSet;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
