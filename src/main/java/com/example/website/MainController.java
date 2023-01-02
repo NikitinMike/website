@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 
 @Controller
 public class MainController extends DataStreams {
-//    static final Set<String> words = readWordBookFile(new File("D:\\DBWords\\wordbook.txt"));
-    WordsBookRepository repository=null;
+    //    static final Set<String> words = readWordBookFile(new File("D:\\DBWords\\wordbook.txt"));
+    WordsBookRepository repository = null;
     Combiner data = new Combiner("вихри враждебные веют над_нами", null);
 
     public MainController(WordsBookRepository repository) {
@@ -43,11 +43,9 @@ public class MainController extends DataStreams {
     @GetMapping("/file/{file}")
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) {
-        List<String> text = getText(file+".txt").stream()
-                .map(s -> new Combiner(s, repository).randomOut(0)
-//                        .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб\\s]","")
-                ).collect(Collectors.toList());
-//        list.stream().map(Utils::wordSplit).forEach(System.out::println);
+        List<String> text = getText(file + ".txt").stream()
+                .map(s -> new Combiner(s, repository).getHash(0) // .randomOut(0)
+                        .toString()).collect(Collectors.toList());
         System.out.println("*" + text.size());
         model.addAttribute("messages", text);
         model.addAttribute("title", "START:" + text.size());

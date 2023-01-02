@@ -58,18 +58,18 @@ public class Utils {
 //                .replaceAll("-","|")
                 .replaceAll("=+'", "'=")
 //                .replaceAll("[ёуеыаоэяию]","@")
-                .replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]", "");
+                ;
     }
 
-    public static String wordAnalyse(String word) {
-        return Arrays.stream(tag(word).split("=+"))
+    public static String wordStrip(String word) {
+        return Arrays.stream(tag(word).replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]", "")
+                        .split("=+"))
                 .map(s -> s.matches(".'|`.") ? s.toUpperCase() : s) // new Locale("en", "EN")
                 .collect(Collectors.joining("|"))
                 .replaceAll("'", "");
     }
 
-    public static String wordAnalyseSplit(String word) {
+    public static String wordAnalyse(String word) {
         return String.join("|", tag(word).split("=+"));
-//                .replaceAll("[ёуеыаоэяию]'","$1")
     }
 }

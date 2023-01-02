@@ -41,6 +41,17 @@ public class Combiner {
                 .filter(p -> !p.isEmpty()).collect(joining(" "));
     }
 
+    String outStrip(int[] a) {
+        return stream(a).mapToObj(j -> wordStrip(dictionary.getWord(words[j])))
+                .filter(p -> !p.isEmpty()).collect(joining(" "));
+    }
+
+    public Hashtable<String,String> getHash(int v){
+        Hashtable<String, String> hashtable = new Hashtable<>();
+        hashtable.put(outStrip(sentence[v]),out(sentence[v]));
+        return hashtable;
+    }
+
     int combiner(int n) {
         if (n > 2) {
             int nf = combiner(n - 1);
