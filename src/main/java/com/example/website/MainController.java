@@ -43,13 +43,13 @@ public class MainController extends DataStreams {
     @GetMapping("/file/{file}")
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) {
-        List<String> text = getText(file + ".txt").stream()
-                .map(s -> new Combiner(s, repository).getHash(0) // .randomOut(0)
-                        .toString()).collect(Collectors.toList());
-        System.out.println("*" + text.size());
+        List<String[]> text = getText(file + ".txt").stream()
+                .map(s -> new Combiner(s, repository).getHash(0)) // .randomOut(0)
+                .collect(Collectors.toList());
+//        System.out.println("*" + text.size());
         model.addAttribute("messages", text);
-        model.addAttribute("title", "START:" + text.size());
-        return new ModelAndView("page");
+//        model.addAttribute("title", "START:" + text.size());
+        return new ModelAndView("pagehash");
     }
 
     @GetMapping("/{i}")

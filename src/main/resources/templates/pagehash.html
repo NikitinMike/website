@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <title th:text="${title}">COMBINER</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <style>
+    </style>
+</head>
+<body>
+<div class="container" align="left">
+    <hr/>
+    <div class="row">
+        <table>
+            <tr th:each="message : ${messages}">
+                <td th:text="${message[0]}"><a href="#">Text ...</a></td>
+                <td> | </td>
+                <td th:text="${message[1]}"><a href="#">Text ...</a></td>
+            </tr>
+        </table>
+    </div>
+    <hr/>
+</div>
+</body>
+</html>

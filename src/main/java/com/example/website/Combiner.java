@@ -46,10 +46,8 @@ public class Combiner {
                 .filter(p -> !p.isEmpty()).collect(joining(" "));
     }
 
-    public Hashtable<String,String> getHash(int v){
-        Hashtable<String, String> hashtable = new Hashtable<>();
-        hashtable.put(outStrip(sentence[v]),out(sentence[v]));
-        return hashtable;
+    public String[] getHash(int v){
+        return new String[]{outStrip(sentence[v]), out(sentence[v])};
     }
 
     int combiner(int n) {

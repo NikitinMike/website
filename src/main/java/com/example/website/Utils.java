@@ -65,11 +65,11 @@ public class Utils {
         return Arrays.stream(tag(word).replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]", "")
                         .split("=+"))
                 .map(s -> s.matches(".'|`.") ? s.toUpperCase() : s) // new Locale("en", "EN")
-                .collect(Collectors.joining("|"))
+                .collect(Collectors.joining("-"))
                 .replaceAll("'", "");
     }
 
     public static String wordAnalyse(String word) {
-        return String.join("|", tag(word).split("=+"));
+        return String.join("-", tag(word).split("=+"));
     }
 }
