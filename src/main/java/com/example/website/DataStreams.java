@@ -116,7 +116,7 @@ public class DataStreams {
             assert inputStream != null;
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, UTF_8));
             return reader.lines() // .map(s -> s.replaceAll("[-\"'_,!.—?:;\\d\\s]+", " ")
-                    .map(s -> s.replaceAll("[^а-яА-ЯёЁ]+", " ")
+                    .map(s -> s.replaceAll("[^а-яА-ЯёЁ`']+", " ")
                             .trim()).filter(p -> !p.isEmpty())
                     .collect(Collectors.toList());
         } catch (IOException e) {

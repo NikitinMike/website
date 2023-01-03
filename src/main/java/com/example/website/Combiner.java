@@ -35,8 +35,6 @@ public class Combiner {
     }
 
     String out(int[] a) {
-//        return stream(a).mapToObj(j -> wordSplit(words[j]) + ' ').collect(joining());
-//        return stream(a).mapToObj(j -> words[j] + ' ').collect(joining());
         return stream(a).mapToObj(j -> wordAnalyse(dictionary.getWord(words[j])))
                 .filter(p -> !p.isEmpty()).collect(joining(" "));
     }
@@ -64,11 +62,9 @@ public class Combiner {
     }
 
     public String randomOut(int v) {
-//        for (String s:words) System.out.print(s+",");System.out.println(words.length);
         if (v == 0) return out(sentence[0]);
         if (words.length > 1) return out(sentence[(int) (random() * amount)]);
         return out(sentence[0]);
-//        return out(comb[(int)(Math.random()*amount)]);
     }
 
     List<String> fullOut() {

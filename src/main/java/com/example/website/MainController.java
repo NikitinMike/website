@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 @Controller
 public class MainController extends DataStreams {
-    //    static final Set<String> words = readWordBookFile(new File("D:\\DBWords\\wordbook.txt"));
     WordsBookRepository repository = null;
     Combiner data = new Combiner("вихри враждебные веют над_нами", null);
 
@@ -43,7 +42,7 @@ public class MainController extends DataStreams {
     @GetMapping("/file/{file}")
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) {
-        List<String[]> text = getText(file + ".txt").stream()
+        List<String[]> text = getText("texts/" + file + ".txt").stream()
                 .map(s -> new Combiner(s, repository).getHash(0)) // .randomOut(0)
                 .collect(Collectors.toList());
 //        System.out.println("*" + text.size());
