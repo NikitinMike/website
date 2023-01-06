@@ -25,11 +25,14 @@ public class Dictionary {
     public String getWord(String word) {
 //        System.out.println(word);
         if (wordTable.containsKey(word)) word = wordTable.get(word);
-        //            if (word.matches(".*([её]).*"))
         if (!word.contains("`")&&!word.contains("'"))
             if (word.replaceAll("[^ёуеыаоэяию]+", "").length() == 1)
                 word = word.replaceFirst("([ёуеыаоэяию])", "$1'");
             else word = word.replaceFirst("(ё)", "$1'");
         return word;
+    }
+
+    public String getGlas(String word){
+        return getWord(word).replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]", "");
     }
 }

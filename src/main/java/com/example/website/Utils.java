@@ -24,15 +24,11 @@ public class Utils {
         return (b == null || 0 == b) ? "" : String.format(",%s=%d", tag, b);
     }
 
-    public static <T> void swap(T[] a, int i, int j) {
-        T t = a[i];
-        a[i] = a[j];
-        a[j] = t;
-    }
+//    public static <T> void swap(T[] a, int i, int j) {T t = a[i];a[i] = a[j];a[j] = t;}
 
-    public static void hackSwap(int[] arr, int i, int j) {
-        arr[i] = (arr[i] + arr[j]) - (arr[j] = arr[i]);
-    }
+//    public static void hackSwap(int[] arr, int i, int j) {
+//        arr[i] = (arr[i] + arr[j]) - (arr[j] = arr[i]);
+//    }
 
     public static int[] swapClone(int[] in, int a) {
         int[] out = in.clone();
@@ -62,8 +58,7 @@ public class Utils {
     }
 
     public static String wordStrip(String word) {
-        return Arrays.stream(tag(word).replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]", "")
-                        .split("=+"))
+        return Arrays.stream(tag(word).split("=+"))
                 .map(s -> s.matches(".'|`.") ? s.toUpperCase() : s) // new Locale("en", "EN")
                 .collect(Collectors.joining("-"))
                 .replaceAll("'", "");
