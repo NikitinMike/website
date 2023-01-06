@@ -29,7 +29,7 @@ public class Dictionary {
         if (!word.contains("`")&&!word.contains("'"))
             if (word.replaceAll("[^ёуеыаоэяию]+", "").length() == 1)
                 word = word.replaceFirst("([ёуеыаоэяию])", "$1'");
-            else word = word.replaceFirst("([ёе])", "$1'");
+            else word = word.replaceFirst("(ё)", "$1'");
         return word;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.website;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,8 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
@@ -21,6 +24,28 @@ public class MainController extends DataStreams {
 //        System.out.println("ПОБЕДА");
 //        words.stream().sorted().forEach(s -> System.out.print(s + ","));
 //        System.out.println("победа");
+    }
+
+    List<String> files(String dir) throws IOException {
+        return Arrays.stream(Objects.requireNonNull(
+                new ClassPathResource(dir).getFile().listFiles()))
+                .map(f->f.getName().replace(".txt",""))
+                .collect(Collectors.toList());
+//        try (Stream<Path> stream = Files.list(Paths.get(dir))) {
+//            return stream
+//                    .filter(file -> !Files.isDirectory(file))
+//                    .map(Path::getFileName)
+//                    .map(Path::toString)
+//                    .collect(Collectors.toList());
+//        }
+    }
+
+    @GetMapping("/")
+    @ResponseBody
+    public ModelAndView main(Model model) throws IOException {
+        model.addAttribute("title", 0);
+        model.addAttribute("messages", files("/texts"));
+        return new ModelAndView("list");
     }
 
     @GetMapping("/random")

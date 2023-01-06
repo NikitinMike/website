@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <title th:text="${title}">COMBINER</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <style>
+    </style>
+</head>
+<body>
+<div class="container" align="left">
+    <hr/>
+    <div class="row">
+        <table>
+            <tr th:each="message : ${messages}">
+                <td>
+                    <a th:href="@{/file/{id}(id=${message})}">
+                        <b th:text="${message}">
+                            link...
+                        </b>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <hr/>
+</div>
+</body>
+</html>

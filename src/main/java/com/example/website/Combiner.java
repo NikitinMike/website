@@ -41,10 +41,11 @@ public class Combiner {
 
     String outStrip(int[] a) {
         return stream(a).mapToObj(j -> wordStrip(dictionary.getWord(words[j])))
-                .filter(p -> !p.isEmpty()).collect(joining(" "));
+                .filter(p -> !p.isEmpty()).collect(joining(" "))
+                .replaceAll("[^ёуеыаоэяиюЁУЕЫАОЭЯИЮ]", "");
     }
 
-    public String[] getHash(int v){
+    public String[] getHash(int v) {
         return new String[]{outStrip(sentence[v]), out(sentence[v])};
     }
 
