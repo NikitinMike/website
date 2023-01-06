@@ -27,10 +27,13 @@ public class MainController extends DataStreams {
 //        System.out.println("победа");
     }
 
-    List<String> files(String dir) throws IOException {
+    List<String> fileResources() throws IOException {
         return Arrays.stream(Objects.requireNonNull(
-                new ClassPathResource(dir).getFile().listFiles()))
-                .map(File::getName).collect(Collectors.toList());
+                new ClassPathResource("/texts").getFile().listFiles()
+        )).map(File::getName).collect(Collectors.toList());
+    }
+
+//    List<String> filesExtra(String dir) throws IOException {
 //        try (Stream<Path> stream = Files.list(Paths.get(dir))) {
 //            return stream
 //                    .filter(file -> !Files.isDirectory(file))
@@ -38,13 +41,13 @@ public class MainController extends DataStreams {
 //                    .map(Path::toString)
 //                    .collect(Collectors.toList());
 //        }
-    }
+//    }
 
     @GetMapping("/")
     @ResponseBody
     public ModelAndView main(Model model) throws IOException {
         model.addAttribute("title", 0);
-        model.addAttribute("messages", files("/texts"));
+        model.addAttribute("messages", fileResources());
         return new ModelAndView("list");
     }
 
