@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Controller
 public class MainController extends DataStreams {
     WordsBookRepository repository = null;
-    Combiner data = new Combiner("вихри враждебные веют над_нами", null);
+    Sentence data = new Sentence("вихри враждебные веют над_нами", null);
 
     public MainController(WordsBookRepository repository) {
 //        this.repository = repository;
@@ -58,7 +58,7 @@ public class MainController extends DataStreams {
         System.out.println();
         System.out.println(s);
         System.out.println("---------------------------------------------");
-        data = new Combiner(s, repository);
+        data = new Sentence(s, repository);
         model.addAttribute("title", "COMBINER:" + data.words.length + "/" + data.amount);
         model.addAttribute("messages", data.fullOut());
         return new ModelAndView("page");
@@ -68,7 +68,7 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) {
         List<String[]> text = getText("texts/" + file).stream()
-                .map(s -> new Combiner(s, repository).getHash(0)) // .randomOut(0)
+                .map(s -> new Sentence(s, repository).getHash(0)) // .randomOut(0)
                 .collect(Collectors.toList());
 //        System.out.println("*" + text.size());
         model.addAttribute("messages", text);
@@ -80,7 +80,7 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView startPageGet(Model model, @PathVariable int i) {
         List<String> list = Arrays.stream(in[i % 4])
-                .map(s -> new Combiner(s.replaceAll("[_,!.—?;:']+", " "), repository).randomOut(1))
+                .map(s -> new Sentence(s.replaceAll("[_,!.—?;:']+", " "), repository).randomOut(1))
                 .collect(Collectors.toList());
         model.addAttribute("messages", list);
         model.addAttribute("title", "START:" + list.size());
