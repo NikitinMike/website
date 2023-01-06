@@ -26,7 +26,7 @@ public class Dictionary {
 //        System.out.println(word);
         if (wordTable.containsKey(word)) word = wordTable.get(word);
         if (!word.contains("`")&&!word.contains("'"))
-            if (word.replaceAll("[^ёуеыаоэяию]+", "").length() == 1)
+            if (word.length() - word.replaceAll("[ёуеыаоэяию]", "").length() == 1)
                 word = word.replaceFirst("([ёуеыаоэяию])", "$1'");
             else word = word.replaceFirst("(ё)", "$1'");
         return word;
