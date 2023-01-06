@@ -41,8 +41,8 @@ public class Combiner {
 
     String outStrip(int[] a) {
         return stream(a).mapToObj(j -> wordStrip(dictionary.getGlas(words[j])))
-                .filter(p -> !p.isEmpty()).collect(joining(" "));
-//                .replaceAll("[^ёуеыаоэяиюЁУЕЫАОЭЯИЮ]", "");
+                .filter(p -> !p.isEmpty()).collect(joining())
+                .replaceAll("-+", "");
     }
 
     public String[] getHash(int v) {

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -29,8 +30,7 @@ public class MainController extends DataStreams {
     List<String> files(String dir) throws IOException {
         return Arrays.stream(Objects.requireNonNull(
                 new ClassPathResource(dir).getFile().listFiles()))
-                .map(f->f.getName().replace(".txt",""))
-                .collect(Collectors.toList());
+                .map(File::getName).collect(Collectors.toList());
 //        try (Stream<Path> stream = Files.list(Paths.get(dir))) {
 //            return stream
 //                    .filter(file -> !Files.isDirectory(file))
@@ -67,7 +67,7 @@ public class MainController extends DataStreams {
     @GetMapping("/file/{file}")
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) {
-        List<String[]> text = getText("texts/" + file + ".txt").stream()
+        List<String[]> text = getText("texts/" + file).stream()
                 .map(s -> new Combiner(s, repository).getHash(0)) // .randomOut(0)
                 .collect(Collectors.toList());
 //        System.out.println("*" + text.size());
