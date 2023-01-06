@@ -10,7 +10,6 @@ public class Combiner {
     int[][] sentence;
 
     public Combiner(int length) {
-//        sentence = new int[words.length][words.length];
         sentence = new int[factorial(length)][length];
         for (int i = 0; i < length; i++) sentence[0][i] = i;
         amount = length > 1 ? combInit(length) : 1;

@@ -24,13 +24,13 @@ public class Sentence {
 
     public Sentence(String str, WordsBookRepository repository) {
 //        System.out.println(str);
-        words = str.trim().toLowerCase().split("\\s+");
+        words = str.trim().replaceAll("[_,!.—?;:]+", " ").toLowerCase().split("\\s+");
         if (repository != null) wordsEntityHashMap = readWordsBookDB(repository, words);
 //        System.out.println(wordsEntityHashMap);
 //        if (wordsEntityHashMap != null) wordsEntityHashMap.forEach((k, v) -> System.out.println(v));
-        sentence = new int[words.length][words.length];
-        for (int i = 0; i < words.length; i++) sentence[0][i] = i;
         amount = words.length;
+        sentence = new int[amount][amount];
+        for (int i = 0; i < amount; i++) sentence[0][i] = i;
     }
 
     String out(int[] a) {
@@ -49,7 +49,7 @@ public class Sentence {
     }
 
     public String randomOut(int v) {
-        if (v > 0 && words.length > 1) return out(sentence[(int) (random() * amount)]);
+        if (v > 0 && amount > 1) return out(sentence[(int) (random() * amount)]);
         return out(sentence[0]);
     }
 

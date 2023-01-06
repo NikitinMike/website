@@ -83,7 +83,7 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView startPageGet(Model model, @PathVariable int i) {
         List<String> list = Arrays.stream(in[i % 4])
-                .map(s -> new Sentence(s.replaceAll("[_,!.—?;:']+", " "), repository).randomOut(1))
+                .map(s -> new Sentence(s, repository).randomOut(1))
                 .collect(Collectors.toList());
         model.addAttribute("messages", list);
         model.addAttribute("title", "START:" + list.size());
