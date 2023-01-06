@@ -9,6 +9,35 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 
 public class DataStreams {
+    String[] tutchev = {
+      "Нам не дано предугадать,\n" ,
+              "Как слово наше отзовется,-\n" ,
+              "И нам сочувствие дается,\n" ,
+              "Как нам дается благодать…"
+    };
+    String[] pushkin = {
+            "Зима!.. Крестьянин, торжествуя,\n" ,
+                    "На дровнях обновляет путь;\n" ,
+                    "Его лошадка, снег почуя,\n" ,
+                    "Плетется рысью как-нибудь;\n" ,
+                    "Бразды пушистые взрывая,\n" ,
+                    "Летит кибитка удалая;\n" ,
+                    "Ямщик сидит на облучке\n" ,
+                    "В тулупе, в красном кушаке.\n" ,
+                    "Вот бегает дворовый мальчик,\n" ,
+                    "В салазки жучку посадив,\n" ,
+                    "Себя в коня преобразив;\n" ,
+                    "Шалун уж заморозил пальчик:\n" ,
+                    "Ему и больно и смешно,\n" ,
+                    "А мать грозит ему в окно…"
+    };
+    String[] rossia = {
+            "Умом Россию не понять,",
+                    "Аршином общим не измерить:",
+                    "У ней особенная стать —",
+                    "В Россию можно только верить"
+    };
+
     String[] hymn = {
             "Братских народов союз вековой,",
             "Грядущие нам открывают года.",
@@ -57,7 +86,7 @@ public class DataStreams {
             "Чучело-мяучело на_трубе сидело"
     };
 
-    String[][] in = {hymn, sobaka, vorona, chuchelo};
+    String[][] in = {hymn, sobaka, vorona, chuchelo, rossia,pushkin,tutchev};
 
     static Hashtable<String, List<WordsBookEntity>> readWordsBookDB(WordsBookRepository repository, String[] words) {
         Hashtable<String, List<WordsBookEntity>> wordsEntityHashMap = new Hashtable<>();

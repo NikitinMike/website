@@ -82,7 +82,7 @@ public class MainController extends DataStreams {
     @GetMapping("/{i}")
     @ResponseBody
     public ModelAndView startPageGet(Model model, @PathVariable int i) {
-        List<String> list = Arrays.stream(in[i % 4])
+        List<String> list = Arrays.stream(in[i % in.length])
                 .map(s -> new Sentence(s, repository).randomOut(1))
                 .collect(Collectors.toList());
         model.addAttribute("messages", list);
