@@ -41,7 +41,8 @@ public class Sentence {
     String outStrip(int[] a) {
         return stream(a).mapToObj(j -> wordStrip(dictionary.getGlas(words[j])))
                 .filter(p -> !p.isEmpty()).collect(joining())
-                .replaceAll("-+", "");
+                .replaceAll("-+", "")
+                .replaceAll("[ёуеыаоэяию]","-");
     }
 
     public String[] getHash(int v) {
