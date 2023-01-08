@@ -79,7 +79,7 @@ public class MainController extends DataStreams {
         return new ModelAndView("pagehash");
     }
 
-    @GetMapping("/{i}")
+    @GetMapping("/page/{i}")
     @ResponseBody
     public ModelAndView startPageGet(Model model, @PathVariable int i) {
         List<String> list = Arrays.stream(in[i % in.length])
