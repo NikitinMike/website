@@ -73,7 +73,7 @@ public class MainController extends DataStreams {
         List<String[]> text = getText("texts/" + file).stream()
                 .map(s -> new Sentence(s, repository).getHash(0)) // .randomOut(0)
                 .collect(Collectors.toList());
-//        System.out.println("*" + text.size());
+        System.out.println(" #" + text.size());
         model.addAttribute("messages", text);
 //        model.addAttribute("title", "START:" + text.size());
         return new ModelAndView("pagehash");
