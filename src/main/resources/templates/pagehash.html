@@ -12,7 +12,7 @@
     <div class="row">
         <table>
             <tr th:each="message : ${messages}">
-                <td th:text="${message[0]}"><a href="#">Text ...</a></td>
+                <td th:text="${message[0]}" align="left"><a href="#">Text ...</a></td>
                 <td> | </td>
                 <td th:text="${message[1]}"><a href="#">Text ...</a></td>
             </tr>
