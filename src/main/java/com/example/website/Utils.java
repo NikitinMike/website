@@ -12,6 +12,10 @@ public class Utils {
         return factorial(n - 1) * n;
     }
 
+    public static String reverse(String str) {
+        return new StringBuilder(str).reverse().toString();
+    }
+
     public static String notNull(String tag, String s) {
         return s == null ? "" : String.format(",%s='%s'", tag, s);
     }
