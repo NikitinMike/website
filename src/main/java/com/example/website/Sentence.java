@@ -15,29 +15,33 @@ import static java.util.stream.Collectors.toList;
 
 @Data
 public class Sentence {
-
+    String sentence;
     static private Dictionary dictionary = new Dictionary();
     int amount;
-    int[][] sentence;
+    int[][] combines;
     String[] words; // слова
     int[] parts; // какой части речи принадлежит
     Hashtable<String, List<WordsBookEntity>> wordsEntityHashMap;
 
-    public Sentence(String str, WordsBookRepository repository) {
+    public Sentence(String source, WordsBookRepository repository) {
 //        System.out.println(str);
-        words = str.trim().replaceAll("[_,!.—?;:]+", " ").toLowerCase().split("\\s+");
+        sentence = source.trim().replaceAll("[_,!.—?;:]+", " ");
+        words = sentence.toLowerCase().split("\\s+");
+//                .map(s -> s.replaceAll("[^а-яА-ЯёЁ`']+", " ").trim())
         if (repository != null) wordsEntityHashMap = readWordsBookDB(repository, words);
 //        System.out.println(wordsEntityHashMap);
 //        if (wordsEntityHashMap != null) wordsEntityHashMap.forEach((k, v) -> System.out.println(v));
         amount = words.length;
-        sentence = new int[amount][amount];
-        for (int i = 0; i < amount; i++) sentence[0][i] = i;
+//        if (sentence.trim().isEmpty()) sentence = source;
+        combines = new int[amount][amount];
+        for (int i = 0; i < amount; i++) combines[0][i] = i;
     }
 
     String out(int[] a) {
+//        if (amount == 1) return sentence;
         return stream(a).mapToObj(j -> wordAnalyse(dictionary.getWord(words[j])))
                 .filter(p -> !p.isEmpty())
-                .map(w -> w.contains("'")? w : "<b>" + w + "</b>")
+                .map(w -> w.contains("'") ? w : "<b>" + w + "</b>")
                 .collect(joining(" "));
     }
 
@@ -49,16 +53,16 @@ public class Sentence {
     }
 
     public String[] getHash(int v) {
-        return new String[]{outStrip(sentence[v]), out(sentence[v])};
+        return new String[]{outStrip(combines[v]), out(combines[v])};
     }
 
     public String randomOut(int v) {
-        if (v > 0 && amount > 1) return out(sentence[(int) (random() * amount)]);
-        return out(sentence[0]);
+        if (v > 0 && amount > 1) return out(combines[(int) (random() * amount)]);
+        return out(combines[0]);
     }
 
     List<String> fullOut() {
-        return stream(sentence).map(this::out).collect(toList());
+        return stream(combines).map(this::out).collect(toList());
     }
 
 }

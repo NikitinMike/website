@@ -156,8 +156,8 @@ public class DataStreams {
     List<String> getText(String fileName) {
         try (BufferedReader reader = Files.newBufferedReader(new File(fileName).toPath())) {
             return reader.lines() // .map(s -> s.replaceAll("[-\"'_,!.—?:;\\d\\s]+", " ")
-                    .map(s -> s.replaceAll("[^а-яА-ЯёЁ`']+", " ")
-                            .trim()).filter(p -> !p.isEmpty())
+                    .map(s -> s.replaceAll("[^а-яА-ЯёЁ`']+", " ").trim())
+//                    .filter(p -> !p.isEmpty())
                     .collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
