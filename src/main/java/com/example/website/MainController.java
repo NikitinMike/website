@@ -10,10 +10,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 public class MainController extends DataStreams {
@@ -33,21 +37,21 @@ public class MainController extends DataStreams {
         )).map(File::getName).collect(Collectors.toList());
     }
 
-//    List<String> filesExtra(String dir) throws IOException {
-//        try (Stream<Path> stream = Files.list(Paths.get(dir))) {
-//            return stream
-//                    .filter(file -> !Files.isDirectory(file))
-//                    .map(Path::getFileName)
-//                    .map(Path::toString)
-//                    .collect(Collectors.toList());
-//        }
-//    }
+    List<String> textFilesExtra() throws IOException {
+        try (Stream<Path> stream = Files.list(Paths.get("texts/"))) {
+            return stream
+                    .filter(file -> !Files.isDirectory(file))
+                    .map(Path::getFileName)
+                    .map(Path::toString)
+                    .collect(Collectors.toList());
+        }
+    }
 
     @GetMapping("/")
     @ResponseBody
     public ModelAndView main(Model model) throws IOException {
         model.addAttribute("title", 0);
-        model.addAttribute("messages", fileResources());
+        model.addAttribute("messages", textFilesExtra());
         return new ModelAndView("list");
     }
 

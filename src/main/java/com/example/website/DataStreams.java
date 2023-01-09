@@ -10,32 +10,32 @@ import static java.util.Arrays.asList;
 
 public class DataStreams {
     String[] tutchev = {
-      "Нам не дано предугадать,\n" ,
-              "Как слово наше отзовется,-\n" ,
-              "И нам сочувствие дается,\n" ,
-              "Как нам дается благодать…"
+            "Нам не дано предугадать,\n",
+            "Как слово наше отзовется,-\n",
+            "И нам сочувствие дается,\n",
+            "Как нам дается благодать…"
     };
     String[] pushkin = {
-            "Зима!.. Крестьянин, торжествуя,\n" ,
-                    "На дровнях обновляет путь;\n" ,
-                    "Его лошадка, снег почуя,\n" ,
-                    "Плетется рысью как-нибудь;\n" ,
-                    "Бразды пушистые взрывая,\n" ,
-                    "Летит кибитка удалая;\n" ,
-                    "Ямщик сидит на облучке\n" ,
-                    "В тулупе, в красном кушаке.\n" ,
-                    "Вот бегает дворовый мальчик,\n" ,
-                    "В салазки жучку посадив,\n" ,
-                    "Себя в коня преобразив;\n" ,
-                    "Шалун уж заморозил пальчик:\n" ,
-                    "Ему и больно и смешно,\n" ,
-                    "А мать грозит ему в окно…"
+            "Зима!.. Крестьянин, торжествуя,\n",
+            "На дровнях обновляет путь;\n",
+            "Его лошадка, снег почуя,\n",
+            "Плетется рысью как-нибудь;\n",
+            "Бразды пушистые взрывая,\n",
+            "Летит кибитка удалая;\n",
+            "Ямщик сидит на облучке\n",
+            "В тулупе, в красном кушаке.\n",
+            "Вот бегает дворовый мальчик,\n",
+            "В салазки жучку посадив,\n",
+            "Себя в коня преобразив;\n",
+            "Шалун уж заморозил пальчик:\n",
+            "Ему и больно и смешно,\n",
+            "А мать грозит ему в окно…"
     };
     String[] rossia = {
             "Умом Россию не понять,",
-                    "Аршином общим не измерить:",
-                    "У ней особенная стать —",
-                    "В Россию можно только верить"
+            "Аршином общим не измерить:",
+            "У ней особенная стать —",
+            "В Россию можно только верить"
     };
 
     String[] hymn = {
@@ -86,7 +86,7 @@ public class DataStreams {
             "Чучело-мяучело на_трубе сидело"
     };
 
-    String[][] in = {hymn, sobaka, vorona, chuchelo, rossia,pushkin,tutchev};
+    String[][] in = {hymn, sobaka, vorona, chuchelo, rossia, pushkin, tutchev};
 
     static Hashtable<String, List<WordsBookEntity>> readWordsBookDB(WordsBookRepository repository, String[] words) {
         Hashtable<String, List<WordsBookEntity>> wordsEntityHashMap = new Hashtable<>();
@@ -140,10 +140,21 @@ public class DataStreams {
         }
     }
 
-    List<String> getText(String fileName) {
+    List<String> getTextResource(String fileName) {
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName)) {
             assert inputStream != null;
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, UTF_8));
+            return reader.lines() // .map(s -> s.replaceAll("[-\"'_,!.—?:;\\d\\s]+", " ")
+                    .map(s -> s.replaceAll("[^а-яА-ЯёЁ`']+", " ")
+                            .trim()).filter(p -> !p.isEmpty())
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    List<String> getText(String fileName) {
+        try (BufferedReader reader = Files.newBufferedReader(new File(fileName).toPath())) {
             return reader.lines() // .map(s -> s.replaceAll("[-\"'_,!.—?:;\\d\\s]+", " ")
                     .map(s -> s.replaceAll("[^а-яА-ЯёЁ`']+", " ")
                             .trim()).filter(p -> !p.isEmpty())
