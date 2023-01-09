@@ -6,7 +6,8 @@ import java.util.Hashtable;
 import java.util.List;
 
 import static com.example.website.DataStreams.readWordsBookDB;
-import static com.example.website.Utils.*;
+import static com.example.website.Utils.wordAnalyse;
+import static com.example.website.Utils.wordStrip;
 import static java.lang.Math.random;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
@@ -15,12 +16,12 @@ import static java.util.stream.Collectors.toList;
 @Data
 public class Sentence {
 
+    static private Dictionary dictionary = new Dictionary();
     int amount;
     int[][] sentence;
     String[] words; // слова
     int[] parts; // какой части речи принадлежит
     Hashtable<String, List<WordsBookEntity>> wordsEntityHashMap;
-    static private Dictionary dictionary = new Dictionary();
 
     public Sentence(String str, WordsBookRepository repository) {
 //        System.out.println(str);
@@ -35,14 +36,16 @@ public class Sentence {
 
     String out(int[] a) {
         return stream(a).mapToObj(j -> wordAnalyse(dictionary.getWord(words[j])))
-                .filter(p -> !p.isEmpty()).collect(joining(" "));
+                .filter(p -> !p.isEmpty())
+                .map(w -> w.contains("'")? w : "<b>" + w + "</b>")
+                .collect(joining(" "));
     }
 
     String outStrip(int[] a) {
         return stream(a).mapToObj(j -> wordStrip(dictionary.getGlas(words[j])))
                 .filter(p -> !p.isEmpty()).collect(joining())
                 .replaceAll("-+", "")
-                .replaceAll("[ёуеыаоэяию]","-");
+                .replaceAll("[ёуеыаоэяию]", "-");
     }
 
     public String[] getHash(int v) {

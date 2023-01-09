@@ -1,29 +1,35 @@
 package com.example.website;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.io.File;
 import java.util.Hashtable;
 
 import static com.example.website.DataStreams.readLopatinFile;
 import static com.example.website.DataStreams.readWordBookFile;
-import static com.example.website.Utils.reverse;
 
 //@Repository
+//@Configuration
+//@PropertySource({ "application.properties" })
 public class Dictionary {
+    @Value("${dictionary.source}")
+    private String dir = "\\DBWords\\";
     static Hashtable<String, String> wordTable = new Hashtable<>();
     private final boolean append;
 
     void putWord(String word){
-        if(append) System.out.print(word+",");
+        if(append) if (word.contains("`") || word.contains("'")) System.out.print(",");
+        else System.out.print(word + ",");
         wordTable.put(word.trim().replaceAll("['`]", ""), word);
-        if(word.contains("ё")) putWord(word.replaceAll("ё","е"));
+        if(word.contains("ё")) putWord(word.replaceAll("ё","е'"));
     }
 
     public Dictionary() {
         if (wordTable.isEmpty()) {
-            for (String word : readLopatinFile(new File("\\DBWords\\lop1v2.utf8.txt")))
+            for (String word : readLopatinFile(new File(dir+"lop1v2.utf8.txt")))
                 putWord(word);
             System.out.println("Lopatin's Dictionary words:" + wordTable.size());
-            for (String word : readWordBookFile(new File("\\DBWords\\wordbook.txt")))
+            for (String word : readWordBookFile(new File(dir+"wordbook.txt")))
                 putWord(word);
             System.out.println("Dictionary words:" + wordTable.size());
         }
