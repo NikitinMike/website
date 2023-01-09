@@ -2,11 +2,24 @@ body{
 	font-family: "Courier New";
 }
 
+b{
+	color: red;
+	font-weight: bold;
+}
+
 header{
 }
 
 td{
 	color: black;
+}
+
+.first {
+	font-weight: normal;
+}
+
+.second {
+	font-weight: bold;
 }
 
 tr.error {
