@@ -11,10 +11,12 @@
     <hr/>
     <div class="row">
         <table>
-            <tr th:each="message : ${messages}">
+            <tr th:each="file : ${files}">
+                <td align="right">[[${file.length()}]]</td>
+                <td>|</td>
                 <td>
-                    <a th:href="@{/file/{id}(id=${message})}">
-                        <i>[[${message}]]</i>
+                    <a th:href="@{/file/{id}(id=${file.getName()})}">
+                        <i>[[${file.getName()}]]</i>
                     </a>
                 </td>
             </tr>

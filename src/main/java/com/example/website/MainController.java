@@ -37,13 +37,10 @@ public class MainController extends DataStreams {
         )).map(File::getName).collect(Collectors.toList());
     }
 
-    List<String> textFilesExtra() throws IOException {
+    List<File> textFilesExtra() throws IOException {
         try (Stream<Path> stream = Files.list(Paths.get("texts/"))) {
-            return stream
-                    .filter(file -> !Files.isDirectory(file))
-                    .map(Path::getFileName)
-                    .map(Path::toString)
-                    .collect(Collectors.toList());
+            return stream.filter(file -> !Files.isDirectory(file))
+                    .map(Path::toFile).collect(Collectors.toList());
         }
     }
 
@@ -51,7 +48,7 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView main(Model model) throws IOException {
         model.addAttribute("title", 0);
-        model.addAttribute("messages", textFilesExtra());
+        model.addAttribute("files", textFilesExtra());
         return new ModelAndView("list");
     }
 
