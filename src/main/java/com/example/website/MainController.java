@@ -49,7 +49,7 @@ public class MainController extends DataStreams {
     public ModelAndView main(Model model) throws IOException {
         model.addAttribute("title", 0);
         model.addAttribute("files", textFilesExtra());
-        return new ModelAndView("list");
+        return new ModelAndView("listfiles");
     }
 
     @GetMapping("/random")
