@@ -75,9 +75,9 @@ public class MainController extends DataStreams {
                 .map(s -> new Sentence(s, repository).getHash(0)) // .randomOut(0)
                 .collect(Collectors.toList());
         System.out.println(" #" + text.size());
-        model.addAttribute("messages", text);
+        model.addAttribute("sentences", text);
 //        model.addAttribute("title", "START:" + text.size());
-        return new ModelAndView("pagehash");
+        return new ModelAndView("text");
     }
 
     @GetMapping("/page/{i}")

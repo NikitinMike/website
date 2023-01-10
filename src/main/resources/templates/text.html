@@ -11,10 +11,10 @@
     <hr/>
     <div class="row">
         <table>
-            <tr th:each="message : ${messages}">
-                <td align="left"> [[${message[0]}]] </td>
+            <tr th:each="sentence : ${sentences}">
+                <td align="left"> [[${sentence[0]}]] </td>
                 <td> | </td>
-                <td class="first"><i>[(${message[1]})]</i></td>
+                <td class="first"><i>[(${sentence[1]})]</i></td>
             </tr>
         </table>
     </div>
