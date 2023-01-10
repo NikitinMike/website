@@ -12,9 +12,9 @@
     <div class="row">
         <table>
             <tr th:each="message : ${messages}">
-                <td th:text="${message[0]}" align="left"><a href="#">Text ...</a></td>
+                <td align="left"> [[${message[0]}]] </td>
                 <td> | </td>
-                <td class="first"  th:utext="${message[1]}"><i>link...</i></td>
+                <td class="first"><i>[(${message[1]})]</i></td>
             </tr>
         </table>
     </div>

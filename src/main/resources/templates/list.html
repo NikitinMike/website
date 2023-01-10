@@ -14,9 +14,7 @@
             <tr th:each="message : ${messages}">
                 <td>
                     <a th:href="@{/file/{id}(id=${message})}">
-                        <i th:text="${message}">
-                            link...
-                        </i>
+                        <i>[[${message}]]</i>
                     </a>
                 </td>
             </tr>
