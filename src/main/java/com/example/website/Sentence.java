@@ -24,21 +24,18 @@ public class Sentence {
     Hashtable<String, List<WordsBookEntity>> wordsEntityHashMap;
 
     public Sentence(String source, WordsBookRepository repository) {
-//        System.out.println(str);
-        sentence = source.trim().replaceAll("[_,!.—?;:]+", " ");
-        words = sentence.toLowerCase().split("\\s+");
-//                .map(s -> s.replaceAll("[^а-яА-ЯёЁ`']+", " ").trim())
+//        System.out.println(str); str.replaceAll("[^а-яА-ЯёЁ`']+", " ")
+        sentence = source.replaceAll("[_,!.—?;:]+", " ");
+        words = sentence.toLowerCase().replaceAll("[^а-яё`']+", " ").split("\\s+");
         if (repository != null) wordsEntityHashMap = readWordsBookDB(repository, words);
 //        System.out.println(wordsEntityHashMap);
 //        if (wordsEntityHashMap != null) wordsEntityHashMap.forEach((k, v) -> System.out.println(v));
         amount = words.length;
-//        if (sentence.trim().isEmpty()) sentence = source;
         combines = new int[amount][amount];
         for (int i = 0; i < amount; i++) combines[0][i] = i;
     }
 
     String out(int[] a) {
-//        if (amount == 1) return sentence;
         return stream(a).mapToObj(j -> wordAnalyse(dictionary.getWord(words[j])))
                 .filter(p -> !p.isEmpty())
                 .map(w -> w.contains("'") ? w : "<b>" + w + "</b>")
@@ -53,6 +50,7 @@ public class Sentence {
     }
 
     public String[] getHash(int v) {
+        if (words.length == 0) return new String[]{"", sentence};
         return new String[]{outStrip(combines[v]), out(combines[v])};
     }
 
@@ -64,5 +62,4 @@ public class Sentence {
     List<String> fullOut() {
         return stream(combines).map(this::out).collect(toList());
     }
-
 }

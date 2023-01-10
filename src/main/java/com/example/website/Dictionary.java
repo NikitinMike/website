@@ -2,40 +2,34 @@ package com.example.website;
 
 import org.springframework.beans.factory.annotation.Value;
 
-import java.io.File;
 import java.util.Hashtable;
 
-import static com.example.website.DataStreams.readLopatinFile;
-import static com.example.website.DataStreams.readWordBookFile;
+import static com.example.website.DataStreams.readLopatin;
+import static com.example.website.DataStreams.readDictionary;
 
-//@Repository
-//@Configuration
-//@PropertySource({ "application.properties" })
 public class Dictionary {
     @Value("${dictionary.source}")
-    private String dir = "\\DBWords\\";
+    final static String dir = "\\DBWords\\";
     static Hashtable<String, String> wordTable = new Hashtable<>();
-    private final boolean append;
+    final boolean append;
 
-    void putWord(String word){
-        if(append) if (word.contains("`") || word.contains("'")) System.out.print(",");
+    void putWord(String word) {
+        if (append) if (word.contains("`") || word.contains("'")) System.out.print(",");
         else System.out.print(word + ",");
         wordTable.put(word.trim().replaceAll("['`]", ""), word);
-        if(word.contains("ё")) putWord(word.replaceAll("ё","е'"));
+        if (word.contains("ё")) putWord(word.replaceAll("ё", "е'"));
     }
 
     public Dictionary() {
         if (wordTable.isEmpty()) {
-            for (String word : readLopatinFile(new File(dir+"lop1v2.utf8.txt")))
-                putWord(word);
+            for (String word : readLopatin(dir + "lop1v2.utf8.txt")) putWord(word);
             System.out.println("Lopatin's Dictionary words:" + wordTable.size());
-            for (String word : readWordBookFile(new File(dir+"wordbook.txt")))
-                putWord(word);
+            for (String word : readDictionary(dir + "wordbook.txt")) putWord(word);
             System.out.println("Dictionary words:" + wordTable.size());
         }
         System.out.println("Dictionary:" + wordTable.get("полей"));
 //        wordTable.forEach((k,v) -> System.out.print(k + ":"+v+","));
-        append=true;
+        append = true;
     }
 
     public String getWord(String word) {

@@ -73,8 +73,8 @@ public class MainController extends DataStreams {
 
     @GetMapping("/file/{file}")
     @ResponseBody
-    public ModelAndView startPage(Model model, @PathVariable String file) {
-        List<String[]> text = getText("texts/" + file).stream()
+    public ModelAndView startPage(Model model, @PathVariable String file) throws IOException {
+        List<String[]> text = getTextStream("texts/" + file)
                 .map(s -> new Sentence(s, repository).getHash(0)) // .randomOut(0)
                 .collect(Collectors.toList());
         System.out.println(" #" + text.size());
