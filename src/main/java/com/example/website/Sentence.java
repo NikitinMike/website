@@ -38,7 +38,7 @@ public class Sentence {
     String out(int[] a) {
         return stream(a).mapToObj(j -> wordAnalyse(dictionary.getWord(words[j])))
                 .filter(p -> !p.isEmpty())
-                .map(w -> w.contains("'") ? w : "<b>" + w + "</b>")
+                .map(w -> w.contains("'") || w.matches("[^ёуеыаоэяию]+") ? w : "<b>" + w + "</b>")
                 .collect(joining(" "));
     }
 
