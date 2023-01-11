@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
-    <title> found [[${files.size()}]] files </title>
+    <title> found [[${files.size()}]] files words:[[${words}]] </title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <style>
     </style>
 </head>
 <body>
 <div class="container" align="left">
+    <a href="/scan">RESCAN</a>
     <hr/>
     <div class="row">
         <table>

@@ -50,7 +50,21 @@ public class MainController extends DataStreams {
     public ModelAndView main(Model model) throws IOException {
         model.addAttribute("title", 0);
         model.addAttribute("files", textFilesExtra());
+        model.addAttribute("words", Dictionary.wordTable.size());
         return new ModelAndView("listfiles");
+    }
+
+    @GetMapping("/scan")
+    @ResponseBody
+    public ModelAndView scan(Model model) throws IOException {
+        model.addAttribute("title", "SCANNER");
+        for (File file : textFilesExtra()) {
+            Set<String> wordSet = readTextWordSet(file.getAbsolutePath());
+            System.out.println(wordSet);
+            Dictionary.addWordSet(wordSet);
+            System.out.println("Dictionary size:" + Dictionary.wordTable.size());
+        }
+        return new ModelAndView("redirect:/");
     }
 
     @GetMapping("/random")
@@ -77,7 +91,7 @@ public class MainController extends DataStreams {
         Set<String> wordSet = readTextWordSet("texts/" + file);
         System.out.println(wordSet);
         Dictionary.addWordSet(wordSet);
-        System.out.println("Dictionary size:"+Dictionary.wordTable.size());
+        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
 
         List<String[]> text = getTextStream("texts/" + file)
                 .map(s -> new Sentence(s, repository).getHash(0)) // .randomOut(0)
