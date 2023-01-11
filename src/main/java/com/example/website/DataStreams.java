@@ -1,6 +1,9 @@
 package com.example.website;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -40,19 +43,7 @@ public class DataStreams extends DataStrings {
         }
     }
 
-    List<String> getTextResource(String fileName) {
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName)) {
-            assert inputStream != null;
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, UTF_8));
-            return reader.lines() // .map(s -> s.replaceAll("[-\"'_,!.—?:;\\d\\s]+", " ")
-                    .map(s -> s.replaceAll("[^а-яА-ЯёЁ`']+", " ").trim())
-                    .filter(p -> !p.isEmpty()).collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    Stream<String> getTextStream(String fileName) throws IOException {
+    static Stream<String> getTextStream(String fileName) throws IOException {
         return Files.newBufferedReader(Path.of(fileName)).lines().map(String::trim);
     }
 
@@ -68,5 +59,26 @@ public class DataStreams extends DataStrings {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    List<String> getTextResource(String fileName) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName)) {
+            assert inputStream != null;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, UTF_8));
+            return reader.lines() // .map(s -> s.replaceAll("[-\"'_,!.—?:;\\d\\s]+", " ")
+                    .map(s -> s.replaceAll("[^а-яА-ЯёЁ`']+", " ").trim())
+                    .filter(p -> !p.isEmpty()).collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    Set<String> readTextWordSet(String file) throws IOException {
+        Set<String> wordSet = new HashSet<>();
+        getTextStream(file).map(l -> l.toLowerCase().replaceAll("[^а-яё`']+", " "))
+                .forEach(l -> Arrays.stream(l.split("\\s+"))
+                        .filter(w -> w.contains("'") || w.contains("`"))
+                        .forEach(wordSet::add));
+        return wordSet;
     }
 }

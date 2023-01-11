@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -72,6 +73,12 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) throws IOException {
         System.out.println(file);
+
+        Set<String> wordSet = readTextWordSet("texts/" + file);
+        System.out.println(wordSet);
+        Dictionary.addWordSet(wordSet);
+        System.out.println("Dictionary size:"+Dictionary.wordTable.size());
+
         List<String[]> text = getTextStream("texts/" + file)
                 .map(s -> new Sentence(s, repository).getHash(0)) // .randomOut(0)
                 .collect(Collectors.toList());

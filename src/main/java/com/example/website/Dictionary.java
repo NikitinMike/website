@@ -1,24 +1,29 @@
 package com.example.website;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import java.util.Hashtable;
+import java.util.Set;
 
-import static com.example.website.DataStreams.readLopatin;
 import static com.example.website.DataStreams.readDictionary;
+import static com.example.website.DataStreams.readLopatin;
 
+@Repository
 public class Dictionary {
     @Value("${dictionary.source}")
     final static String dir = "\\DBWords\\";
     static Hashtable<String, String> wordTable = new Hashtable<>();
-    final boolean append;
+    static boolean append = false;
 
-    void putWord(String word) {
+    static void putWord(String word) {
         if (append) if (word.contains("`") || word.contains("'")) System.out.print(",");
         else System.out.print(word + ",");
         wordTable.put(word.trim().replaceAll("['`]", ""), word);
         if (word.contains("ё")) putWord(word.replaceAll("ё", "е'"));
     }
+
+    public static void addWordSet(Set<String> words){words.forEach(Dictionary::putWord);}
 
     public Dictionary() {
         if (wordTable.isEmpty()) {
