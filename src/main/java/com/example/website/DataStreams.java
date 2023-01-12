@@ -73,12 +73,11 @@ public class DataStreams extends DataStrings {
         }
     }
 
-    Set<String> readTextWordSet(String file) throws IOException {
-        Set<String> wordSet = new HashSet<>();
-        getTextStream(file).map(l -> l.toLowerCase().replaceAll("[^а-яё`']+", " "))
-                .forEach(l -> Arrays.stream(l.split("\\s+"))
-                        .filter(w -> w.contains("'") || w.contains("`"))
-                        .forEach(wordSet::add));
-        return wordSet;
+    Set<String> extractWordSet(String file) throws IOException {
+        return getTextStream(file).map(String::toLowerCase)
+                .map(l->l.replaceAll("[^а-яё`']+", " "))
+                .flatMap(l -> Arrays.stream(l.split("\\s+")))
+                .filter(w -> w.contains("'") || w.contains("`"))
+                .collect(Collectors.toSet());
     }
 }

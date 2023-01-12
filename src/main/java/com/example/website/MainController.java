@@ -59,7 +59,7 @@ public class MainController extends DataStreams {
     public ModelAndView scan(Model model) throws IOException {
         model.addAttribute("title", "SCANNER");
         for (File file : textFilesExtra()) {
-            Set<String> wordSet = readTextWordSet(file.getAbsolutePath());
+            Set<String> wordSet = extractWordSet(file.getAbsolutePath());
             Dictionary.addWordSet(wordSet);
             System.out.println(file + " : +" + wordSet.size()); // Dictionary.wordTable.size()
         }
@@ -85,7 +85,7 @@ public class MainController extends DataStreams {
     @GetMapping("/file/{file}")
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) throws IOException {
-        Set<String> wordSet = readTextWordSet("texts/" + file);
+        Set<String> wordSet = extractWordSet("texts/" + file);
         Dictionary.addWordSet(wordSet);
 //        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
         List<String[]> text = getTextStream("texts/" + file)
