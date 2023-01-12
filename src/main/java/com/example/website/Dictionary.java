@@ -16,15 +16,6 @@ public class Dictionary {
     static Hashtable<String, String> wordTable = new Hashtable<>();
     static boolean append = false;
 
-    static void putWord(String word) {
-        if (append) if (word.contains("`") || word.contains("'")) System.out.print(",");
-        else System.out.print(word + ",");
-        wordTable.put(word.trim().replaceAll("['`]", ""), word);
-        if (word.contains("ё")) putWord(word.replaceAll("ё", "е'"));
-    }
-
-    public static void addWordSet(Set<String> words){words.forEach(Dictionary::putWord);}
-
     public Dictionary() {
         if (wordTable.isEmpty()) {
             for (String word : readLopatin(dir + "lop1v2.utf8.txt")) putWord(word);
@@ -37,12 +28,22 @@ public class Dictionary {
         append = true;
     }
 
+    static void putWord(String word) {
+        if (append) if (!word.contains("`") && !word.contains("'")) System.out.print(word + ",");
+        wordTable.put(word.trim().replaceAll("['`]", ""), word);
+        if (word.contains("ё")) putWord(word.replaceAll("ё", "е'"));
+    }
+
+    public static void addWordSet(Set<String> words) {
+        words.forEach(Dictionary::putWord);
+    }
+
     public String getWord(String word) {
         if (wordTable.containsKey(word)) word = wordTable.get(word); // .replaceAll("['`]","")
         else putWord(word);  // System.out.print(word + ",");
         // if (!word.contains("ё") && word.contains("е"))
-//      return getWord(reverse(reverse(word).replaceFirst("е", "ё")));
-//      return getWord(word.replaceFirst("е", "ё"));
+        //      return getWord(reverse(reverse(word).replaceFirst("е", "ё")));
+        //      return getWord(word.replaceFirst("е", "ё"));
         if (!word.contains("`") && !word.contains("'"))
             if (word.length() - word.replaceAll("[ёуеыаоэяию]", "").length() == 1)
                 word = word.replaceFirst("([ёуеыаоэяию])", "$1'");

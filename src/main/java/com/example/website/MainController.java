@@ -60,9 +60,8 @@ public class MainController extends DataStreams {
         model.addAttribute("title", "SCANNER");
         for (File file : textFilesExtra()) {
             Set<String> wordSet = readTextWordSet(file.getAbsolutePath());
-            System.out.println(wordSet);
             Dictionary.addWordSet(wordSet);
-            System.out.println("Dictionary size:" + Dictionary.wordTable.size());
+            System.out.println(file + " : +" + wordSet.size()); // Dictionary.wordTable.size()
         }
         return new ModelAndView("redirect:/");
     }
@@ -86,17 +85,14 @@ public class MainController extends DataStreams {
     @GetMapping("/file/{file}")
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) throws IOException {
-        System.out.println(file);
-
         Set<String> wordSet = readTextWordSet("texts/" + file);
-        System.out.println(wordSet);
         Dictionary.addWordSet(wordSet);
-        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
-
+//        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
         List<String[]> text = getTextStream("texts/" + file)
                 .map(s -> new Sentence(s, repository).getHash(0)) // .randomOut(0)
                 .collect(Collectors.toList());
-        System.out.println(" #" + text.size());
+        System.out.println(file + " #" + text.size());
+        System.out.println(wordSet);
         model.addAttribute("sentences", text);
 //        model.addAttribute("title", "START:" + text.size());
         return new ModelAndView("text");
