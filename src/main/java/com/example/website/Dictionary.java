@@ -14,7 +14,7 @@ public class Dictionary {
     @Value("${dictionary.source}")
     final static String dir = "\\DBWords\\";
     static Hashtable<String, String> wordTable = new Hashtable<>();
-    static boolean append = false;
+    static boolean showThesaurus = false;
 
     public Dictionary() {
         if (wordTable.isEmpty()) {
@@ -25,13 +25,14 @@ public class Dictionary {
         }
 //        System.out.println("Dictionary:" + wordTable.get("полей"));
 //        wordTable.forEach((k,v) -> System.out.print(k + ":"+v+","));
-        append = true;
+        showThesaurus = true;
     }
 
     static String putWord(String word) {
         if (word.matches("[^ёуеыаоэяию]*")) return word; //  System.out.printf(" [%s] ",word);
-        if (append) if (!word.contains("`") && !word.contains("'")) System.out.print(word + ",");
-        wordTable.put(word.trim().replaceAll("['`]", ""), word);
+        word = word.trim().replaceAll("`(.)", "$1'");
+        if (showThesaurus && !word.contains("'")) System.out.print(word + ",");
+        wordTable.put(word.replaceAll("['`]", ""), word);
         if (word.contains("ё")) return putWord(word.replaceAll("ё", "е'"));
         return word;
     }
@@ -41,15 +42,13 @@ public class Dictionary {
     }
 
     public String getWord(String word) {
-        if (wordTable.containsKey(word)) word = wordTable.get(word); // .replaceAll("['`]","")
-        else putWord(word);  // System.out.print(word + ",");
-        // if (!word.contains("ё") && word.contains("е"))
-        //      return getWord(reverse(reverse(word).replaceFirst("е", "ё")));
-        //      return getWord(word.replaceFirst("е", "ё"));
-        if (!word.contains("`") && !word.contains("'"))
+        word = word.replaceAll("`(.)", "$1'");
+        if (wordTable.containsKey(word)) word = wordTable.get(word); else putWord(word);
+        if (!word.contains("'"))
             if (word.length() - word.replaceAll("[ёуеыаоэяию]", "").length() == 1)
                 word = word.replaceFirst("([ёуеыаоэяию])", "$1'");
             else word = word.replaceFirst("(ё)", "$1'");
+        // getWord(reverse(reverse(word).replaceFirst("е", "ё")));
         return word;
     }
 
