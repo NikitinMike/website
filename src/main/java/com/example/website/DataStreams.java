@@ -43,6 +43,18 @@ public class DataStreams extends DataStrings {
         }
     }
 
+    static Set<String> readThesaurus(String file) {
+        try (BufferedReader reader = Files.newBufferedReader(Path.of(file))) {
+            Set<String> wordSet = new HashSet<>();
+            do {
+                Collections.addAll(wordSet, reader.readLine().split(","));
+            } while (reader.ready());
+            return wordSet;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     static Stream<String> getTextStream(String fileName) throws IOException {
         return Files.newBufferedReader(Path.of(fileName)).lines().map(String::trim);
     }

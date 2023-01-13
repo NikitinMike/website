@@ -6,8 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Hashtable;
 import java.util.Set;
 
-import static com.example.website.DataStreams.readDictionary;
-import static com.example.website.DataStreams.readLopatin;
+import static com.example.website.DataStreams.*;
 
 @Repository
 public class Dictionary {
@@ -18,6 +17,8 @@ public class Dictionary {
 
     public Dictionary() {
         if (wordTable.isEmpty()) {
+            for (String word : readThesaurus("texts\\thesaurus.txt")) putWord(word);
+            System.out.println("Thesaurus words:" + wordTable.size());
             for (String word : readLopatin(dir + "lop1v2.utf8.txt")) putWord(word);
             System.out.println("Lopatin's Dictionary words:" + wordTable.size());
             for (String word : readDictionary(dir + "wordbook.txt")) putWord(word);
@@ -43,7 +44,8 @@ public class Dictionary {
 
     public String getWord(String word) {
         word = word.replaceAll("`(.)", "$1'");
-        if (wordTable.containsKey(word)) word = wordTable.get(word); else putWord(word);
+        if (wordTable.containsKey(word)) word = wordTable.get(word);
+        else putWord(word);
         if (!word.contains("'"))
             if (word.length() - word.replaceAll("[ёуеыаоэяию]", "").length() == 1)
                 word = word.replaceFirst("([ёуеыаоэяию])", "$1'");
