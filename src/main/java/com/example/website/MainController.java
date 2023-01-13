@@ -61,6 +61,7 @@ public class MainController extends DataStreams {
         Path thesaurus = Paths.get("thesaurus.txt");
         Files.write(thesaurus, Collections.singleton(""), UTF_8);
         for (File file : textFilesExtra()) {
+            Files.write(thesaurus, Collections.singleton("\n<"+file.getPath()+">"), UTF_8,APPEND);
             Set<String> wordSet = extractWordSet(file.getAbsolutePath());
             Dictionary.addWordSet(wordSet);
             System.out.println(file + " : +" + wordSet.size()); // Dictionary.wordTable.size()
