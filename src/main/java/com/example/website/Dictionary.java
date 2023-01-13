@@ -18,23 +18,26 @@ public class Dictionary {
     public Dictionary() {
         if (wordTable.isEmpty()) {
             for (String word : readThesaurus("texts\\thesaurus.txt")) putWord(word);
+//            wordTable.forEach((k,v) -> System.out.print(k + ":"+v+","));
             System.out.println("Thesaurus words:" + wordTable.size());
             for (String word : readLopatin(dir + "lop1v2.utf8.txt")) putWord(word);
             System.out.println("Lopatin's Dictionary words:" + wordTable.size());
             for (String word : readDictionary(dir + "wordbook.txt")) putWord(word);
             System.out.println("Dictionary words:" + wordTable.size());
+            System.out.println("Dictionary:" + wordTable.get("её"));
         }
-//        System.out.println("Dictionary:" + wordTable.get("полей"));
-//        wordTable.forEach((k,v) -> System.out.print(k + ":"+v+","));
         showThesaurus = true;
     }
 
     static String putWord(String word) {
         if (word.matches("[^ёуеыаоэяию]*")) return word; //  System.out.printf(" [%s] ",word);
         word = word.trim().replaceAll("`(.)", "$1'");
-        if (showThesaurus && !word.contains("'")) System.out.print(word + ",");
-        wordTable.put(word.replaceAll("['`]", ""), word);
-        if (word.contains("ё")) return putWord(word.replaceAll("ё", "е'"));
+        if (word.contains("ё")) putWord(word.replaceAll("ё", "е'"));
+        if (word.replaceAll("([^ёуеыаоэяию'])","").length()==1)
+            word = word.replaceAll("([ёуеыаоэяию])","$1'");
+        if (word.contains("'")||word.contains("ё"))
+            wordTable.put(word.replace("'", ""), word);
+        else if (showThesaurus) System.out.print(word + ",");
         return word;
     }
 
