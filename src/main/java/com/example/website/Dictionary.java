@@ -23,15 +23,17 @@ public class Dictionary {
             for (String word : readDictionary(dir + "wordbook.txt")) putWord(word);
             System.out.println("Dictionary words:" + wordTable.size());
         }
-        System.out.println("Dictionary:" + wordTable.get("полей"));
+//        System.out.println("Dictionary:" + wordTable.get("полей"));
 //        wordTable.forEach((k,v) -> System.out.print(k + ":"+v+","));
         append = true;
     }
 
-    static void putWord(String word) {
+    static String putWord(String word) {
+        if (word.matches("[^ёуеыаоэяию]*")) return word; //  System.out.printf(" [%s] ",word);
         if (append) if (!word.contains("`") && !word.contains("'")) System.out.print(word + ",");
         wordTable.put(word.trim().replaceAll("['`]", ""), word);
-        if (word.contains("ё")) putWord(word.replaceAll("ё", "е'"));
+        if (word.contains("ё")) return putWord(word.replaceAll("ё", "е'"));
+        return word;
     }
 
     public static void addWordSet(Set<String> words) {

@@ -75,9 +75,7 @@ public class DataStreams extends DataStrings {
 
     Set<String> extractWordSet(String file) throws IOException {
         return getTextStream(file).map(String::toLowerCase)
-                .map(l->l.replaceAll("[^а-яё`']+", " "))
-                .flatMap(l -> Arrays.stream(l.split("\\s+")))
-                .filter(w -> w.contains("'") || w.contains("`"))
-                .collect(Collectors.toSet());
+                .flatMap(l -> Arrays.stream(l.replaceAll("[^а-яё`']+", " ").split("\\s+")))
+                .filter(w -> w.contains("'") || w.contains("`")).collect(Collectors.toSet());
     }
 }

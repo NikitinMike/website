@@ -13,12 +13,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.APPEND;
 
 @Controller
 public class MainController extends DataStreams {
@@ -58,10 +58,13 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView scan(Model model) throws IOException {
         model.addAttribute("title", "SCANNER");
+        Path thesaurus = Paths.get("thesaurus.txt");
+        Files.write(thesaurus, Collections.singleton(""), UTF_8);
         for (File file : textFilesExtra()) {
             Set<String> wordSet = extractWordSet(file.getAbsolutePath());
             Dictionary.addWordSet(wordSet);
             System.out.println(file + " : +" + wordSet.size()); // Dictionary.wordTable.size()
+            Files.write(thesaurus, wordSet, UTF_8, APPEND);
         }
         return new ModelAndView("redirect:/");
     }
