@@ -24,7 +24,6 @@ import static java.nio.file.StandardOpenOption.APPEND;
 
 @Controller
 public class MainController extends DataStreams {
-    Sentence data = new Sentence("вихри враждебные веют над_нами");
     String texts = "texts/";
 
     List<File> textFilesExtra(String dir) throws IOException {
@@ -69,7 +68,8 @@ public class MainController extends DataStreams {
         System.out.println();
         System.out.println(s);
         System.out.println("---------------------------------------------");
-        data = new Sentence(s);
+        Sentence data = new Sentence(s);
+//    Sentence data = new Sentence("вихри враждебные веют над_нами");
         model.addAttribute("title", "COMBINER:" + data.words.length + "/" + data.amount);
         model.addAttribute("messages", data.fullOut());
         return new ModelAndView("page");
