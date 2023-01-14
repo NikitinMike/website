@@ -1,6 +1,5 @@
 package com.example.website;
 
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +12,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,24 +24,11 @@ import static java.nio.file.StandardOpenOption.APPEND;
 
 @Controller
 public class MainController extends DataStreams {
-    WordsBookRepository repository = null;
-    Sentence data = new Sentence("вихри враждебные веют над_нами", null);
+    Sentence data = new Sentence("вихри враждебные веют над_нами");
+    String texts = "texts/";
 
-    public MainController(WordsBookRepository repository) {
-//        this.repository = repository;
-//        System.out.println("ПОБЕДА");
-//        words.stream().sorted().forEach(s -> System.out.print(s + ","));
-//        System.out.println("победа");
-    }
-
-    List<String> fileResources() throws IOException {
-        return Arrays.stream(Objects.requireNonNull(
-                new ClassPathResource("/texts").getFile().listFiles()
-        )).map(File::getName).collect(Collectors.toList());
-    }
-
-    List<File> textFilesExtra() throws IOException {
-        try (Stream<Path> stream = Files.list(Paths.get("texts/"))) {
+    List<File> textFilesExtra(String dir) throws IOException {
+        try (Stream<Path> stream = Files.list(Paths.get(dir))) {
             return stream.filter(file -> !Files.isDirectory(file))
                     .map(Path::toFile).collect(Collectors.toList());
         }
@@ -49,7 +38,7 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView main(Model model) throws IOException {
         model.addAttribute("title", 0);
-        model.addAttribute("files", textFilesExtra());
+        model.addAttribute("files", textFilesExtra(texts));
         model.addAttribute("words", Dictionary.wordTable.size());
         return new ModelAndView("listfiles");
     }
@@ -60,7 +49,7 @@ public class MainController extends DataStreams {
         model.addAttribute("title", "SCANNER");
         Path thesaurus = Paths.get("thesaurus.txt");
         Files.write(thesaurus, Collections.singleton(""), UTF_8);
-        for (File file : textFilesExtra()) {
+        for (File file : textFilesExtra(texts)) {
 //            Files.write(thesaurus, Collections.singleton("\n<"+file.getPath()+">"), UTF_8,APPEND);
             Set<String> wordSet = extractWordSet(file.getAbsolutePath());
             Dictionary.addWordSet(wordSet);
@@ -80,7 +69,7 @@ public class MainController extends DataStreams {
         System.out.println();
         System.out.println(s);
         System.out.println("---------------------------------------------");
-        data = new Sentence(s, repository);
+        data = new Sentence(s);
         model.addAttribute("title", "COMBINER:" + data.words.length + "/" + data.amount);
         model.addAttribute("messages", data.fullOut());
         return new ModelAndView("page");
@@ -89,11 +78,11 @@ public class MainController extends DataStreams {
     @GetMapping("/file/{file}")
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) throws IOException {
-        Set<String> wordSet = extractWordSet("texts/" + file);
+        Set<String> wordSet = extractWordSet(texts + file);
         Dictionary.addWordSet(wordSet);
 //        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
-        List<String[]> text = getTextStream("texts/" + file)
-                .map(s -> new Sentence(s, repository).getHash(0)) // .randomOut(0)
+        List<String[]> text = getTextStream(texts + file)
+                .map(s -> new Sentence(s).getHash(0)) // .randomOut(0)
                 .collect(Collectors.toList());
         System.out.println(file + " #" + text.size());
         System.out.println(wordSet);
@@ -106,7 +95,7 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView startPageGet(Model model, @PathVariable int i) {
         List<String> list = Arrays.stream(in[i % in.length])
-                .map(s -> new Sentence(s, repository).randomOut(1))
+                .map(s -> new Sentence(s).randomOut(1))
                 .collect(Collectors.toList());
         model.addAttribute("messages", list);
         model.addAttribute("title", "START:" + list.size());

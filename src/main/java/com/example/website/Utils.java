@@ -1,7 +1,14 @@
 package com.example.website;
 
+import org.springframework.core.io.ClassPathResource;
+
+import java.io.*;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Utils {
 
@@ -12,21 +19,27 @@ public class Utils {
         return factorial(n - 1) * n;
     }
 
-    public static String reverse(String str) {
-        return new StringBuilder(str).reverse().toString();
+    List<String> getResourceFiles() throws IOException {
+        return Arrays.stream(Objects.requireNonNull(
+                new ClassPathResource("/texts").getFile().listFiles()
+        )).map(File::getName).collect(Collectors.toList());
     }
 
-    public static String notNull(String tag, String s) {
-        return s == null ? "" : String.format(",%s='%s'", tag, s);
+    List<String> getResourceTextFile(String fileName) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName)) {
+            assert inputStream != null;
+            return new BufferedReader(new InputStreamReader(inputStream, UTF_8)).lines()
+                    // .map(s -> s.replaceAll("[-\"'_,!.—?:;\\d\\s]+", " ")
+                    .map(s -> s.replaceAll("[^а-яА-ЯёЁ`']+", " ")
+                    .trim()).filter(p -> !p.isEmpty()).collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static String notNull(String tag, Long c) {
-        return (c == null || 0 == c) ? "" : String.format(",%s=%d", tag, c);
-    }
-
-    public static String notNull(String tag, Byte b) {
-        return (b == null || 0 == b) ? "" : String.format(",%s=%d", tag, b);
-    }
+//    public static String reverse(String str) {
+//        return new StringBuilder(str).reverse().toString();
+//    }
 
 //    public static <T> void swap(T[] a, int i, int j) {T t = a[i];a[i] = a[j];a[j] = t;}
 
@@ -59,13 +72,6 @@ public class Utils {
                 .replaceAll("=+'", "'=")
 //                .replaceAll("[ёуеыаоэяию]","@")
                 ;
-    }
-
-    public static String wordStrip(String word) {
-        return Arrays.stream(tag(word).split("=+"))
-                .map(s -> s.matches(".'|`.") ? s.toUpperCase() : s) // new Locale("en", "EN")
-                .collect(Collectors.joining("-"))
-                .replaceAll("'", "");
     }
 
     public static String wordAnalyse(String word) {

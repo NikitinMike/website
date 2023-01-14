@@ -1,33 +1,34 @@
 package com.example.website;
 
-import lombok.Data;
-
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static com.example.website.DataStreams.readWordsBookDB;
+import static com.example.website.Dictionary.getGlas;
+import static com.example.website.Dictionary.getWord;
+import static com.example.website.Utils.tag;
 import static com.example.website.Utils.wordAnalyse;
-import static com.example.website.Utils.wordStrip;
 import static java.lang.Math.random;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-@Data
+//@Data
 public class Sentence {
     String sentence;
-    static private Dictionary dictionary = new Dictionary();
     int amount;
     int[][] combines;
     String[] words; // слова
     int[] parts; // какой части речи принадлежит
-    Hashtable<String, List<WordsBookEntity>> wordsEntityHashMap;
+//    Hashtable<String, List<WordBookEntity>> wordsEntityHashMap;
 
-    public Sentence(String source, WordsBookRepository repository) {
+    public Sentence(String source) {
 //        System.out.println(str); str.replaceAll("[^а-яА-ЯёЁ`']+", " ")
         sentence = source.replaceAll("[_,!.—?;:]+", " ");
         words = sentence.toLowerCase().replaceAll("[^а-яё`']+", " ").split("\\s+");
-        if (repository != null) wordsEntityHashMap = readWordsBookDB(repository, words);
+//        System.out.println(stream(words).sorted().collect(joining(",")));
+//        wordsEntityHashMap = readWordBook(words);
 //        System.out.println(wordsEntityHashMap);
 //        if (wordsEntityHashMap != null) wordsEntityHashMap.forEach((k, v) -> System.out.println(v));
         amount = words.length;
@@ -36,14 +37,21 @@ public class Sentence {
     }
 
     String out(int[] a) {
-        return stream(a).mapToObj(j -> wordAnalyse(dictionary.getWord(words[j])))
+        return stream(a).mapToObj(j -> wordAnalyse(getWord(words[j])))
                 .filter(p -> !p.isEmpty())
                 .map(w -> w.contains("'") || w.matches("[^ёуеыаоэяию]+") ? w : "<b>" + w + "</b>")
                 .collect(joining(" "));
     }
 
+    public static String wordStrip(String word) {
+        return Arrays.stream(tag(word).split("=+"))
+                .map(s -> s.matches(".'|`.") ? s.toUpperCase() : s) // new Locale("en", "EN")
+                .collect(Collectors.joining("-"))
+                .replaceAll("'", "");
+    }
+
     String outStrip(int[] a) {
-        return stream(a).mapToObj(j -> wordStrip(dictionary.getGlas(words[j])))
+        return stream(a).mapToObj(j -> wordStrip(getGlas(words[j])))
                 .filter(p -> !p.isEmpty()).collect(joining())
                 .replaceAll("-+", "")
                 .replaceAll("[ёуеыаоэяию]", "-");

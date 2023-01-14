@@ -6,14 +6,12 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import static com.example.website.Utils.notNull;
-
 @Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
 @Table(name = "words", schema = "words")
-public class WordsBookEntity {
+public class WordBookEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "IID")
@@ -76,12 +74,24 @@ public class WordsBookEntity {
     @Column(name = "nakl")
     private String nakl;
 
-    public WordsBookEntity(String word) {
+    public WordBookEntity(String word) {
         this.word = word;
 //        this.iid = (long) (5000000+Math.random()*1000000);
 //        this.type= "сущ";
 //        this.gender = "ср";
 //        this.wcase = "им";
+    }
+
+    public static String notNull(String tag, String s) {
+        return s == null ? "" : String.format(",%s='%s'", tag, s);
+    }
+
+    public static String notNull(String tag, Long c) {
+        return (c == null || 0 == c) ? "" : String.format(",%s=%d", tag, c);
+    }
+
+    public static String notNull(String tag, Byte b) {
+        return (b == null || 0 == b) ? "" : String.format(",%s=%d", tag, b);
     }
 
     @Override

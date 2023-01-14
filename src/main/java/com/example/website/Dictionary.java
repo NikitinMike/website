@@ -45,10 +45,9 @@ public class Dictionary {
         words.forEach(Dictionary::putWord);
     }
 
-    public String getWord(String word) {
+    public static String getWord(String word) {
         word = word.replaceAll("`(.)", "$1'");
-        if (wordTable.containsKey(word)) word = wordTable.get(word);
-        else putWord(word);
+        if (wordTable.containsKey(word)) word = wordTable.get(word); else putWord(word);
         if (!word.contains("'"))
             if (word.length() - word.replaceAll("[ёуеыаоэяию]", "").length() == 1)
                 word = word.replaceFirst("([ёуеыаоэяию])", "$1'");
@@ -57,7 +56,7 @@ public class Dictionary {
         return word;
     }
 
-    public String getGlas(String word) {
+    public static String getGlas(String word) {
         return getWord(word).replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]", "");
     }
 }
