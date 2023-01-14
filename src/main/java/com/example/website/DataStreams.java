@@ -65,6 +65,11 @@ public class DataStreams extends DataStrings {
                 String[] lines = reader.readLine().split("%");
                 String[] words = lines[0].split("#");
                 wordSet.add(words[1]);
+                words = lines[1].toLowerCase().split(",");
+                if (words.length > 1) stream(words).map(String::trim)
+                        .filter(word -> word.matches("[а-яё`']+"))
+                        .forEach(wordSet::add);
+                lopatinWordsExtender(lines[1], wordSet);
             } while (reader.ready());
             return wordSet;
         } catch (IOException e) {
@@ -72,11 +77,27 @@ public class DataStreams extends DataStrings {
         }
     }
 
+    private static void lopatinWordsExtender(String line, Set<String> wordSet) {
+        String[] words = line.toLowerCase().split(",");
+        if (words.length < 2) return;
+        if (words[0].trim().matches("[а-яё`']+"))
+            for (String word : words)
+                if (word.trim().matches("-[а-яё`']+")) ; // wordSet.add(w);
+                else if (!wordSet.contains(word.trim())) {
+                    String w = word.trim().replaceAll("\\(.+\\s?\\)", "")
+                            .replaceAll("[а-я]+\\s?\\.", "").trim();
+                    if (!w.isEmpty())
+                        if (w.matches("[а-яё`']+")) wordSet.add(w);
+                        else if (w.matches("-[а-яё`']+")) ; // wordSet.add(w);
+                        else System.out.printf(" %s: [%s] %s\n", words[0], w, word);
+                }
+    }
+
     Set<String> extractWordSet(String file) throws IOException {
         return getTextStream(file).map(String::toLowerCase)
                 .flatMap(l -> stream(l.replaceAll("[^а-яё`']+", " ").split("\\s+")))
                 .filter(w -> w.contains("'") || w.contains("`"))
-                .map(w->w.replaceAll("`(.)","$1'"))
+                .map(w -> w.replaceAll("`(.)", "$1'"))
                 .collect(Collectors.toSet());
     }
 }
