@@ -61,6 +61,8 @@ public class DataStreams extends DataStrings {
     static Set<String> readLopatin(String file) {
         try (BufferedReader reader = Files.newBufferedReader(Path.of(file))) {
             Set<String> wordSet = new HashSet<>();
+            Set<String> wordSet2 = new HashSet<>();
+            Set<String> wordSet3 = new HashSet<>();
             do {
                 String[] lines = reader.readLine().split("%");
                 String[] words = lines[0].split("#");
@@ -68,9 +70,13 @@ public class DataStreams extends DataStrings {
                 words = lines[1].toLowerCase().split(",");
                 if (words.length > 1) stream(words).map(String::trim)
                         .filter(word -> word.matches("[а-яё`']+"))
+                        .filter(w->w.replaceAll("[^уеыаоэяию]","").length()>1)
                         .forEach(wordSet::add);
-                lopatinWordsExtender(lines[1], wordSet);
+                lopatinWordsExtender(lines[1].toLowerCase(), wordSet3);
             } while (reader.ready());
+            wordSet3.stream()
+                    .filter(s -> !s.contains("`") && !s.contains("ё"))
+                    .map(s -> s + ",").forEach(System.out::print);
             return wordSet;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -78,14 +84,14 @@ public class DataStreams extends DataStrings {
     }
 
     private static void lopatinWordsExtender(String line, Set<String> wordSet) {
-        String[] words = line.toLowerCase().split(",");
+        String[] words = line.replaceAll("\\(.+\\)", "")
+                .split("[,;:]\\s?|\\sи\\s");
         if (words.length < 2) return;
-        if (words[0].trim().matches("[а-яё`']+"))
+        if (words[0].matches("[а-яё`']+"))
             for (String word : words)
-                if (word.trim().matches("-[а-яё`']+")) ; // wordSet.add(w);
+                if (word.matches("-[а-яё`']+")) ; // wordSet.add(w);
                 else if (!wordSet.contains(word.trim())) {
-                    String w = word.trim().replaceAll("\\(.+\\s?\\)", "")
-                            .replaceAll("[а-я]+\\s?\\.", "").trim();
+                    String w = word.replaceAll("[а-я]+\\s?\\.", "").trim();
                     if (!w.isEmpty())
                         if (w.matches("[а-яё`']+")) wordSet.add(w);
                         else if (w.matches("-[а-яё`']+")) ; // wordSet.add(w);
