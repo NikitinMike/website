@@ -67,7 +67,7 @@ public class DataStreams extends DataStrings {
                 String[] words = lines[0].split("#");
                 wordSet.add(words[1]);
                 words = lines[1].replaceAll("\\(.+\\)", "")
-                        .replaceAll("но:.+","")
+//                        .replaceAll("но:.+|предлог|частица|приставка|союз","")
                         .toLowerCase().split(",");
                 if (words.length > 1) stream(words).map(String::trim)
                         .filter(word -> word.matches("[а-яё`']+"))
@@ -94,7 +94,10 @@ public class DataStreams extends DataStrings {
                 else if (!wordSet.contains(word.trim())) {
                     String w = word.replaceAll("[а-я]+\\s?\\.", "").trim();
                     if (!w.isEmpty())
-                        if (w.matches("[а-яё`']+")) wordSet.add(w);
+                        if (w.matches("[а-яё`']+"))
+//                            if (w.replaceAll("[^уеыаоэяию]","").length()>1)
+                                wordSet.add(w);
+//                            else System.out.print(w+"|");
                         else if (w.matches("-[а-яё`']+")) ; // wordSet.add(w);
                         else System.out.printf(" %s: [%s] %s\n", words[0], w, word);
                 }
