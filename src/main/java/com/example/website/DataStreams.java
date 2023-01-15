@@ -62,30 +62,31 @@ public class DataStreams extends DataStrings {
         try (BufferedReader reader = Files.newBufferedReader(Path.of(file))) {
             Set<String> wordSet = new HashSet<>();
             Set<String> wordSet2 = new HashSet<>();
-            Set<String> wordSet3 = new HashSet<>();
             do {
                 String[] lines = reader.readLine().split("%");
                 String[] words = lines[0].split("#");
                 wordSet.add(words[1]);
-                words = lines[1].toLowerCase().split(",");
+                words = lines[1].replaceAll("\\(.+\\)", "")
+                        .replaceAll("но:.+","")
+                        .toLowerCase().split(",");
                 if (words.length > 1) stream(words).map(String::trim)
                         .filter(word -> word.matches("[а-яё`']+"))
                         .filter(w->w.replaceAll("[^уеыаоэяию]","").length()>1)
-                        .forEach(wordSet::add);
-                lopatinWordsExtender(lines[1].toLowerCase(), wordSet3);
+                        .forEach(wordSet2::add);
+//                lopatinExtender(lines[1].toLowerCase(), wordSet2);
             } while (reader.ready());
-            wordSet3.stream()
+            wordSet2.stream() // trash
                     .filter(s -> !s.contains("`") && !s.contains("ё"))
                     .map(s -> s + ",").forEach(System.out::print);
+            wordSet.addAll(wordSet2);
             return wordSet;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static void lopatinWordsExtender(String line, Set<String> wordSet) {
-        String[] words = line.replaceAll("\\(.+\\)", "")
-                .split("[,;:]\\s?|\\sи\\s");
+    private static void lopatinExtender(String line, Set<String> wordSet) {
+        String[] words = line.split("[,;:]\\s?|\\sи\\s");
         if (words.length < 2) return;
         if (words[0].matches("[а-яё`']+"))
             for (String word : words)
