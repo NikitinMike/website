@@ -85,7 +85,7 @@ public class MainController extends DataStreams {
                 .map(s -> new Sentence(s).getHash(0)) // .randomOut(0)
                 .collect(Collectors.toList());
         System.out.println(file + " #" + text.size());
-        System.out.println(wordSet);
+//        System.out.println(wordSet);
         model.addAttribute("sentences", text);
 //        model.addAttribute("title", "START:" + text.size());
         return new ModelAndView("text");
