@@ -62,18 +62,19 @@ public class DataStreams extends DataStrings {
         try (BufferedReader reader = Files.newBufferedReader(Path.of(file))) {
             Set<String> wordSet = new HashSet<>();
             Set<String> wordSet2 = new HashSet<>();
+            Set<String> wordSet3 = new HashSet<>();
             do {
-                String[] lines = reader.readLine().split("%");
-                String[] words = lines[0].split("#");
+                String[] line = reader.readLine().split("%");
+                String[] words = line[0].split("#");
                 wordSet.add(words[1]);
-                words = lines[1].replaceAll("\\(.+\\)", "")
-//                        .replaceAll("но:.+|предлог|частица|приставка|союз","")
-                        .toLowerCase().split(",");
+                words = line[1].replaceAll("\\(.+\\)?", "")
+                        .replaceAll("но:.+|предлог|частица|приставка|союз","")
+                        .toLowerCase().split(",");   // .split("[,;:]\\s?|\\sи\\s");
                 if (words.length > 1) stream(words).map(String::trim)
                         .filter(word -> word.matches("[а-яё`']+"))
                         .filter(w->w.replaceAll("[^уеыаоэяию]","").length()>1)
                         .forEach(wordSet2::add);
-//                lopatinExtender(lines[1].toLowerCase(), wordSet2);
+                lopatinExtender(words, wordSet3);
             } while (reader.ready());
             wordSet2.stream() // trash
                     .filter(s -> !s.contains("`") && !s.contains("ё"))
@@ -85,8 +86,7 @@ public class DataStreams extends DataStrings {
         }
     }
 
-    private static void lopatinExtender(String line, Set<String> wordSet) {
-        String[] words = line.split("[,;:]\\s?|\\sи\\s");
+    private static void lopatinExtender(String[] words, Set<String> wordSet) {
         if (words.length < 2) return;
         if (words[0].matches("[а-яё`']+"))
             for (String word : words)
