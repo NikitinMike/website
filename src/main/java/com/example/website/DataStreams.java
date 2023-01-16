@@ -65,14 +65,13 @@ public class DataStreams extends DataStrings {
             Set<String> wordSet3 = new HashSet<>();
             do {
                 String[] line = reader.readLine().split("%");
-                if(line[1].contains("...")){
-                    System.out.println(line[1]);
-                    continue;
-                }
+                if(line[1].contains("пишется")) continue;
+                if(line[1].contains("...")) continue;
+//                    System.out.println(line[1]);
                 String[] words = line[0].split("#");
                 wordSet.add(words[1]);
                 words = line[1].replaceAll("\\(.+\\)?", "")
-                        .replaceAll(":.+|предлог|частица|приставка|союз","")
+                        .replaceAll("предлог|частица|приставка|союз","")
                         .toLowerCase().split(",");   // .split("[,;:]\\s?|\\sи\\s");
                 if (words.length > 1) stream(words).map(String::trim)
                         .filter(word -> word.matches("[а-яё`']+"))
