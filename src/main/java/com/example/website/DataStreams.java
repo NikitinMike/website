@@ -65,10 +65,14 @@ public class DataStreams extends DataStrings {
             Set<String> wordSet3 = new HashSet<>();
             do {
                 String[] line = reader.readLine().split("%");
+                if(line[1].contains("...")){
+                    System.out.println(line[1]);
+                    continue;
+                }
                 String[] words = line[0].split("#");
                 wordSet.add(words[1]);
                 words = line[1].replaceAll("\\(.+\\)?", "")
-                        .replaceAll("но:.+|предлог|частица|приставка|союз","")
+                        .replaceAll(":.+|предлог|частица|приставка|союз","")
                         .toLowerCase().split(",");   // .split("[,;:]\\s?|\\sи\\s");
                 if (words.length > 1) stream(words).map(String::trim)
                         .filter(word -> word.matches("[а-яё`']+"))
@@ -99,7 +103,7 @@ public class DataStreams extends DataStrings {
                                 wordSet.add(w);
 //                            else System.out.print(w+"|");
                         else if (w.matches("-[а-яё`']+")) ; // wordSet.add(w);
-                        else System.out.printf(" %s: [%s] %s\n", words[0], w, word);
+//                        else System.out.printf(" %s: [%s] %s\n", words[0], w, word);
                 }
     }
 
