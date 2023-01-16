@@ -71,8 +71,8 @@ public class DataStreams extends DataStrings {
                 String[] words = line[0].split("#");
                 wordSet.add(words[1]);
                 words = line[1].replaceAll("\\(.+\\)?", "")
-                        .replaceAll("предлог|частица|приставка|союз","")
-                        .toLowerCase().split(",");   // .split("[,;:]\\s?|\\sи\\s");
+                        .replaceAll("предлог|частица|приставка|союз|но","")
+                        .toLowerCase().split("[,;:]| и ");
                 if (words.length > 1) stream(words).map(String::trim)
                         .filter(word -> word.matches("[а-яё`']+"))
                         .filter(w->w.replaceAll("[^уеыаоэяию]","").length()>1)
@@ -93,6 +93,7 @@ public class DataStreams extends DataStrings {
         if (words.length < 2) return;
         if (words[0].matches("[а-яё`']+"))
             for (String word : words)
+//                if (word.contains(":"))
                 if (word.matches("-[а-яё`']+")) ; // wordSet.add(w);
                 else if (!wordSet.contains(word.trim())) {
                     String w = word.replaceAll("[а-я]+\\s?\\.", "").trim();
@@ -102,7 +103,7 @@ public class DataStreams extends DataStrings {
                                 wordSet.add(w);
 //                            else System.out.print(w+"|");
                         else if (w.matches("-[а-яё`']+")) ; // wordSet.add(w);
-//                        else System.out.printf(" %s: [%s] %s\n", words[0], w, word);
+                        else System.out.printf(" %s: [%s] %s\n", words[0], w, word);
                 }
     }
 
