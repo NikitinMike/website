@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 import static java.util.Arrays.stream;
 
 public class DataStreams extends DataStrings {
-    String[][] in = {hymn, sobaka, vorona, chuchelo, rossia, pushkin, tutchev};
     static WordsBookRepository wordsBookRepository;
+    String[][] in = {hymn, sobaka, vorona, chuchelo, rossia, pushkin, tutchev};
 
     static Hashtable<String, List<WordBookEntity>> readWordBook(String[] words) {
         Hashtable<String, List<WordBookEntity>> wordsEntityHashMap = new Hashtable<>();
@@ -42,6 +42,37 @@ public class DataStreams extends DataStrings {
         }
     }
 
+    static Set<String> readLopatin(String file) {
+        try (BufferedReader reader = Files.newBufferedReader(Path.of(file))) {
+            Set<String> lopatin = new HashSet<>();
+            do {
+                String line = reader.readLine()
+                        .replaceAll("\\(.+\\)?", " ")
+                        .replaceAll(".+#", "") // .replaceAll(".+%","")
+                        .replaceAll(" [ивск] ", " ")
+                        .replaceAll("союз|частица","")
+//                        .replaceAll(";.+", " ")
+                        .toLowerCase();
+                if (line.contains("часть сложных слов")) continue;
+                if (line.contains("приставка")) continue;
+                if (line.contains("пишется")) continue;
+                if (line.contains("...")) continue;
+//                if (line.contains("союз")) System.out.println(line);
+//                if (line.contains("частица")) System.out.println(line);
+                String[] words = line
+                        .replaceAll("[а-я]+\\.", "")
+                        .replaceAll("[^а-яё`'-]+", " ")
+                        .split("\\s+");
+                Set<String> wordSet = stream(words).filter(word -> !word.matches("-.+")).collect(Collectors.toSet());
+//                if (wordSet.size() > 5) System.out.println(wordSet.size() + ":" + wordSet + "\t" + stream(words).filter(word -> word.matches("-.+")).collect(Collectors.toSet()));
+                lopatin.addAll(wordSet);
+            } while (reader.ready());
+            return lopatin;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     static Set<String> readThesaurus(String file) {
         try (BufferedReader reader = Files.newBufferedReader(Path.of(file))) {
             Set<String> wordSet = new HashSet<>();
@@ -56,55 +87,6 @@ public class DataStreams extends DataStrings {
 
     static Stream<String> getTextStream(String fileName) throws IOException {
         return Files.newBufferedReader(Path.of(fileName)).lines().map(String::trim);
-    }
-
-    static Set<String> readLopatin(String file) {
-        try (BufferedReader reader = Files.newBufferedReader(Path.of(file))) {
-            Set<String> wordSet = new HashSet<>();
-            Set<String> wordSet2 = new HashSet<>();
-            Set<String> wordSet3 = new HashSet<>();
-            do {
-                String[] line = reader.readLine().split("%");
-                if(line[1].contains("пишется")) continue;
-                if(line[1].contains("...")) continue;
-//                    System.out.println(line[1]);
-                String[] words = line[0].split("#");
-                wordSet.add(words[1]);
-                words = line[1].replaceAll("\\(.+\\)?", "")
-                        .replaceAll("предлог|частица|приставка|союз|но","")
-                        .toLowerCase().split("[,;:]| и ");
-                if (words.length > 1) stream(words).map(String::trim)
-                        .filter(word -> word.matches("[а-яё`']+"))
-                        .filter(w->w.replaceAll("[^уеыаоэяию]","").length()>1)
-                        .forEach(wordSet2::add);
-                lopatinExtender(words, wordSet3);
-            } while (reader.ready());
-            wordSet2.stream() // trash
-                    .filter(s -> !s.contains("`") && !s.contains("ё"))
-                    .map(s -> s + ",").forEach(System.out::print);
-            wordSet.addAll(wordSet2);
-            return wordSet;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static void lopatinExtender(String[] words, Set<String> wordSet) {
-        if (words.length < 2) return;
-        if (words[0].matches("[а-яё`']+"))
-            for (String word : words)
-//                if (word.contains(":"))
-                if (word.matches("-[а-яё`']+")) ; // wordSet.add(w);
-                else if (!wordSet.contains(word.trim())) {
-                    String w = word.replaceAll("[а-я]+\\s?\\.", "").trim();
-                    if (!w.isEmpty())
-                        if (w.matches("[а-яё`']+"))
-//                            if (w.replaceAll("[^уеыаоэяию]","").length()>1)
-                                wordSet.add(w);
-//                            else System.out.print(w+"|");
-                        else if (w.matches("-[а-яё`']+")) ; // wordSet.add(w);
-                        else System.out.printf(" %s: [%s] %s\n", words[0], w, word);
-                }
     }
 
     Set<String> extractWordSet(String file) throws IOException {
