@@ -2,6 +2,7 @@ package com.example.website;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -42,6 +43,20 @@ public class DataStreams extends DataStrings {
         }
     }
 
+    static Set<String> readHagen(String file) {
+        try (BufferedReader reader = Files.newBufferedReader(Path.of(file),Charset.forName("Cp1251"))) {
+            Set<String> hagen = new HashSet<>();
+            do {
+                String line = reader.readLine();
+                if (line.trim().isEmpty()) continue;
+                hagen.add(line.split("\\|")[1].trim());
+            } while (reader.ready());
+            return hagen;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     static Set<String> readLopatin(String file) {
         try (BufferedReader reader = Files.newBufferedReader(Path.of(file))) {
             Set<String> lopatin = new HashSet<>();
@@ -64,7 +79,7 @@ public class DataStreams extends DataStrings {
                         .replaceAll("[^а-яё`'-]+", " ")
                         .split("\\s+");
                 Set<String> wordSet = stream(words).filter(word -> !word.matches("-.+")).collect(Collectors.toSet());
-//                if (wordSet.size() > 5) System.out.println(wordSet.size() + ":" + wordSet + "\t" + stream(words).filter(word -> word.matches("-.+")).collect(Collectors.toSet()));
+//                if (wordSet.size() > 1) System.out.println(wordSet.size() + ":" + wordSet + "\t" + stream(words).filter(word -> word.matches("-.+")).collect(Collectors.toSet()));
                 lopatin.addAll(wordSet);
             } while (reader.ready());
             return lopatin;
