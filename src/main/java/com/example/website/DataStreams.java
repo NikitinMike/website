@@ -44,7 +44,7 @@ public class DataStreams extends DataStrings {
     }
 
     static Set<String> readHagen(String file) {
-        try (BufferedReader reader = Files.newBufferedReader(Path.of(file),Charset.forName("Cp1251"))) {
+        try (BufferedReader reader = Files.newBufferedReader(Path.of(file), Charset.forName("Cp1251"))) {
             Set<String> hagen = new HashSet<>();
             do {
                 String line = reader.readLine();
@@ -65,7 +65,7 @@ public class DataStreams extends DataStrings {
                         .replaceAll("\\(.+\\)?", " ")
                         .replaceAll(".+#", "") // .replaceAll(".+%","")
                         .replaceAll(" [ивск] ", " ")
-                        .replaceAll("союз|частица","")
+                        .replaceAll("союз|частица", "")
 //                        .replaceAll(";.+", " ")
                         .toLowerCase();
                 if (line.contains("часть сложных слов")) continue;
@@ -78,14 +78,45 @@ public class DataStreams extends DataStrings {
                         .replaceAll("[а-я]+\\.", "")
                         .replaceAll("[^а-яё`'-]+", " ")
                         .split("\\s+");
-                Set<String> wordSet = stream(words).filter(word -> !word.matches("-.+")).collect(Collectors.toSet());
-//                if (wordSet.size() > 1) System.out.println(wordSet.size() + ":" + wordSet + "\t" + stream(words).filter(word -> word.matches("-.+")).collect(Collectors.toSet()));
-                lopatin.addAll(wordSet);
+//                System.out.println(stream(words).collect(Collectors.toList()));
+                lopatin.addAll(wordExtend(words));
             } while (reader.ready());
             return lopatin;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static Set<String> wordExtend(String[] words) {
+        Set<String> wordSet = new HashSet<>();
+        Set<String> wordSet2 = new HashSet<>();
+        Set<String> ok = new HashSet<>();
+        for (String word : words)
+            if (word.matches("-.+")) ok.add(word);
+            else wordSet.add(word);
+
+        if (ok.size() > 0)
+            for (String word : wordSet)
+                for (String o : ok)
+                    if (o.matches("-[ёуеыаоэяию].*")) {
+                        String w = join(word, o.replace("-", ""));
+                        if (w.contains("+")) System.out.println(word + " [" + o + "] " + w);
+                        else wordSet2.add(w);
+                    }
+
+        wordSet.addAll(wordSet2);
+        return wordSet;
+    }
+
+    private static String join(String word, String o) {
+        if (word.matches(".+[ёуеыаоэяию]$"))
+            return word.replaceFirst("(.+)[ёуеыаоэяию]$", "$1") + o;
+        else if(word.matches(".+ь$"))
+            return word.replaceFirst("(.+)ь$", "$1") + o;
+        else if(word.matches(".+й$"))
+            if(o.contains("я")) return word+o;
+            else return word +" +"+ o;
+        return word+o;
     }
 
     static Set<String> readThesaurus(String file) {
