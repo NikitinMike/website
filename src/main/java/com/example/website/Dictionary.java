@@ -31,8 +31,8 @@ public class Dictionary {
         showThesaurus = true;
     }
 
-    static String putWord(String word) {
-        if (word.matches("[^ёуеыаоэяию]*")) return word; //  System.out.printf(" [%s] ",word);
+    static void putWord(String word) {
+        if (word.matches("[^ёуеыаоэяию]*")) return; //  System.out.printf(" [%s] ",word);
         word = word.trim().replaceAll("`(.)", "$1'");
         if (word.contains("ё")) putWord(word.replaceAll("ё", "е'"));
         if (word.replaceAll("([^ёуеыаоэяию'])","").length()==1)
@@ -40,7 +40,6 @@ public class Dictionary {
         if (word.contains("'")||word.contains("ё"))
             wordTable.put(word.replace("'", ""), word);
         else if (showThesaurus) System.out.print(word + ",");
-        return word;
     }
 
     public static void addWordSet(Set<String> words) {
@@ -56,9 +55,5 @@ public class Dictionary {
             else word = word.replaceFirst("(ё)", "$1'");
         // getWord(reverse(reverse(word).replaceFirst("е", "ё")));
         return word;
-    }
-
-    public static String getGlas(String word) {
-        return getWord(word).replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]", "");
     }
 }

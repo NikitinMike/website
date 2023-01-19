@@ -1,14 +1,9 @@
 package com.example.website;
 
-import java.util.Arrays;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.example.website.Dictionary.getGlas;
 import static com.example.website.Dictionary.getWord;
-import static com.example.website.Utils.tag;
-import static com.example.website.Utils.wordAnalyse;
+import static com.example.website.Utils.*;
 import static java.lang.Math.random;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
@@ -43,15 +38,8 @@ public class Sentence {
                 .collect(joining(" "));
     }
 
-    public static String wordStrip(String word) {
-        return Arrays.stream(tag(word).split("=+"))
-                .map(s -> s.matches(".'|`.") ? s.toUpperCase() : s) // new Locale("en", "EN")
-                .collect(Collectors.joining("-"))
-                .replaceAll("'", "");
-    }
-
     String outStrip(int[] a) {
-        return stream(a).mapToObj(j -> wordStrip(getGlas(words[j])))
+        return stream(a).mapToObj(j -> wordStrip(getGlas(getWord(words[j]))))
                 .filter(p -> !p.isEmpty()).collect(joining())
                 .replaceAll("-+", "")
                 .replaceAll("[ёуеыаоэяию]", "-");

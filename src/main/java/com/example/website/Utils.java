@@ -74,6 +74,17 @@ public class Utils {
                 ;
     }
 
+    public static String getGlas(String word) {
+        return word.replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]", "");
+    }
+
+    public static String wordStrip(String word) {
+        return Arrays.stream(tag(word).split("=+"))
+                .map(s -> s.matches(".'|`.") ? s.toUpperCase() : s) // new Locale("en", "EN")
+                .collect(Collectors.joining("-"))
+                .replaceAll("'", "");
+    }
+
     public static String wordAnalyse(String word) {
         return String.join("-", tag(word).split("=+"));
     }
