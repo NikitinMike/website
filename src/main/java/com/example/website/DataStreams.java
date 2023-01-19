@@ -98,25 +98,31 @@ public class DataStreams extends DataStrings {
         if (ok.size() > 0)
             for (String word : wordSet)
                 for (String o : ok)
-                    if (o.matches("-[ёуеыаоэяию].*")) {
+                    if (o.matches("-[ёуеыаоэяию`].*")) {
                         String w = join(word, o.replace("-", ""));
-                        if (w.contains("+")) System.out.println(word + " [" + o + "] " + w);
+                        if (w.contains("+")) ;
                         else wordSet2.add(w);
-                    }
+                    } else System.out.println(word + " [" + o + "] ");
 
         wordSet.addAll(wordSet2);
         return wordSet;
     }
 
     private static String join(String word, String o) {
-        if (word.matches(".+[ёуеыаоэяию]$"))
+        if (o.matches("`.+"))
+            return word.replaceFirst("(.+)`.*", "$1") + o;
+        else if (word.matches(".+[ёуеыаоэяию]$"))
             return word.replaceFirst("(.+)[ёуеыаоэяию]$", "$1") + o;
-        else if(word.matches(".+ь$"))
+        else if (word.matches(".+ь$"))
             return word.replaceFirst("(.+)ь$", "$1") + o;
-        else if(word.matches(".+й$"))
-            if(o.contains("я")) return word+o;
-            else return word +" +"+ o;
-        return word+o;
+        else if (word.matches(".+й$"))
+            if (o.contains("я")) return word + o;
+            else if (word.contains("ный")) return word.replaceFirst("..ный", o);
+            else if (word.contains("ий")) return word.replaceFirst("ий", o);
+            else if (word.contains("ый")) return word.replaceFirst("ый", o);
+            else if (word.contains("ей") && o.equals("и")) return word.replaceFirst("ей", o);
+            else return word + " +" + o;
+        return word + o;
     }
 
     static Set<String> readThesaurus(String file) {
