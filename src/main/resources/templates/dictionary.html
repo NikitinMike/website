@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <title> found [[${files.size()}]] words:[[${words}]] </title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <style>
+    </style>
+</head>
+<body>
+<div class="container">
+    <hr/>
+    <div class="row">
+            <span th:each="file : ${files}">
+                [[${file}]],
+            </span>
+    </div>
+    <hr/>
+</div>
+</body>
+</html>

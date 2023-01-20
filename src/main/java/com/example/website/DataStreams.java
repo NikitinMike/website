@@ -92,14 +92,17 @@ public class DataStreams extends DataStrings {
         Set<String> wordSet2 = new HashSet<>();
         Set<String> ok = new HashSet<>();
         for (String word : words)
-            if (word.matches("-.+")) ok.add(word); else wordSet.add(word);
+            if (word.matches("-.+")) ok.add(word);
+            else if (!word.matches(".*-")) wordSet.add(word);
+//            else if (word.equals("-")) ;
+//            else System.out.println(word);
 
         if (ok.size() > 0)
             for (String word : wordSet)
                 for (String o : ok)
                     if (o.matches("-[ёуеыаоэяию`].*")) {
                         String w = join(word, o.replace("-", ""));
-                        if (w.contains("+")) ; // System.out.println(word + " [" + o + "] " + w);
+                        if (w.contains("+")) System.out.println(word + " [" + o + "] " + w);
                         else wordSet2.add(w);
                     } else wordSet2.add(join2(word, o.replace("-", "")));
 
@@ -110,7 +113,7 @@ public class DataStreams extends DataStrings {
 
     private static String join2(String word, String o) {
         //        System.out.println(word + " [" + o + "] " + ws + o);
-        return word.replaceFirst( o.charAt(0) + "{1}+.*$", o);
+        return word.replaceFirst(o.charAt(0) + "{1}+.*$", o);
     }
 
     private static String join(String word, String o) {
@@ -125,7 +128,9 @@ public class DataStreams extends DataStrings {
             else if (word.contains("ный")) return word.replaceFirst("..ный", o);
             else if (word.contains("ий")) return word.replaceFirst("ий", o);
             else if (word.contains("ый")) return word.replaceFirst("ый", o);
-            else if (word.contains("ей") && o.equals("и")) return word.replaceFirst("ей", o);
+            else if (word.contains("ей") && o.matches("и|а|ю|е.")) return word.replaceFirst("ей", o);
+            else if (word.contains("ой") && o.matches("а|ю|ы|е.|ёв")) return word.replaceFirst("ой", o);
+            else if (word.contains("ай") && o.matches("ю")) return word.replaceFirst("ай", o);
             else return word + " +" + o;
         return word + o;
     }

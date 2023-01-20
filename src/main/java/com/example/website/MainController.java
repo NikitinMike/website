@@ -12,10 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,6 +37,15 @@ public class MainController extends DataStreams {
         model.addAttribute("files", textFilesExtra(texts));
         model.addAttribute("words", Dictionary.wordTable.size());
         return new ModelAndView("listfiles");
+    }
+
+    @GetMapping("/dictionary")
+    @ResponseBody
+    public ModelAndView dictionary(Model model) {
+        model.addAttribute("title", 0);
+        model.addAttribute("files", new TreeSet<>(Dictionary.wordTable.values()));
+        model.addAttribute("words", Dictionary.wordTable.size());
+        return new ModelAndView("dictionary");
     }
 
     @GetMapping("/scan")
