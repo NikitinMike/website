@@ -38,8 +38,14 @@ public class DataStreams extends DataStrings {
                 Set<String> set = stream(lines[1].split(","))
 //                        .filter(w -> !w.equals("-"))
                         .collect(Collectors.toSet());
-                set.stream().filter(w->w.matches("-.+")).forEach(System.out::println);
-                wordSet.addAll(set);
+                if (lines[1].contains(",-"))
+                    for (String w : set)
+                        if (w.matches("-.+"))
+                            if (lines[0].matches(".+очьс?я?"))
+                                wordSet.add(lines[0].replaceFirst("очьс?я?", w));
+                            else System.out.println(lines[0]+w);
+                        else wordSet.add(w);
+                else wordSet.addAll(set);
             } while (reader.ready());
             return wordSet;
         } catch (IOException e) {
