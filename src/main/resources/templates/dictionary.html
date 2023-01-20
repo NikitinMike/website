@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
-    <title> found [[${files.size()}]] words:[[${words}]] </title>
+    <title> found [[${words.size()}]] </title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <style>
     </style>
@@ -10,9 +10,7 @@
 <div class="container">
     <hr/>
     <div class="row">
-            <span th:each="file : ${files}">
-                [[${file}]],
-            </span>
+        <span th:each="word : ${words}"> [[${word}]] </span>
     </div>
     <hr/>
 </div>

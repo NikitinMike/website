@@ -35,7 +35,11 @@ public class DataStreams extends DataStrings {
             Set<String> wordSet = new HashSet<>();
             do {
                 String[] lines = reader.readLine().split("#");
-                Collections.addAll(wordSet, lines[1].split(","));
+                Set<String> set = stream(lines[1].split(","))
+//                        .filter(w -> !w.equals("-"))
+                        .collect(Collectors.toSet());
+                set.stream().filter(w->w.matches("-.+")).forEach(System.out::println);
+                wordSet.addAll(set);
             } while (reader.ready());
             return wordSet;
         } catch (IOException e) {

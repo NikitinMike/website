@@ -43,8 +43,8 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView dictionary(Model model) {
         model.addAttribute("title", 0);
-        model.addAttribute("files", new TreeSet<>(Dictionary.wordTable.values()));
-        model.addAttribute("words", Dictionary.wordTable.size());
+        model.addAttribute("files", Collections.singleton(""));
+        model.addAttribute("words",new TreeSet<>(Dictionary.wordTable.values()));
         return new ModelAndView("dictionary");
     }
 
