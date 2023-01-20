@@ -104,7 +104,7 @@ public class DataStreams extends DataStrings {
                     } else wordSet2.add(join2(word, o.replace("-", "")));
 
         wordSet.addAll(wordSet2);
-        System.out.println(wordSet);
+//        System.out.println(wordSet);
         return wordSet;
     }
 
