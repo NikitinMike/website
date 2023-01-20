@@ -92,20 +92,25 @@ public class DataStreams extends DataStrings {
         Set<String> wordSet2 = new HashSet<>();
         Set<String> ok = new HashSet<>();
         for (String word : words)
-            if (word.matches("-.+")) ok.add(word);
-            else wordSet.add(word);
+            if (word.matches("-.+")) ok.add(word); else wordSet.add(word);
 
         if (ok.size() > 0)
             for (String word : wordSet)
                 for (String o : ok)
                     if (o.matches("-[ёуеыаоэяию`].*")) {
                         String w = join(word, o.replace("-", ""));
-                        if (w.contains("+")) ;
+                        if (w.contains("+")) ; // System.out.println(word + " [" + o + "] " + w);
                         else wordSet2.add(w);
-                    } else System.out.println(word + " [" + o + "] ");
+                    } else wordSet2.add(join2(word, o.replace("-", "")));
 
         wordSet.addAll(wordSet2);
+        System.out.println(wordSet);
         return wordSet;
+    }
+
+    private static String join2(String word, String o) {
+        //        System.out.println(word + " [" + o + "] " + ws + o);
+        return word.replaceFirst( o.charAt(0) + "{1}+.*$", o);
     }
 
     private static String join(String word, String o) {
