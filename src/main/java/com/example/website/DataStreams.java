@@ -1,10 +1,12 @@
 package com.example.website;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -14,6 +16,13 @@ import static java.util.Arrays.stream;
 public class DataStreams extends DataStrings {
     static WordsBookRepository wordsBookRepository;
     String[][] in = {hymn, sobaka, vorona, chuchelo, rossia, pushkin, tutchev};
+
+    List<File> textFilesExtra(String dir) throws IOException {
+        try (Stream<Path> stream = Files.list(Paths.get(dir))) {
+            return stream.filter(file -> !Files.isDirectory(file))
+                    .map(Path::toFile).collect(Collectors.toList());
+        }
+    }
 
     static Hashtable<String, List<WordBookEntity>> readWordBook(String[] words) {
         Hashtable<String, List<WordBookEntity>> wordsEntityHashMap = new Hashtable<>();
@@ -43,7 +52,7 @@ public class DataStreams extends DataStrings {
                         if (w.matches("-.+"))
                             if (lines[0].matches(".+очьс?я?"))
                                 wordSet.add(lines[0].replaceFirst("очьс?я?", w));
-                            else System.out.println(lines[0]+w);
+                            else System.out.println(lines[0] + w);
                         else wordSet.add(w);
                 else wordSet.addAll(set);
             } while (reader.ready());

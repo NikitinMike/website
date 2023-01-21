@@ -14,27 +14,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.StandardOpenOption.APPEND;
 
 @Controller
 public class MainController extends DataStreams {
-    String texts = "texts/";
-
-    List<File> textFilesExtra(String dir) throws IOException {
-        try (Stream<Path> stream = Files.list(Paths.get(dir))) {
-            return stream.filter(file -> !Files.isDirectory(file))
-                    .map(Path::toFile).collect(Collectors.toList());
-        }
-    }
+    String source = "texts/";
 
     @GetMapping("/")
     @ResponseBody
     public ModelAndView main(Model model) throws IOException {
         model.addAttribute("title", 0);
-        model.addAttribute("files", textFilesExtra(texts));
+        model.addAttribute("files", textFilesExtra(source));
         model.addAttribute("words", Dictionary.wordTable.size());
         return new ModelAndView("listfiles");
     }
@@ -54,7 +46,7 @@ public class MainController extends DataStreams {
         model.addAttribute("title", "SCANNER");
         Path thesaurus = Paths.get("thesaurus.txt");
         Files.write(thesaurus, Collections.singleton(""), UTF_8);
-        for (File file : textFilesExtra(texts)) {
+        for (File file : textFilesExtra(source)) {
 //            Files.write(thesaurus, Collections.singleton("\n<"+file.getPath()+">"), UTF_8,APPEND);
             Set<String> wordSet = extractWordSet(file.getAbsolutePath());
             Dictionary.addWordSet(wordSet);
@@ -84,10 +76,10 @@ public class MainController extends DataStreams {
     @GetMapping("/file/{file}")
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) throws IOException {
-        Set<String> wordSet = extractWordSet(texts + file);
+        Set<String> wordSet = extractWordSet(source + file);
         Dictionary.addWordSet(wordSet);
 //        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
-        List<String[]> text = getTextStream(texts + file)
+        List<String[]> text = getTextStream(source + file)
                 .map(s -> new Sentence(s).getHash(0)) // .randomOut(0)
                 .collect(Collectors.toList());
         System.out.println(file + " #" + text.size());
