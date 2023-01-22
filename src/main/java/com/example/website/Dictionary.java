@@ -17,18 +17,18 @@ public class Dictionary {
 
     public Dictionary() {
         if (wordTable.isEmpty()) {
-            for (String word : readThesaurus("texts\\thesaurus.txt")) putWord(word);
-//            wordTable.forEach((k,v) -> System.out.print(k + ":"+v+","));
-            System.out.println("Thesaurus words:" + wordTable.size());
+            for (String word : readDictionary(dir + "wordbook.txt")) putWord(word);
+            System.out.println("Dictionary words:" + wordTable.size());
 
             for (String word : readHagen(dir + "hagen-orf.txt")) putWord(word);
             System.out.println("Hagen words:" + wordTable.size());
 
-            for (String word : readDictionary(dir + "wordbook.txt")) putWord(word);
-            System.out.println("Dictionary words:" + wordTable.size());
-
             for (String word : readLopatin(dir + "lop1v2.utf8.txt")) putWord(word);
             System.out.println("Lopatin's Dictionary words:" + wordTable.size());
+
+            for (String word : readThesaurus("texts\\thesaurus.txt")) putWord(word);
+//            wordTable.forEach((k,v) -> System.out.print(k + ":"+v+","));
+            System.out.println("Thesaurus words:" + wordTable.size());
 
             System.out.println("Dictionary:" + wordTable.get("её"));
         }
