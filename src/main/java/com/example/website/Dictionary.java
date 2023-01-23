@@ -41,6 +41,7 @@ public class Dictionary {
         if (word.contains("ё")) putWord(word.replaceAll("ё", "е'"));
         if (word.replaceAll("([^ёуеыаоэяию'])","").length()==1)
             word = word.replaceAll("([ёуеыаоэяию])","$1'");
+        word = word.replaceAll("''","'");
         if (word.contains("'")||word.contains("ё"))
             wordTable.put(word.replace("'", ""), word);
         else if (showThesaurus) System.out.print(word + ",");
