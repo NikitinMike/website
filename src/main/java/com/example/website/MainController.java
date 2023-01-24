@@ -52,21 +52,23 @@ public class MainController extends DataStreams {
         return new ModelAndView("dictionary");
     }
 
-    @GetMapping({"/scan","/scan/{page}"})
+    @GetMapping({"/scan", "/scan/{page}"})
     @ResponseBody
-    public ModelAndView scan(Model model,@PathVariable @Nullable String page) throws IOException {
+    public ModelAndView scan(Model model, @PathVariable @Nullable String page) throws IOException {
         model.addAttribute("title", "SCANNER");
         Path thesaurus = Paths.get("thesaurus.txt");
         Files.write(thesaurus, Collections.singleton(""), UTF_8);
         for (File file : textFilesExtra(source)) {
 //            Files.write(thesaurus, Collections.singleton("\n<"+file.getPath()+">"), UTF_8,APPEND);
-            Set<String> wordSet = extractWordSet(file.getAbsolutePath());
+            Set<String> wordSet = thesaurusExtract(file.getAbsolutePath());
+//            Set<String> wordSet = extractWordSet(file.getAbsolutePath());
             Dictionary.addWordSet(wordSet);
             System.out.println(file + " : +" + wordSet.size()); // Dictionary.wordTable.size()
             Files.write(thesaurus, wordSet, UTF_8, APPEND);
         }
-        if(page!=null) return new ModelAndView("redirect:/"+page);
-        return new ModelAndView("redirect:/");
+//        System.out.println(page);
+        if (page == null) return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/" + page.toLowerCase());
     }
 
     @GetMapping("/random")
