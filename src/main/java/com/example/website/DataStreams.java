@@ -179,11 +179,13 @@ public class DataStreams extends DataStrings {
     }
 
     Set<String> thesaurusExtract(String file) throws IOException {
+//        Comparator<Human> nameComparator = (h1, h2) -> h1.getName().compareTo(h2.getName());
         return getTextStream(file).map(String::toLowerCase)
                 .flatMap(l -> stream(l.replaceAll("[^а-яё`']+", " ").split("\\s+")))
                 .map(Dictionary::getWord)
                 .filter(w -> w.contains("'") || w.contains("`") || w.contains("ё"))
                 .map(w -> w.replaceAll("`(.)", "$1'"))
-                .sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+                .sorted(Comparator.comparing(Utils::reverse))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

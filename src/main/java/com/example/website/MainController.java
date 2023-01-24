@@ -44,6 +44,7 @@ public class MainController extends DataStreams {
                 .subSet(from, Character.toString(to)).stream()
                 .map(s -> new Sentence(s).getHash(0)[1])// .randomOut(0)
                 .map(s -> s.replaceAll("(.)'", "`$1"))
+                .sorted(Comparator.comparing(Utils::reverse).reversed())
                 .collect(Collectors.toList());
 //                .collect(Collectors.toSet());
 //                .collect(Collectors.joining(", "));

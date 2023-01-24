@@ -37,12 +37,11 @@ public class Utils {
         }
     }
 
-//    public static String reverse(String str) {
-//        return new StringBuilder(str).reverse().toString();
-//    }
+    public static String reverse(String str) {
+        return new StringBuilder(str).reverse().toString();
+    }
 
 //    public static <T> void swap(T[] a, int i, int j) {T t = a[i];a[i] = a[j];a[j] = t;}
-
 //    public static void hackSwap(int[] arr, int i, int j) {
 //        arr[i] = (arr[i] + arr[j]) - (arr[j] = arr[i]);
 //    }
