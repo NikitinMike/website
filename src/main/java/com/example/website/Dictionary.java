@@ -28,6 +28,9 @@ public class Dictionary {
                     for (String word : readLopatin(dir + "lop1v2.utf8.txt")) putWord(word);
                     System.out.println("Lopatin's Dictionary words:" + wordTable.size());
                 case 3:
+                    for (String word : readThesaurus("thesaurus.txt")) putWord(word);
+                    System.out.println("Thesaurus words:" + wordTable.size());
+                case 4:
                     for (String word : readThesaurus("texts\\thesaurus.txt")) putWord(word);
                     System.out.println("Thesaurus words:" + wordTable.size());
                 default:
