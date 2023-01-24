@@ -16,22 +16,24 @@ public class Dictionary {
     static boolean showThesaurus = false;
 
     public Dictionary() {
-        if (wordTable.isEmpty()) {
-//            for (String word : readDictionary(dir + "wordbook.txt")) putWord(word);
-//            System.out.println("Dictionary words:" + wordTable.size());
-//
-//            for (String word : readHagen(dir + "hagen-orf.txt")) putWord(word);
-//            System.out.println("Hagen words:" + wordTable.size());
-//
-            for (String word : readLopatin(dir + "lop1v2.utf8.txt")) putWord(word);
-            System.out.println("Lopatin's Dictionary words:" + wordTable.size());
-
-            for (String word : readThesaurus("texts\\thesaurus.txt")) putWord(word);
-//            wordTable.forEach((k,v) -> System.out.print(k + ":"+v+","));
-            System.out.println("Thesaurus words:" + wordTable.size());
-
-            System.out.println("Dictionary:" + wordTable.get("её"));
-        }
+        if (wordTable.isEmpty())
+            switch (3) {
+                case 0:
+                    for (String word : readDictionary(dir + "wordbook.txt")) putWord(word);
+                    System.out.println("Dictionary words:" + wordTable.size());
+                case 1:
+                    for (String word : readHagen(dir + "hagen-orf.txt")) putWord(word);
+                    System.out.println("Hagen words:" + wordTable.size());
+                case 2:
+                    for (String word : readLopatin(dir + "lop1v2.utf8.txt")) putWord(word);
+                    System.out.println("Lopatin's Dictionary words:" + wordTable.size());
+                case 3:
+                    for (String word : readThesaurus("texts\\thesaurus.txt")) putWord(word);
+                    System.out.println("Thesaurus words:" + wordTable.size());
+                default:
+//                    wordTable.forEach((k, v) -> System.out.print(k + ":" + v + ","));
+//                    System.out.println("Dictionary:" + wordTable.get("её"));
+            }
         showThesaurus = true;
     }
 
@@ -39,10 +41,10 @@ public class Dictionary {
         if (word.matches("[^ёуеыаоэяию]*")) return; //  System.out.printf(" [%s] ",word);
         word = word.trim().replaceAll("`(.)", "$1'");
         if (word.contains("ё")) putWord(word.replaceAll("ё", "е'"));
-        if (word.replaceAll("([^ёуеыаоэяию'])","").length()==1)
-            word = word.replaceAll("([ёуеыаоэяию])","$1'");
-        word = word.replaceAll("''","'");
-        if (word.contains("'")||word.contains("ё"))
+        if (word.replaceAll("([^ёуеыаоэяию'])", "").length() == 1)
+            word = word.replaceAll("([ёуеыаоэяию])", "$1'");
+        word = word.replaceAll("''", "'");
+        if (word.contains("'") || word.contains("ё"))
             wordTable.put(word.replace("'", ""), word);
         else if (showThesaurus) System.out.print(word + ",");
     }

@@ -35,7 +35,7 @@ public class MainController extends DataStreams {
     @GetMapping({"/dictionary/{from}", "/dictionary"})
     @ResponseBody
     public ModelAndView dictionary(Model model, @PathVariable @Nullable String from) {
-        if (from == null || from.isEmpty()) from = "а";
+        if (from == null || from.isEmpty()) from = "ё";
         model.addAttribute("title", from.toUpperCase());
         model.addAttribute("files", Collections.singleton(""));
         model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщыэюя".split(""));
