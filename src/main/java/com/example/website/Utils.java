@@ -86,6 +86,6 @@ public class Utils {
     }
 
     public static String wordAnalyse(String word) {
-        return String.join("-", tag(word).split("=+"));
+        return String.join("-", tag(word).split("=+")); // .replaceAll("(.)'","`$1");
     }
 }
