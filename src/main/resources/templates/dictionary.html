@@ -9,14 +9,15 @@
 <body>
 <div class="container">
     <a href="/"> BACK </a>
-
-    <SPAN th:each="chr : ${alphabet}">
-        <a th:href="@{/dictionary/{id}(id=${chr})}">[[${chr.toUpperCase()}]]</a>
-    </SPAN>
-
+    <a th:each="chr : ${alphabet}" th:href="@{/dictionary/{id}(id=${chr})}">
+        [[${chr.toUpperCase()}]]
+    </a>
+    <a href="/scan/dictionary">RESCAN</a>
     <hr/>
     <div class="row">
-        <span th:each="word : ${words}"> [[${word}]] </span>
+        <span th:each="word : ${words}">
+            [[${word}]]
+        </span>
     </div>
     <hr/>
 </div>

@@ -40,18 +40,21 @@ public class MainController extends DataStreams {
         model.addAttribute("files", Collections.singleton(""));
         model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщыэюя".split(""));
         char to = (char) (from.charAt(0) + 1);
-        String words = new TreeSet<>(Dictionary.wordTable.values())
+        List<String> words = new TreeSet<>(Dictionary.wordTable.values())
                 .subSet(from, Character.toString(to)).stream()
                 .map(s -> new Sentence(s).getHash(0)[1])// .randomOut(0)
-                // .collect(Collectors.toSet());
-                .collect(Collectors.joining(", "));
-        model.addAttribute("words", Collections.singleton(words));
+                .map(s -> s.replaceAll("(.)'", "`$1"))
+                .collect(Collectors.toList());
+//                .collect(Collectors.toSet());
+//                .collect(Collectors.joining(", "));
+        model.addAttribute("words", words);
+//        model.addAttribute("words", Collections.singleton(words));
         return new ModelAndView("dictionary");
     }
 
-    @GetMapping("/scan")
+    @GetMapping({"/scan","/scan/{page}"})
     @ResponseBody
-    public ModelAndView scan(Model model) throws IOException {
+    public ModelAndView scan(Model model,@PathVariable @Nullable String page) throws IOException {
         model.addAttribute("title", "SCANNER");
         Path thesaurus = Paths.get("thesaurus.txt");
         Files.write(thesaurus, Collections.singleton(""), UTF_8);
@@ -62,6 +65,7 @@ public class MainController extends DataStreams {
             System.out.println(file + " : +" + wordSet.size()); // Dictionary.wordTable.size()
             Files.write(thesaurus, wordSet, UTF_8, APPEND);
         }
+        if(page!=null) return new ModelAndView("redirect:/"+page);
         return new ModelAndView("redirect:/");
     }
 
