@@ -36,12 +36,16 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView dictionary(Model model, @PathVariable @Nullable String from) {
         if (from == null || from.isEmpty()) from = "а";
-        model.addAttribute("title", 0);
+        model.addAttribute("title", from.toUpperCase());
         model.addAttribute("files", Collections.singleton(""));
         model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщыэюя".split(""));
         char to = (char) (from.charAt(0) + 1);
-        TreeSet<String> set = new TreeSet<>(Dictionary.wordTable.values());
-        model.addAttribute("words", set.subSet(from, Character.toString(to)));
+        String words = new TreeSet<>(Dictionary.wordTable.values())
+                .subSet(from, Character.toString(to)).stream()
+                .map(s -> new Sentence(s).getHash(0)[1])// .randomOut(0)
+                // .collect(Collectors.toSet());
+                .collect(Collectors.joining(", "));
+        model.addAttribute("words", Collections.singleton(words));
         return new ModelAndView("dictionary");
     }
 
