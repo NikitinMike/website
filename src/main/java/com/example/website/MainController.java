@@ -1,5 +1,6 @@
 package com.example.website;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,12 +32,16 @@ public class MainController extends DataStreams {
         return new ModelAndView("listfiles");
     }
 
-    @GetMapping("/dictionary")
+    @GetMapping({"/dictionary/{from}", "/dictionary"})
     @ResponseBody
-    public ModelAndView dictionary(Model model) {
+    public ModelAndView dictionary(Model model, @PathVariable @Nullable String from) {
+        if (from == null || from.isEmpty()) from = "а";
         model.addAttribute("title", 0);
         model.addAttribute("files", Collections.singleton(""));
-        model.addAttribute("words",new TreeSet<>(Dictionary.wordTable.values()));
+        model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщыэюя".split(""));
+        char to = (char) (from.charAt(0) + 1);
+        TreeSet<String> set = new TreeSet<>(Dictionary.wordTable.values());
+        model.addAttribute("words", set.subSet(from, Character.toString(to)));
         return new ModelAndView("dictionary");
     }
 

@@ -8,7 +8,12 @@
 </head>
 <body>
 <div class="container">
-    <a href="/">BACK</a>
+    <a href="/"> BACK </a>
+
+    <SPAN th:each="chr : ${alphabet}">
+        <a th:href="@{/dictionary/{id}(id=${chr})}">[[${chr.toUpperCase()}]]</a>
+    </SPAN>
+
     <hr/>
     <div class="row">
         <span th:each="word : ${words}"> [[${word}]] </span>
