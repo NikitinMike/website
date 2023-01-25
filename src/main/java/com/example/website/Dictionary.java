@@ -17,22 +17,22 @@ public class Dictionary {
 
     public Dictionary() {
         if (wordTable.isEmpty())
-            switch (3) {
+            switch (0) {
                 case 0:
-                    for (String word : readDictionary(dir + "wordbook.txt")) putWord(word);
+                    addWordSet(readDictionary(dir + "wordbook.txt"));
                     System.out.println("Dictionary words:" + wordTable.size());
                 case 1:
-                    for (String word : readHagen(dir + "hagen-orf.txt")) putWord(word);
+                    addWordSet(readHagen(dir + "hagen-orf.txt"));
                     System.out.println("Hagen words:" + wordTable.size());
                 case 2:
-                    for (String word : readLopatin(dir + "lop1v2.utf8.txt")) putWord(word);
-                    System.out.println("Lopatin's Dictionary words:" + wordTable.size());
+                    addWordSet(readLopatin(dir + "lop1v2.utf8.txt"));
+                    System.out.println("Lopatin words:" + wordTable.size());
                 case 3:
-                    for (String word : readThesaurus("thesaurus.txt")) putWord(word);
-                    System.out.println("Thesaurus words:" + wordTable.size());
+                    addWordSet(readThesaurus("thesaurus.txt"));
+                    System.out.println("Big Thesaurus words:" + wordTable.size());
                 case 4:
-                    for (String word : readThesaurus("texts\\thesaurus.txt")) putWord(word);
-                    System.out.println("Thesaurus words:" + wordTable.size());
+                    addWordSet(readThesaurus("texts\\thesaurus.txt"));
+                    System.out.println("Small Thesaurus words:" + wordTable.size());
                 default:
 //                    wordTable.forEach((k, v) -> System.out.print(k + ":" + v + ","));
 //                    System.out.println("Dictionary:" + wordTable.get("её"));
