@@ -3,7 +3,6 @@ package com.example.website;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,18 +10,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.nio.charset.Charset.forName;
+import static java.nio.file.Files.newBufferedReader;
 import static java.util.Arrays.stream;
 
 public class DataStreams extends DataStrings {
     static WordsBookRepository wordsBookRepository;
     String[][] in = {hymn, sobaka, vorona, chuchelo, rossia, pushkin, tutchev};
-
-    List<File> textFilesExtra(String dir) throws IOException {
-        try (Stream<Path> stream = Files.list(Paths.get(dir))) {
-            return stream.filter(file -> !Files.isDirectory(file))
-                    .map(Path::toFile).collect(Collectors.toList());
-        }
-    }
 
     static Hashtable<String, List<WordBookEntity>> readWordBook(String[] words) {
         Hashtable<String, List<WordBookEntity>> wordsEntityHashMap = new Hashtable<>();
@@ -40,97 +34,98 @@ public class DataStreams extends DataStrings {
     }
 
     static Set<String> readDictionary(String file) {
-        try (BufferedReader reader = Files.newBufferedReader(Path.of(file))) {
-            Set<String> wordSet = new HashSet<>();
-            do {
-                String[] lines = reader.readLine().split("#");
-                Set<String> set = stream(lines[1].split(","))
+        Set<String> wordSet = new HashSet<>();
+        if (new File(file).isFile())
+            try (BufferedReader reader = newBufferedReader(Path.of(file))) {
+                do {
+                    String[] lines = reader.readLine().split("#");
+                    Set<String> set = stream(lines[1].split(","))
 //                        .filter(w -> !w.equals("-"))
-                        .collect(Collectors.toSet());
-                if (lines[1].contains(",-"))
-                    for (String w : set)
-                        if (w.matches("-.+"))
-                            if (lines[0].matches(".+очьс?я?"))
-                                wordSet.add(lines[0].replaceFirst("очьс?я?", w));
-                            else System.out.println(lines[0] + w);
-                        else wordSet.add(w);
-                else wordSet.addAll(set);
-            } while (reader.ready());
-            return wordSet;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+                            .collect(Collectors.toSet());
+                    if (lines[1].contains(",-"))
+                        for (String w : set)
+                            if (w.matches("-.+"))
+                                if (lines[0].matches(".+очьс?я?"))
+                                    wordSet.add(lines[0].replaceFirst("очьс?я?", w));
+                                else System.out.println(lines[0] + w);
+                            else wordSet.add(w);
+                    else wordSet.addAll(set);
+                } while (reader.ready());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        return wordSet;
     }
 
     static Set<String> readHagen(String file) {
-        try (BufferedReader reader = Files.newBufferedReader(Path.of(file), Charset.forName("Cp1251"))) {
-            Set<String> hagen = new HashSet<>();
-            do {
-                String line = reader.readLine();
-                if (line.trim().isEmpty()) continue;
-                hagen.add(line.split("\\|")[1].trim());
-            } while (reader.ready());
-            return hagen;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Set<String> hagen = new HashSet<>();
+        if (new File(file).isFile())
+            try (BufferedReader reader = newBufferedReader(Path.of(file), forName("Cp1251"))) {
+                do {
+                    String line = reader.readLine();
+                    if (line.trim().isEmpty()) continue;
+                    hagen.add(line.split("\\|")[1].trim());
+                } while (reader.ready());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        return hagen;
     }
 
     static Set<String> readLopatin(String file) {
-        try (BufferedReader reader = Files.newBufferedReader(Path.of(file))) {
-            Set<String> lopatin = new HashSet<>();
-            do {
-                String line = reader.readLine()
-                        .replaceAll("\\(.+\\)?", " ")
-                        .replaceAll(".+#", "") // .replaceAll(".+%","")
-                        .replaceAll(" [ивск] ", " ")
-                        .replaceAll("союз|частица", "")
+        Set<String> lopatin = new HashSet<>();
+        if (new File(file).isFile())
+            try (BufferedReader reader = newBufferedReader(Path.of(file))) {
+                do {
+                    String line = reader.readLine()
+                            .replaceAll("\\(.+\\)?", " ")
+                            .replaceAll(".+#", "") // .replaceAll(".+%","")
+                            .replaceAll(" [ивск] ", " ")
+                            .replaceAll("союз|частица", "")
 //                        .replaceAll(";.+", " ")
-                        .toLowerCase();
-                if (line.contains("часть сложных слов")) continue;
-                if (line.contains("приставка")) continue;
-                if (line.contains("пишется")) continue;
-                if (line.contains("...")) continue;
+                            .toLowerCase();
+                    if (line.contains("часть сложных слов")) continue;
+                    if (line.contains("приставка")) continue;
+                    if (line.contains("пишется")) continue;
+                    if (line.contains("...")) continue;
 //                if (line.contains("союз")) System.out.println(line);
 //                if (line.contains("частица")) System.out.println(line);
-                String[] words = line
-                        .replaceAll("[а-я]+\\.", "")
-                        .replaceAll("[^а-яё`'-]+", " ")
-                        .split("\\s+");
+                    String[] words = line
+                            .replaceAll("[а-я]+\\.", "")
+                            .replaceAll("[^а-яё`'-]+", " ")
+                            .split("\\s+");
 //                System.out.println(stream(words).collect(Collectors.toList()));
-                lopatin.addAll(wordExtend(words));
-            } while (reader.ready());
-            return lopatin;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+                    lopatin.addAll(wordExtend(words));
+                } while (reader.ready());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        return lopatin;
     }
 
     private static Set<String> wordExtend(String[] words) {
         Set<String> wordSet = new HashSet<>();
-        Set<String> wordSet2 = new HashSet<>();
+        Set<String> wordSetExt = new HashSet<>();
         Set<String> ok = new HashSet<>();
         for (String word : words)
             if (word.matches("-.+")) ok.add(word);
             else if (!word.matches(".*-")) wordSet.add(word);
 //            else if (word.equals("-")) ;
 //            else System.out.println(word);
-
         if (ok.size() > 0)
             for (String word : wordSet)
                 for (String o : ok)
                     if (o.matches("-[ёуеыаоэяию`].*")) {
                         String w = join(word, o.replace("-", ""));
                         if (w.contains("+")) System.out.println(word + " [" + o + "] " + w);
-                        else wordSet2.add(w);
-                    } else wordSet2.add(join2(word, o.replace("-", "")));
-
-        wordSet.addAll(wordSet2);
+                        else wordSetExt.add(w);
+                    } else wordSetExt.add(joinOk(word, o.replace("-", "")));
+        wordSet.addAll(wordSetExt);
 //        System.out.println(wordSet);
         return wordSet;
     }
 
-    private static String join2(String word, String o) {
+    private static String joinOk(String word, String o) {
         //        System.out.println(word + " [" + o + "] " + ws + o);
         return word.replaceFirst(o.charAt(0) + "{1}+.*$", o);
     }
@@ -155,38 +150,51 @@ public class DataStreams extends DataStrings {
     }
 
     static Set<String> readThesaurus(String file) {
-        try (BufferedReader reader = Files.newBufferedReader(Path.of(file))) {
-            Set<String> wordSet = new HashSet<>();
-            do {
-                Collections.addAll(wordSet, reader.readLine().split(","));
-            } while (reader.ready());
-            return wordSet;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Set<String> wordSet = new HashSet<>();
+        if (new File(file).isFile())
+            try (BufferedReader reader = newBufferedReader(Path.of(file))) {
+                do {
+                    Collections.addAll(wordSet, reader.readLine().split(",")); // .replaceAll("[^а-яёА-ЯЁ`',]","")
+                } while (reader.ready());
+                return wordSet;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        return wordSet;
     }
 
     static Stream<String> getTextStream(String fileName) throws IOException {
-        return Files.newBufferedReader(Path.of(fileName)).lines().map(String::trim);
+        return newBufferedReader(Path.of(fileName)).lines().map(String::trim);
+    }
+
+    List<File> textFilesExtra(String dir) throws IOException {
+        try (Stream<Path> stream = Files.list(Paths.get(dir))) {
+            return stream.filter(file -> !Files.isDirectory(file))
+                    .map(Path::toFile).collect(Collectors.toList());
+        }
     }
 
     Set<String> extractWordSet(String file) throws IOException {
-        return getTextStream(file).map(String::toLowerCase)
-                .flatMap(l -> stream(l.replaceAll("[^а-яё`']+", " ").split("\\s+")))
-                .filter(w -> w.contains("'") || w.contains("`"))
-                .map(w -> w.replaceAll("`(.)", "$1'"))
-                .collect(Collectors.toSet());
+        if (new File(file).isFile())
+            return getTextStream(file).map(String::toLowerCase)
+                    .flatMap(l -> stream(l.replaceAll("[^а-яё`']+", " ").split("\\s+")))
+                    .filter(w -> w.contains("'") || w.contains("`"))
+                    .map(w -> w.replaceAll("`(.)", "$1'"))
+                    .collect(Collectors.toSet());
+        return null;
     }
 
     Set<String> thesaurusExtract(String file) throws IOException {
-//        Comparator<Human> nameComparator = (h1, h2) -> h1.getName().compareTo(h2.getName());
-        return getTextStream(file).map(String::toLowerCase)
-                .flatMap(l -> stream(l.replaceAll("[^а-яё`']+", " ").split("\\s+")))
-                .map(Dictionary::getWord)
-                .filter(w -> w.contains("'") || w.contains("`") || w.contains("ё"))
-                .map(w -> w.replaceAll("`(.)", "$1'"))
-                .filter(w->w.replaceAll("[ёуеыаоэяию]","").length()+1<w.length())
-                .sorted(Comparator.comparing(Utils::reverse))
-                .collect(Collectors.toCollection(LinkedHashSet::new));
+        if (new File(file).isFile())
+            return getTextStream(file).map(String::toLowerCase)
+                    .flatMap(l -> stream(l.replaceAll("[^а-яё`']+", " ").split("\\s+")))
+                    .map(Dictionary::getWord)
+                    .filter(w -> w.contains("'") || w.contains("`") || w.contains("ё"))
+                    .map(w -> w.replaceAll("`(.)", "$1'"))
+                    .filter(w -> w.replaceAll("[ёуеыаоэяию]", "").length() + 1 < w.length())
+                    .sorted(Comparator.comparing(Utils::reverse))
+//                .map(w-> new Sentence(w).getHash(0)[1])
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
+        else return null;
     }
 }
