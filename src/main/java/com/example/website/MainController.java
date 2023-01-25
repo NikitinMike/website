@@ -33,13 +33,10 @@ public class MainController extends DataStreams {
     }
 
 
-    @GetMapping({"/rhythm/{from}", "/rhythm"})
+    @GetMapping({"/rhythm/{key}", "/rhythm"})
     @ResponseBody
-    public ModelAndView rhythm(Model model, @PathVariable @Nullable String from) {
-        model.addAttribute("title", "RHYTHM");
-        model.addAttribute("files", Collections.singleton(""));
-        model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщыэюя".split(""));
-
+    public ModelAndView rhythm(Model model, @PathVariable @Nullable String key) {
+        model.addAttribute("title", key + " RHYTHM ");
         Set<String> words = Dictionary.wordTable.values().stream()
                 .map(s -> new Sentence(s).getHash(0)[1])
 //                .flatMap(l -> stream(l.split("-")))
@@ -47,7 +44,6 @@ public class MainController extends DataStreams {
                 .map(s -> s.replaceAll("(.)'", "$1"))
 //                .sorted(Comparator.comparing(Utils::reverse))
                 .sorted().collect(toCollection(LinkedHashSet::new));
-
         model.addAttribute("words", words);
 //        model.addAttribute("words", Collections.singleton(words));
         return new ModelAndView("rhythm");
