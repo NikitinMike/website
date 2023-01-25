@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.stream.Collectors.toCollection;
+import static java.util.Collections.singleton;
 
 @Controller
 public class MainController extends DataStreams {
@@ -32,20 +32,20 @@ public class MainController extends DataStreams {
         return new ModelAndView("listfiles");
     }
 
-
     @GetMapping({"/rhythm/{key}", "/rhythm"})
     @ResponseBody
     public ModelAndView rhythm(Model model, @PathVariable @Nullable String key) {
         model.addAttribute("title", key + " RHYTHM ");
-        Set<String> words = Dictionary.wordTable.values().stream()
-                .map(s -> new Sentence(s).getHash(0)[1])
-//                .flatMap(l -> stream(l.split("-")))
-                .map(w -> w.replaceAll(".*-", ""))
-                .map(s -> s.replaceAll("(.)'", "$1"))
-//                .sorted(Comparator.comparing(Utils::reverse))
-                .sorted().collect(toCollection(LinkedHashSet::new));
-        model.addAttribute("words", words);
-//        model.addAttribute("words", Collections.singleton(words));
+        TreeMap<String, Set<String>> rhythm = new TreeMap<>();
+        for (String s : Dictionary.wordTable.values()) {
+            String w = new Sentence(s).getHash(0)[1];  // .flatMap(l -> stream(l.split("-")))
+            String ok = w.replaceAll(".*-", "").replaceAll("(.)'", "$1");
+            Set<String> set = rhythm.get(ok);
+            if (set != null) set.add(w.replaceAll("-",""));
+            else rhythm.put(ok, new HashSet<>(singleton(w.replaceAll("-",""))));
+        }
+        rhythm.entrySet().removeIf(r->r.getValue().size()<2);
+        model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm");
     }
 
@@ -54,7 +54,7 @@ public class MainController extends DataStreams {
     public ModelAndView dictionary(Model model, @PathVariable @Nullable String from) {
         if (from == null || from.isEmpty()) from = "ё";
         model.addAttribute("title", from.toUpperCase());
-        model.addAttribute("files", Collections.singleton(""));
+        model.addAttribute("files", singleton(""));
         model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщыэюя".split(""));
         char to = (char) (from.charAt(0) + 1);
         List<String> words = new TreeSet<>(Dictionary.wordTable.values())

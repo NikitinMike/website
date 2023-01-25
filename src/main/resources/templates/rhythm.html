@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
-    <title> [[${title}]] found [[${words.size()}]] </title>
+    <title> [[${title}]] </title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <style>
     </style>
@@ -11,8 +11,8 @@
     <a href="/"> BACK </a>
     <hr/>
     <div class="row">
-        <p th:each="word : ${words}">
-            [[${word}]]
+        <p th:each="words : ${set}">
+            [[${words.getValue()}]]
         </p>
     </div>
     <hr/>
