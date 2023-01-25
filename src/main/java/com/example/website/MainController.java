@@ -17,7 +17,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.StandardOpenOption.APPEND;
 
 @Controller
 public class MainController extends DataStreams {
@@ -58,7 +57,7 @@ public class MainController extends DataStreams {
     public ModelAndView scan(Model model, @PathVariable @Nullable String page) throws IOException {
         model.addAttribute("title", "SCANNER");
         Path thesaurus = Paths.get("thesaurus.txt");
-        TreeSet<String> wordSet = new TreeSet<>(Comparator.comparing(Utils::reverse).reversed());
+        TreeSet<String> wordSet = new TreeSet<>(Comparator.comparing(Utils::reverse));
 //        Files.write(thesaurus, Collections.singleton(""), UTF_8);
         for (File file : textFilesExtra(source)) {
 //            Files.write(thesaurus, Collections.singleton("\n<"+file.getPath()+">"), UTF_8,APPEND);
