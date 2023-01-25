@@ -185,6 +185,7 @@ public class DataStreams extends DataStrings {
                 .map(Dictionary::getWord)
                 .filter(w -> w.contains("'") || w.contains("`") || w.contains("ё"))
                 .map(w -> w.replaceAll("`(.)", "$1'"))
+                .filter(w->w.replaceAll("[ёуеыаоэяию]","").length()+1<w.length())
                 .sorted(Comparator.comparing(Utils::reverse))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }

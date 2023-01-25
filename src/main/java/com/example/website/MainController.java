@@ -58,15 +58,18 @@ public class MainController extends DataStreams {
     public ModelAndView scan(Model model, @PathVariable @Nullable String page) throws IOException {
         model.addAttribute("title", "SCANNER");
         Path thesaurus = Paths.get("thesaurus.txt");
-        Files.write(thesaurus, Collections.singleton(""), UTF_8);
+        Set<String> wordSet = new HashSet<>();
+//        Files.write(thesaurus, Collections.singleton(""), UTF_8);
         for (File file : textFilesExtra(source)) {
 //            Files.write(thesaurus, Collections.singleton("\n<"+file.getPath()+">"), UTF_8,APPEND);
-            Set<String> wordSet = thesaurusExtract(file.getAbsolutePath());
-//            Set<String> wordSet = extractWordSet(file.getAbsolutePath());
-            Dictionary.addWordSet(wordSet);
-            System.out.println(file + " : +" + wordSet.size()); // Dictionary.wordTable.size()
-            Files.write(thesaurus, wordSet, UTF_8, APPEND);
+            Set<String> set = thesaurusExtract(file.getAbsolutePath());
+//            Set<String> set = extractWordSet(file.getAbsolutePath());
+            Dictionary.addWordSet(set);
+            System.out.println(file + " : +" + set.size()); // Dictionary.wordTable.size()
+//            Files.write(thesaurus, set, UTF_8, APPEND);
+            wordSet.addAll(set);
         }
+        Files.write(thesaurus, new TreeSet<>(wordSet), UTF_8);
 //        System.out.println(page);
         if (page == null) return new ModelAndView("redirect:/");
         return new ModelAndView("redirect:/" + page.toLowerCase());
