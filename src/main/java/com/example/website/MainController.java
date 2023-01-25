@@ -58,7 +58,7 @@ public class MainController extends DataStreams {
     public ModelAndView scan(Model model, @PathVariable @Nullable String page) throws IOException {
         model.addAttribute("title", "SCANNER");
         Path thesaurus = Paths.get("thesaurus.txt");
-        Set<String> wordSet = new HashSet<>();
+        TreeSet<String> wordSet = new TreeSet<>(Comparator.comparing(Utils::reverse).reversed());
 //        Files.write(thesaurus, Collections.singleton(""), UTF_8);
         for (File file : textFilesExtra(source)) {
 //            Files.write(thesaurus, Collections.singleton("\n<"+file.getPath()+">"), UTF_8,APPEND);
@@ -69,7 +69,7 @@ public class MainController extends DataStreams {
 //            Files.write(thesaurus, set, UTF_8, APPEND);
             wordSet.addAll(set);
         }
-        Files.write(thesaurus, new TreeSet<>(wordSet), UTF_8);
+        Files.write(thesaurus, wordSet, UTF_8);
 //        System.out.println(page);
         if (page == null) return new ModelAndView("redirect:/");
         return new ModelAndView("redirect:/" + page.toLowerCase());
