@@ -41,7 +41,7 @@ public class MainController extends DataStreams {
         char to = (char) (from.charAt(0) + 1);
         List<String> words = new TreeSet<>(Dictionary.wordTable.values())
                 .subSet(from, Character.toString(to)).stream()
-                .map(s -> new Sentence(s).getHash(0)[1])// .randomOut(0)
+//                .map(s -> new Sentence(s).getHash(0)[1])// .randomOut(0)
                 .map(s -> s.replaceAll("(.)'", "`$1"))
                 .sorted(Comparator.comparing(Utils::reverse).reversed())
                 .collect(Collectors.toList());
