@@ -14,6 +14,7 @@ public class Dictionary {
     final static String dir = "\\DBWords\\";
     static Hashtable<String, String> wordTable = new Hashtable<>();
     static boolean showThesaurus = false;
+// Comparator<Human> nameComparator = (h1, h2) -> h1.getName().compareTo(h2.getName());
 
     public Dictionary() {
         if (wordTable.isEmpty())
