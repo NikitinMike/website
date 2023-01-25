@@ -34,17 +34,21 @@ public class MainController extends DataStreams {
 
     @GetMapping({"/rhythm/{key}", "/rhythm"})
     @ResponseBody
-    public ModelAndView rhythm(Model model, @PathVariable @Nullable String key) {
+    public ModelAndView rhythm(Model model, @PathVariable @Nullable Integer key) {
+        if (key == null || key == 0) key = 1;
         model.addAttribute("title", key + " RHYTHM ");
+        model.addAttribute("number", "123456789".split(""));
         Map<String, Set<String>> rhythm = new TreeMap<>(Comparator.comparing(Utils::reverse));
         for (String s : Dictionary.wordTable.values()) {
-            String w = new Sentence(s).getHash(0)[1];  // .flatMap(l -> stream(l.split("-")))
+            String w = new Sentence(s).getHash(0)[1];
+            if (w.split("-").length < key) continue;
             String ok = w.replaceAll(".*-", "").replaceAll("(.)'", "$1");
+            ok = ok.replaceAll("[^ёуеыаоэяию](.{2,})", "$1");
             Set<String> set = rhythm.get(ok);
-            if (set != null) set.add(w);
-            else rhythm.put(ok, new TreeSet<>(singleton(w)));
+            if (set == null) rhythm.put(ok, new TreeSet<>(singleton(w)));
+            else set.add(w);
         }
-        rhythm.entrySet().removeIf(r->r.getValue().size()<2);
+        rhythm.entrySet().removeIf(r -> r.getValue().size() < 2);
         model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm");
     }

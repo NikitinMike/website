@@ -9,6 +9,9 @@
 <body>
 <div class="container">
     <a href="/"> BACK </a>
+    <a th:each="chr : ${number}" th:href="@{/rhythm/{id}(id=${chr})}">
+        [[${chr}]]
+    </a>
     <hr/>
     <div class="row">
         <p th:each="words : ${set}">
