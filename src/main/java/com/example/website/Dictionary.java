@@ -12,13 +12,15 @@ import static com.example.website.DataStreams.*;
 public class Dictionary {
     @Value("${dictionary.source}")
     final static String dir = "\\DBWords\\";
+    @Value("${dictionary.level}")
+    final static int level=3;
     static Hashtable<String, String> wordTable = new Hashtable<>();
     static boolean showThesaurus = false;
 // Comparator<Human> nameComparator = (h1, h2) -> h1.getName().compareTo(h2.getName());
 
     public Dictionary() {
         if (wordTable.isEmpty())
-            switch (0) {
+            switch (level) {
                 case 0:
                     addWordSet(readDictionary(dir + "wordbook.txt"));
                     System.out.println("Dictionary words:" + wordTable.size());
