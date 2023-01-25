@@ -17,6 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.stream.Collectors.toCollection;
 
 @Controller
 public class MainController extends DataStreams {
@@ -35,26 +36,21 @@ public class MainController extends DataStreams {
     @GetMapping({"/rhythm/{from}", "/rhythm"})
     @ResponseBody
     public ModelAndView rhythm(Model model, @PathVariable @Nullable String from) {
-        if (from == null || from.isEmpty()) from = "ё";
-        model.addAttribute("title", from.toUpperCase());
+        model.addAttribute("title", "RHYTHM");
         model.addAttribute("files", Collections.singleton(""));
-//        char to = (char) (from.charAt(0) + 1);
+        model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщыэюя".split(""));
 
         Set<String> words = Dictionary.wordTable.values().stream()
                 .map(s -> new Sentence(s).getHash(0)[1])
 //                .flatMap(l -> stream(l.split("-")))
                 .map(w -> w.replaceAll(".*-", ""))
-                .map(s -> s.replaceAll("(.)'", "`$1"))
+                .map(s -> s.replaceAll("(.)'", "$1"))
 //                .sorted(Comparator.comparing(Utils::reverse))
-//                .collect(Collectors.toList());
-                .sorted()
-                .collect(Collectors.toCollection(LinkedHashSet::new));
-//                .collect(Collectors.joining(", "));
+                .sorted().collect(toCollection(LinkedHashSet::new));
 
-        model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщыэюя".split(""));
         model.addAttribute("words", words);
 //        model.addAttribute("words", Collections.singleton(words));
-        return new ModelAndView("dictionary");
+        return new ModelAndView("rhythm");
     }
 
     @GetMapping({"/dictionary/{from}", "/dictionary"})
