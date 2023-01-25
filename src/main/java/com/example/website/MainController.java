@@ -31,6 +31,32 @@ public class MainController extends DataStreams {
         return new ModelAndView("listfiles");
     }
 
+
+    @GetMapping({"/rhythm/{from}", "/rhythm"})
+    @ResponseBody
+    public ModelAndView rhythm(Model model, @PathVariable @Nullable String from) {
+        if (from == null || from.isEmpty()) from = "ё";
+        model.addAttribute("title", from.toUpperCase());
+        model.addAttribute("files", Collections.singleton(""));
+//        char to = (char) (from.charAt(0) + 1);
+
+        Set<String> words = Dictionary.wordTable.values().stream()
+                .map(s -> new Sentence(s).getHash(0)[1])
+//                .flatMap(l -> stream(l.split("-")))
+                .map(w -> w.replaceAll(".*-", ""))
+                .map(s -> s.replaceAll("(.)'", "`$1"))
+//                .sorted(Comparator.comparing(Utils::reverse))
+//                .collect(Collectors.toList());
+                .sorted()
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+//                .collect(Collectors.joining(", "));
+
+        model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщыэюя".split(""));
+        model.addAttribute("words", words);
+//        model.addAttribute("words", Collections.singleton(words));
+        return new ModelAndView("dictionary");
+    }
+
     @GetMapping({"/dictionary/{from}", "/dictionary"})
     @ResponseBody
     public ModelAndView dictionary(Model model, @PathVariable @Nullable String from) {
