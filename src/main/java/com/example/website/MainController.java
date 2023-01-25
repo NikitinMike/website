@@ -36,13 +36,13 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView rhythm(Model model, @PathVariable @Nullable String key) {
         model.addAttribute("title", key + " RHYTHM ");
-        TreeMap<String, Set<String>> rhythm = new TreeMap<>();
+        TreeMap<String, Set<String>> rhythm = new TreeMap<>(Comparator.comparing(Utils::reverse));
         for (String s : Dictionary.wordTable.values()) {
             String w = new Sentence(s).getHash(0)[1];  // .flatMap(l -> stream(l.split("-")))
             String ok = w.replaceAll(".*-", "").replaceAll("(.)'", "$1");
             Set<String> set = rhythm.get(ok);
-            if (set != null) set.add(w.replaceAll("-",""));
-            else rhythm.put(ok, new HashSet<>(singleton(w.replaceAll("-",""))));
+            if (set != null) set.add(w);
+            else rhythm.put(ok, new HashSet<>(singleton(w)));
         }
         rhythm.entrySet().removeIf(r->r.getValue().size()<2);
         model.addAttribute("set", rhythm);
