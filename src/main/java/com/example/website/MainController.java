@@ -40,7 +40,7 @@ public class MainController extends DataStreams {
         model.addAttribute("title", key + " RHYTHM ");
         model.addAttribute("number", "0123456789".split(""));
         Map<String, Set<String>> rhythm = getRhythm(key);
-//        rhythm.entrySet().removeIf(r -> r.getValue().size() > 11);
+        rhythm.entrySet().removeIf(r -> r.getValue().size() < 2);
         model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm");
     }

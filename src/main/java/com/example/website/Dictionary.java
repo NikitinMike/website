@@ -66,8 +66,16 @@ public class Dictionary {
         for (String s : wordTable.values().stream().filter(Objects::nonNull).collect(toSet())) {
             if(s.replaceAll("[^ёуеыаоэяию]","").length()!=key) continue;
             String w = new Sentence(s).getHash(0)[1];
+
             String ok = w.replaceAll(".*-", "").replaceAll("(.)'", "$1");
             ok = ok.replaceAll("[^ёуеыаоэяию](.{2,})", "$1");
+
+            if(ok.matches(".*[ёуеыаоэяию][^ёуеыаоэяию]+ь?$"))
+                ok=ok.replaceAll(".*([ёуеыаоэяию][^ёуеыаоэяию]+ь?)$","$1");
+
+            if(ok.equals(w.replaceAll("'",""))) continue;
+//            System.out.print(ok+":"+s+" ");
+
             Set<String> set = rhythm.get(ok);
             if (set == null) rhythm.put(ok, new TreeSet<>(singleton(w)));
             else set.add(w);
