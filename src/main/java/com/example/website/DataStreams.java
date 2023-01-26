@@ -77,25 +77,20 @@ public class DataStreams extends DataStrings {
         if (new File(file).isFile())
             try (BufferedReader reader = newBufferedReader(Path.of(file))) {
                 do {
-                    String line = reader.readLine()
+                    String line = reader.readLine().toLowerCase()
                             .replaceAll("\\(.+\\)?", " ")
                             .replaceAll(".+#", "") // .replaceAll(".+%","")
                             .replaceAll(" [ивск] ", " ")
                             .replaceAll("союз|частица", "")
+                            .replaceAll("[а-я]+\\.", "")
 //                        .replaceAll(";.+", " ")
-                            .toLowerCase();
+                            ;
                     if (line.contains("часть сложных слов")) continue;
                     if (line.contains("приставка")) continue;
                     if (line.contains("пишется")) continue;
                     if (line.contains("...")) continue;
-//                if (line.contains("союз")) System.out.println(line);
-//                if (line.contains("частица")) System.out.println(line);
-                    String[] words = line
-                            .replaceAll("[а-я]+\\.", "")
-                            .replaceAll("[^а-яё`'-]+", " ")
-                            .split("\\s+");
-//                System.out.println(stream(words).collect(Collectors.toList()));
-                    lopatin.addAll(wordExtend(words));
+                    String words = line.replaceAll("[^а-яё`'-]+", " ");
+                    lopatin.addAll(wordExtend(words.split("\\s+")));
                 } while (reader.ready());
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -109,9 +104,7 @@ public class DataStreams extends DataStrings {
         Set<String> ok = new HashSet<>();
         for (String word : words)
             if (word.matches("-.+")) ok.add(word);
-            else if (!word.matches(".*-")) wordSet.add(word);
-//            else if (word.equals("-")) ;
-//            else System.out.println(word);
+            else if (!word.matches(".*-") && word.contains("`")) wordSet.add(word);
         if (ok.size() > 0)
             for (String word : wordSet)
                 for (String o : ok)
@@ -121,13 +114,17 @@ public class DataStreams extends DataStrings {
                         else wordSetExt.add(w);
                     } else wordSetExt.add(joinOk(word, o.replace("-", "")));
         wordSet.addAll(wordSetExt);
-//        System.out.println(wordSet);
         return wordSet;
     }
 
     private static String joinOk(String word, String o) {
-        //        System.out.println(word + " [" + o + "] " + ws + o);
-        return word.replaceFirst(o.charAt(0) + "{1}+.*$", o);
+        int l = word.lastIndexOf(o.charAt(0));
+        if (l < 0) return word;
+        String sl = word.substring(l);
+        if(sl.contains("`")) o=o.replaceFirst("([ёуеыаоэяию])","`$1");
+        String w = word.replaceFirst(sl, o).replaceFirst("``","`");
+        if (!w.contains("`") && !w.contains("ё")) System.out.printf("%s [%s] %s %n ", word, o, w);
+        return w;
     }
 
     private static String join(String word, String o) {
