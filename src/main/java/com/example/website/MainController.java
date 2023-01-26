@@ -14,10 +14,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.singleton;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Controller
 public class MainController extends DataStreams {
@@ -39,9 +40,9 @@ public class MainController extends DataStreams {
         model.addAttribute("title", key + " RHYTHM ");
         model.addAttribute("number", "123456789".split(""));
         Map<String, Set<String>> rhythm = new TreeMap<>(Comparator.comparing(Utils::reverse));
-        for (String s : Dictionary.wordTable.values()) {
+        for (String s : Dictionary.wordTable.values().stream().filter(Objects::nonNull).collect(toSet())) {
             String w = new Sentence(s).getHash(0)[1];
-            if (w.split("-").length < key) continue;
+            if ((key * 2 > w.length()) || w.split("-").length < key) continue;
             String ok = w.replaceAll(".*-", "").replaceAll("(.)'", "$1");
             ok = ok.replaceAll("[^ёуеыаоэяию](.{2,})", "$1");
             Set<String> set = rhythm.get(ok);
@@ -66,8 +67,8 @@ public class MainController extends DataStreams {
 //                .map(s -> new Sentence(s).getHash(0)[1])// .randomOut(0)
                 .map(s -> s.replaceAll("(.)'", "`$1"))
                 .sorted(Comparator.comparing(Utils::reverse).reversed())
-                .collect(Collectors.toList());
-//                .collect(Collectors.toSet());
+                .collect(toList());
+//                .collect(toSet());
 //                .collect(Collectors.joining(", "));
         model.addAttribute("words", words);
 //        model.addAttribute("words", Collections.singleton(words));
@@ -120,8 +121,7 @@ public class MainController extends DataStreams {
         Dictionary.addWordSet(wordSet);
 //        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
         List<String[]> text = getTextStream(source + file)
-                .map(s -> new Sentence(s).getHash(0)) // .randomOut(0)
-                .collect(Collectors.toList());
+                .map(s -> new Sentence(s).getHash(0)).collect(toList());
         System.out.println(file + " #" + text.size());
 //        System.out.println(wordSet);
         model.addAttribute("sentences", text);
@@ -133,8 +133,7 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView startPageGet(Model model, @PathVariable int i) {
         List<String> list = Arrays.stream(in[i % in.length])
-                .map(s -> new Sentence(s).randomOut(1))
-                .collect(Collectors.toList());
+                .map(s -> new Sentence(s).randomOut(1)).collect(toList());
         model.addAttribute("messages", list);
         model.addAttribute("title", "START:" + list.size());
         return new ModelAndView("page");
