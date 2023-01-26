@@ -15,10 +15,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static com.example.website.Dictionary.getRhythm;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 @Controller
 public class MainController extends DataStreams {
@@ -36,20 +36,11 @@ public class MainController extends DataStreams {
     @GetMapping({"/rhythm/{key}", "/rhythm"})
     @ResponseBody
     public ModelAndView rhythm(Model model, @PathVariable @Nullable Integer key) {
-        if (key == null || key == 0) key = 1;
+        if (key == null) key = 10;
         model.addAttribute("title", key + " RHYTHM ");
-        model.addAttribute("number", "123456789".split(""));
-        Map<String, Set<String>> rhythm = new TreeMap<>(Comparator.comparing(Utils::reverse));
-        for (String s : Dictionary.wordTable.values().stream().filter(Objects::nonNull).collect(toSet())) {
-            String w = new Sentence(s).getHash(0)[1];
-            if ((key * 2 > w.length()) || w.split("-").length < key) continue;
-            String ok = w.replaceAll(".*-", "").replaceAll("(.)'", "$1");
-            ok = ok.replaceAll("[^ёуеыаоэяию](.{2,})", "$1");
-            Set<String> set = rhythm.get(ok);
-            if (set == null) rhythm.put(ok, new TreeSet<>(singleton(w)));
-            else set.add(w);
-        }
-        rhythm.entrySet().removeIf(r -> r.getValue().size() < 2);
+        model.addAttribute("number", "0123456789".split(""));
+        Map<String, Set<String>> rhythm = getRhythm(key);
+//        rhythm.entrySet().removeIf(r -> r.getValue().size() > 11);
         model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm");
     }
