@@ -3,20 +3,22 @@ package com.example.website;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.util.Hashtable;
-import java.util.Set;
+import java.util.*;
 
 import static com.example.website.DataStreams.*;
+import static java.util.Collections.singleton;
+import static java.util.stream.Collectors.toSet;
 
 @Repository
 public class Dictionary {
-    @Value("${dictionary.source}")
-    final static String dir = "\\DBWords\\";
-    @Value("${dictionary.level}")
-    final static int level=3;
     static Hashtable<String, String> wordTable = new Hashtable<>();
     static boolean showThesaurus = false;
-// Comparator<Human> nameComparator = (h1, h2) -> h1.getName().compareTo(h2.getName());
+    // Comparator<Human> nameComparator = (h1, h2) -> h1.getName().compareTo(h2.getName());
+//    static Map<String, Set<String>> rhythm = new TreeMap<>(Comparator.comparing(Utils::reverse));
+    @Value("${dictionary.source}")
+    String dir = "\\DBWords\\";
+    @Value("${dictionary.level}")
+    int level=2;
 
     public Dictionary() {
         if (wordTable.isEmpty())
@@ -31,11 +33,11 @@ public class Dictionary {
                     addWordSet(readLopatin(dir + "lop1v2.utf8.txt"));
                     System.out.println("Lopatin words:" + wordTable.size());
                 case 3:
-                    addWordSet(readThesaurus("thesaurus.txt"));
-                    System.out.println("Big Thesaurus words:" + wordTable.size());
-                case 4:
                     addWordSet(readThesaurus("texts\\thesaurus.txt"));
                     System.out.println("Small Thesaurus words:" + wordTable.size());
+                case 4:
+                    addWordSet(readThesaurus("thesaurus.txt"));
+                    System.out.println("Big Thesaurus words:" + wordTable.size());
                 default:
 //                    wordTable.forEach((k, v) -> System.out.print(k + ":" + v + ","));
 //                    System.out.println("Dictionary:" + wordTable.get("её"));
@@ -57,6 +59,20 @@ public class Dictionary {
 
     public static void addWordSet(Set<String> words) {
         words.forEach(Dictionary::putWord);
+    }
+
+    public static Map<String, Set<String>> getRhythm(int key) {
+        Map<String, Set<String>> rhythm = new TreeMap<>(Comparator.comparing(Utils::reverse));
+        for (String s : wordTable.values().stream().filter(Objects::nonNull).collect(toSet())) {
+            if(s.replaceAll("[^ёуеыаоэяию]","").length()!=key) continue;
+            String w = new Sentence(s).getHash(0)[1];
+            String ok = w.replaceAll(".*-", "").replaceAll("(.)'", "$1");
+            ok = ok.replaceAll("[^ёуеыаоэяию](.{2,})", "$1");
+            Set<String> set = rhythm.get(ok);
+            if (set == null) rhythm.put(ok, new TreeSet<>(singleton(w)));
+            else set.add(w);
+        }
+        return rhythm;
     }
 
     public static String getWord(String word) {
