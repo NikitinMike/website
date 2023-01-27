@@ -13,10 +13,11 @@
         [[${chr}]]
     </a>
     <hr/>
-    <table class="row" border="1">
+    <table class="row" border="0">
         <tr th:each="entry : ${set}">
-            <td>[(${entry.getValue()})]</td>
-            <td>[(${entry.getKey()})]</td>
+            <td align="right">[(${entry.getKey()})]</td>
+            <td align="center">[(${entry.getValue()})]</td>
+            <td >[(${entry.getKey()})]</td>
         </tr>
     </table>
     <hr/>

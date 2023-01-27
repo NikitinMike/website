@@ -40,7 +40,7 @@ public class MainController extends DataStreams {
         model.addAttribute("title", key + " RHYTHM ");
         model.addAttribute("number", "0123456789".split(""));
         Map<String, Set<String>> rhythm = getRhythm(key);
-        rhythm.entrySet().removeIf(r -> r.getValue().size() < 2);
+//        rhythm.entrySet().removeIf(r -> r.getValue().size() > 3);
         model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm");
     }
@@ -77,7 +77,7 @@ public class MainController extends DataStreams {
 //            Files.write(thesaurus, Collections.singleton("\n<"+file.getPath()+">"), UTF_8,APPEND);
             Set<String> set = thesaurusExtract(file.getAbsolutePath());
 //            Set<String> set = extractWordSet(file.getAbsolutePath());
-            Dictionary.addWordSet(set);
+            Dictionary.addSet(null,set);
             System.out.println(file + " : +" + set.size()); // Dictionary.wordTable.size()
 //            Files.write(thesaurus, set, UTF_8, APPEND);
             wordSet.addAll(set);
@@ -109,7 +109,7 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) throws IOException {
         Set<String> wordSet = extractWordSet(source + file);
-        Dictionary.addWordSet(wordSet);
+        Dictionary.addSet(file,wordSet);
 //        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
         List<String[]> text = getTextStream(source + file)
                 .map(s -> new Sentence(s).getHash(0)).collect(toList());
