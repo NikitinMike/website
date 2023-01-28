@@ -86,10 +86,11 @@ public class DataStreams extends DataStrings {
                     lopatin.addAll(List.of(record[1].split("[-\\s]"))); // split??? and add main words
                     String line = record[2]
                             .replaceAll("\\(.+\\)?", " ")
-                            .replaceAll(".+#", "") // .replaceAll(".+%","")
+//                            .replaceAll(".+#", "") // .replaceAll(".+%","")
                             .replaceAll(" [ивск] ", " ")
                             .replaceAll("союз|частица", "")
                             .replaceAll("[а-я]+\\.", "")
+                            .replaceAll(":.+", "")
 //                        .replaceAll(";.+", " ")
                             .replaceAll("[^а-яё`'-]+"," ");
                     lopatin.addAll(wordExtend(line.split("\\s+"))); // extend word with some ends
@@ -104,13 +105,13 @@ public class DataStreams extends DataStrings {
 
         Set<String> wordSet = new HashSet<>();
         if(words == null||words.length==0) return wordSet;
-        if(words[0].contains("-")) return wordSet;
+//        if(words[0].contains("-")) return wordSet;
 
         Set<String> ok = new HashSet<>();
         for (String word : words)
             if (word.matches("-.+")) ok.add(word);
-            else if(word.contains("-")) System.out.print(word+","); // check pipe
-            else if (!word.matches(".*-") && word.contains("`")) wordSet.add(word);
+//            else if(word.contains("-")) System.out.print(word+","); // check pipe
+            else if (word.contains("`") && !word.matches(".*-")) wordSet.add(word);
 
         Set<String> wordSetExt = new HashSet<>();
         if (ok.size() > 0)
