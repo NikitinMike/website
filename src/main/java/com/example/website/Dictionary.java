@@ -60,8 +60,10 @@ public class Dictionary {
 
             String w = new Sentence(s).getHash(0)[1];
 //            if(!w.contains(" "))continue;
+            if(w.contains(" ")) continue;
 
-            String ok = w.replaceAll(".*-", "").replaceAll("(.)'", "$1");
+            String ok = w.replaceFirst(".*-", "").replaceAll("(.)'", "$1");
+
             ok = ok.replaceAll("[^ёуеыаоэяию](.{2,})", "$1");
 
             if(ok.matches(".*[ёуеыаоэяию][^ёуеыаоэяию]+ь?$"))
@@ -69,6 +71,18 @@ public class Dictionary {
 
             if(ok.equals(w.replaceAll("'",""))) continue;
 //            System.out.print(ok+":"+s+" ");
+
+//            if(ok.matches("[ёуеыаоэяию][^ёуеыаоэяию]ь?"))
+//                ok=ok.replaceAll("[ёуеыаоэяию]","");
+//            if(ok.matches("[^ёуеыаоэяию][ёуеыаоэяию]"))
+//                ok=ok.replaceAll("[^ёуеыаоэяию]","");
+//            if(ok.matches("[^ёуеыаоэяию]ж"))
+//                ok=ok.replaceFirst("[^ёуеыаоэяию]","");
+//            if(ok.matches("[мнл]м"))
+//                ok=ok.replaceFirst("[^ёуеыаоэяию]","@");
+
+            if(ok.matches("[ёуеыаоэяию][^ёуеыаоэяию]ь?[^ёуеыаоэяию]ь?"))
+                ok=ok.replaceAll("[ёуеыаоэяию]","");
 
             Set<String> set = rhythm.get(ok);
             if (set == null) rhythm.put(ok, new TreeSet<>(singleton(w)));

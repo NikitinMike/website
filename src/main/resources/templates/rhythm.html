@@ -15,9 +15,9 @@
     <hr/>
     <table class="row" border="0">
         <tr th:each="entry : ${set}">
-            <td align="right">[(${entry.getKey()})]</td>
-            <td align="center">[(${entry.getValue()})]</td>
-            <td >[(${entry.getKey()})]</td>
+            <td align="right" color="blue" bgcolor="yellow"> [(${entry.getKey()})] </td>
+            <td align="center"> [(${entry.getValue()})] </td>
+            <td bgcolor="yellow"> [(${entry.getKey()})] </td>
         </tr>
     </table>
     <hr/>

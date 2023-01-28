@@ -82,7 +82,7 @@ public class DataStreams extends DataStrings {
                     if (record[2].contains("часть сложных слов")) continue;
                     if (record[2].contains("приставка")) continue;
                     if (record[2].contains("пишется")) continue;
-                    if (record[2].contains(record[1]+"...")) continue;
+//                    if (record[2].contains(record[1]+"...")) continue;
                     lopatin.addAll(List.of(record[1].split("[-\\s]"))); // split??? and add main words
                     String line = record[2]
                             .replaceAll("\\(.+\\)?", " ")
