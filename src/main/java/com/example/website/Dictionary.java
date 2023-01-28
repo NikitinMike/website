@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 import static com.example.website.DataStreams.*;
+import static com.example.website.Utils.glasCount;
 import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toSet;
 
@@ -18,7 +19,7 @@ public class Dictionary {
     @Value("${dictionary.source}")
     String dir = "\\DBWords\\";
     @Value("${dictionary.level}")
-    int level=0;
+    int level=2;
     static boolean extendE = true;
 
     public Dictionary() {
@@ -39,8 +40,7 @@ public class Dictionary {
         if (word.matches("[^ёуеыаоэяию]*")) return; //  System.out.printf(" [%s] ",word);
         word = word.trim().replaceAll("`(.)", "$1'");
         if (extendE) if (word.contains("ё")) putWord(word.replaceAll("ё", "е'"));
-        if (word.replaceAll("([^ёуеыаоэяию'])", "").length() == 1)
-            word = word.replaceAll("([ёуеыаоэяию])", "$1'");
+        if (glasCount(word) == 1) word = word.replaceAll("([ёуеыаоэяию])", "$1'");
         word = word.replaceAll("''", "'");
         if (word.contains("'") || word.contains("ё"))
             wordTable.put(word.replace("'", ""), word);
@@ -59,6 +59,7 @@ public class Dictionary {
             if(key!=0) if(s.replaceAll("[^ёуеыаоэяию]","").length()!=key) continue;
 
             String w = new Sentence(s).getHash(0)[1];
+//            if(!w.contains(" "))continue;
 
             String ok = w.replaceAll(".*-", "").replaceAll("(.)'", "$1");
             ok = ok.replaceAll("[^ёуеыаоэяию](.{2,})", "$1");
