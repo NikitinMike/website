@@ -78,8 +78,8 @@ public class DataStreams extends DataStrings {
         if (new File(file).isFile())
             try (BufferedReader reader = newBufferedReader(Path.of(file))) {
                 do {
-                    String[] record = reader.readLine().replace("...","").toLowerCase().split("[#%]",3);
-                    if (record.length<3) continue; // bad line
+                    String[] record = reader.readLine().replace("...", "").toLowerCase().split("[#%]", 3);
+                    if (record.length < 3) continue; // bad line
                     if (record[2].contains("часть сложных слов")) continue;
                     if (record[2].contains("приставка")) continue;
                     if (record[2].contains("пишется")) continue;
@@ -91,9 +91,11 @@ public class DataStreams extends DataStrings {
                             .replaceAll(" [ивск] ", " ")
                             .replaceAll("союз|частица", "")
                             .replaceAll("[а-я]+\\.", "")
+                            .replace(" тв "," ")
+                            .replace(" мн "," ")
                             .replaceAll(":.+", "")
 //                        .replaceAll(";.+", " ")
-                            .replaceAll("[^а-яё`'-]+"," ");
+                            .replaceAll("[^а-яё`'-]+", " ");
                     lopatin.addAll(wordExtend(line.split("\\s+"))); // extend word with some ends
                 } while (reader.ready());
             } catch (IOException e) {
@@ -105,25 +107,25 @@ public class DataStreams extends DataStrings {
     private static Set<String> wordExtend(String[] words) {
 
         Set<String> wordSet = new HashSet<>();
-        if(words == null||words.length==0) return wordSet;
-//        if(words[0].contains("-")) return wordSet;
+        if (words == null || words.length == 0) return wordSet;
 
         Set<String> ok = new HashSet<>();
         for (String word : words)
-//            if (word.matches("(ка[`']?к|ку[`']?д)`")) System.out.print(Arrays.toString(words)); else
-            if (word.matches("-.+")) ok.add(word);
-//            else if(word.contains("-")) System.out.print(word+","); // check pipe
-            else if (word.contains("`") && !word.matches(".*-")) wordSet.add(word);
+            if (word.matches("-.+")) ok.add(word.substring(1));
+            else if (word.matches(".*-")) System.out.print(word + ","); // check pipe
+            else if(word.contains("`")) wordSet.add(word);
+            else wordSet.add(word.replaceFirst("([ёуеыаоэяию])","`$1"));
 
         Set<String> wordSetExt = new HashSet<>();
         if (ok.size() > 0)
             for (String word : wordSet)
                 for (String o : ok)
-                    if (o.matches("-[ёуеыаоэяию`].*")) {
-                        String w = join(word, o.replace("-", ""));
+                    if (o.matches("[`ёуеыаоэяию].*")) {
+                        String w = join(word, o);
+//                        if(w.contains("`")) System.out.print(w + ", ");
                         if (w.contains("+")) System.out.println(word + " [" + o + "] " + w);
                         else wordSetExt.add(w);
-                    } else wordSetExt.add(joinOk(word, o.replace("-", "")));
+                    } else wordSetExt.add(joinOk(word, o));
 
         wordSet.addAll(wordSetExt);
         return wordSet;
@@ -133,18 +135,19 @@ public class DataStreams extends DataStrings {
         int l = word.lastIndexOf(o.charAt(0));
         if (l < 0) return word;
         String subword = word.substring(l);
-        if(subword.contains("`")) o=o.replaceFirst("([ёуеыаоэяию])","`$1");
-        String w = word.replaceFirst(subword, o).replaceFirst("``","`");
+        if (subword.contains("`")) o = o.replaceFirst("([ёуеыаоэяию])", "`$1");
+        String w = word.replaceFirst(subword, o).replaceFirst("``", "`");
         if (!w.contains("`") && !w.contains("ё")) System.out.printf("%s [%s] %s %n ", word, o, w);
         return w;
     }
 
     private static String join(String word, String o) {
         if (o.matches("`.+")) {
-            if (o.matches("`[ёуеыаоэяию]"))
-                if(word.matches(".*[ёуеыаоэяиюь]$"))
-                    return reverse(reverse(word).replaceFirst("[ёуеыаоэяиюь]",o));
-            return word.replaceFirst("(.+)`.*", "$1") + o;
+            if (o.matches("`[ёуеыаоэяию].*"))
+                if (word.matches(".*[ьёуеыаоэяию]$"))
+                    return reverse(reverse(word).replaceFirst("[ьёуеыаоэяию]", o));
+                else if(word.matches(".+[^ёуеыаоэяию]$")) return word+o;
+            System.out.print(word+":"+word.replaceFirst("(.+)`.*", "$1") + o+", ");
         } else if (word.matches(".+[ёуеыаоэяию]$"))
             return word.replaceFirst("(.+)[ёуеыаоэяию]$", "$1") + o;
         else if (word.matches(".+ь$"))
