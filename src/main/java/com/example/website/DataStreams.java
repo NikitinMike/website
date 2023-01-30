@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.example.website.Utils.reverse;
 import static java.nio.charset.Charset.forName;
 import static java.nio.file.Files.newBufferedReader;
 import static java.util.Arrays.stream;
@@ -77,7 +78,7 @@ public class DataStreams extends DataStrings {
         if (new File(file).isFile())
             try (BufferedReader reader = newBufferedReader(Path.of(file))) {
                 do {
-                    String[] record = reader.readLine().toLowerCase().split("[#%]",3);
+                    String[] record = reader.readLine().replace("...","").toLowerCase().split("[#%]",3);
                     if (record.length<3) continue; // bad line
                     if (record[2].contains("часть сложных слов")) continue;
                     if (record[2].contains("приставка")) continue;
@@ -109,6 +110,7 @@ public class DataStreams extends DataStrings {
 
         Set<String> ok = new HashSet<>();
         for (String word : words)
+//            if (word.matches("(ка[`']?к|ку[`']?д)`")) System.out.print(Arrays.toString(words)); else
             if (word.matches("-.+")) ok.add(word);
 //            else if(word.contains("-")) System.out.print(word+","); // check pipe
             else if (word.contains("`") && !word.matches(".*-")) wordSet.add(word);
@@ -130,17 +132,20 @@ public class DataStreams extends DataStrings {
     private static String joinOk(String word, String o) {
         int l = word.lastIndexOf(o.charAt(0));
         if (l < 0) return word;
-        String sl = word.substring(l);
-        if(sl.contains("`")) o=o.replaceFirst("([ёуеыаоэяию])","`$1");
-        String w = word.replaceFirst(sl, o).replaceFirst("``","`");
+        String subword = word.substring(l);
+        if(subword.contains("`")) o=o.replaceFirst("([ёуеыаоэяию])","`$1");
+        String w = word.replaceFirst(subword, o).replaceFirst("``","`");
         if (!w.contains("`") && !w.contains("ё")) System.out.printf("%s [%s] %s %n ", word, o, w);
         return w;
     }
 
     private static String join(String word, String o) {
-        if (o.matches("`.+"))
+        if (o.matches("`.+")) {
+            if (o.matches("`[ёуеыаоэяию]"))
+                if(word.matches(".*[ёуеыаоэяиюь]$"))
+                    return reverse(reverse(word).replaceFirst("[ёуеыаоэяиюь]",o));
             return word.replaceFirst("(.+)`.*", "$1") + o;
-        else if (word.matches(".+[ёуеыаоэяию]$"))
+        } else if (word.matches(".+[ёуеыаоэяию]$"))
             return word.replaceFirst("(.+)[ёуеыаоэяию]$", "$1") + o;
         else if (word.matches(".+ь$"))
             return word.replaceFirst("(.+)ь$", "$1") + o;
