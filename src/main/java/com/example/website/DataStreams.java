@@ -91,8 +91,8 @@ public class DataStreams extends DataStrings {
                             .replaceAll(" [ивск] ", " ")
                             .replaceAll("союз|частица", "")
                             .replaceAll("[а-я]+\\.", "")
-                            .replace(" тв "," ")
-                            .replace(" мн "," ")
+                            .replace(" тв ", " ")
+                            .replace(" мн ", " ")
                             .replaceAll(":.+", "")
 //                        .replaceAll(";.+", " ")
                             .replaceAll("[^а-яё`'-]+", " ");
@@ -113,19 +113,20 @@ public class DataStreams extends DataStrings {
         for (String word : words)
             if (word.matches("-.+")) ok.add(word.substring(1));
             else if (word.matches(".*-")) System.out.print(word + ","); // check pipe
-            else if(word.contains("`")) wordSet.add(word);
-            else wordSet.add(word.replaceFirst("([ёуеыаоэяию])","`$1"));
+            else if (word.contains("`")) wordSet.add(word);
+            else wordSet.add(word.replaceFirst("([ёуеыаоэяию])", "`$1"));
 
         Set<String> wordSetExt = new HashSet<>();
         if (ok.size() > 0)
             for (String word : wordSet)
-                for (String o : ok)
-                    if (o.matches("[`ёуеыаоэяию].*")) {
-                        String w = join(word, o);
+                if (!word.matches("."))
+                    for (String o : ok)
+                        if (o.matches("[`ёуеыаоэяию].*")) {
+                            String w = join(word, o);
 //                        if(w.contains("`")) System.out.print(w + ", ");
-                        if (w.contains("+")) System.out.println(word + " [" + o + "] " + w);
-                        else wordSetExt.add(w);
-                    } else wordSetExt.add(joinOk(word, o));
+                            if (w.contains("+")) System.out.println(word + " [" + o + "] " + w);
+                            else wordSetExt.add(w);
+                        } else wordSetExt.add(joinOk(word, o));
 
         wordSet.addAll(wordSetExt);
         return wordSet;
@@ -146,8 +147,8 @@ public class DataStreams extends DataStrings {
             if (o.matches("`[ёуеыаоэяию].*"))
                 if (word.matches(".*[ьёуеыаоэяию]$"))
                     return reverse(reverse(word).replaceFirst("[ьёуеыаоэяию]", o));
-                else if(word.matches(".+[^ёуеыаоэяию]$")) return word+o;
-            System.out.print(word+":"+word.replaceFirst("(.+)`.*", "$1") + o+", ");
+                else if (word.matches(".+[^ёуеыаоэяию]$")) return word + o;
+            System.out.print(word + ":" + word.replaceFirst("(.+)`.*", "$1") + o + ", ");
         } else if (word.matches(".+[ёуеыаоэяию]$"))
             return word.replaceFirst("(.+)[ёуеыаоэяию]$", "$1") + o;
         else if (word.matches(".+ь$"))
