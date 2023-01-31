@@ -106,11 +106,8 @@ public class DataStreams extends DataStrings {
     }
 
     private static Set<String> wordExtend(String[] words) {
-
         Set<String> wordSet = new HashSet<>();
         if (words == null || words.length == 0) return wordSet;
-
-        Set<String> wordSetExt = new HashSet<>();
         String baseWord=null;
         for (String word : words)
             if (word.matches(".")) ;
@@ -120,15 +117,13 @@ public class DataStreams extends DataStrings {
                     if (o.matches("[`ёуеыаоэяию].*")) {
                         String w = join(baseWord, o);
                         if (w.contains("+")) System.out.println(baseWord + " [" + o + "] " + w);
-                        else wordSetExt.add(w);
-                    } else wordSetExt.add(joinOk(baseWord, o));
+                        else wordSet.add(w);
+                    } else wordSet.add(joinOk(baseWord, o));
             }
             else if (word.matches(".*-")) System.out.print(word + ","); // check pipe
             else if (word.contains("`")||word.contains("ё")||glasCount(word)==1)
                 { wordSet.add(word); baseWord=word; }
             else wordSet.add(word.replaceFirst("([ёуеыаоэяию])", "`$1"));
-
-        wordSet.addAll(wordSetExt);
         return wordSet;
     }
 
