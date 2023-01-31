@@ -20,7 +20,6 @@ public class Dictionary {
     String dir = "\\DBWords\\";
     @Value("${dictionary.level}")
     int level=2;
-    static boolean extendE = true;
 
     public Dictionary() {
         if (wordTable.isEmpty())
@@ -39,7 +38,7 @@ public class Dictionary {
     static void putWord(String word) {
         if (word.matches("[^ёуеыаоэяию]*")) return; //  System.out.printf(" [%s] ",word);
         word = word.trim().replaceAll("`(.)", "$1'");
-        if (extendE) if (word.contains("ё")) putWord(word.replaceAll("ё", "е'"));
+//        if (word.contains("ё")) putWord(word.replaceAll("ё", "е'")); // Ё -> `E
         if (glasCount(word) == 1) word = word.replaceAll("([ёуеыаоэяию])", "$1'");
         word = word.replaceAll("''", "'");
         if (word.contains("'") || word.contains("ё"))
@@ -58,18 +57,24 @@ public class Dictionary {
 
             if(key!=0) if(s.replaceAll("[^ёуеыаоэяию]","").length()!=key) continue;
 
-            String w = new Sentence(s).getHash(0)[1].replaceFirst("`$","");
-//            if(!w.contains(" "))continue;
-            if(w.contains(" ")) continue;
+            String w = new Sentence(s).getHash(0)[1]
+                    .replaceFirst("`$","")
+                    .replaceAll("(.)'", "`$1");
 
-            String ok = w.replaceFirst(".*-", "").replaceAll("(.)'", "$1");
+//            if(w.contains(" ")) continue;
 
-            ok = ok.replaceAll("[^ёуеыаоэяию](.{2,})", "$1");
+            String ok = w.replaceFirst(".*`", "");
+            if(ok.matches("[ёуеыаоэяию]"))
+                ok = w.replaceFirst(".*(.`.)", "$1");
+//                ok = w.replaceFirst(".*-", "");
 
-            if(ok.matches(".*[ёуеыаоэяию][^ёуеыаоэяию]+ь?$"))
-                ok=ok.replaceAll(".*([ёуеыаоэяию][^ёуеыаоэяию]+ь?)$","$1");
+//            ok = ok.replaceAll("[^ёуеыаоэяию](.{2,})", "$1");
 
-            if(ok.equals(w.replaceAll("'",""))) continue;
+//            if(ok.matches(".*[ёуеыаоэяию][^ёуеыаоэяию]+ь?$"))
+//                ok=ok.replaceAll(".*([ёуеыаоэяию][^ёуеыаоэяию]+ь?)$","$1");
+
+            if(ok.replaceAll("[`']","")
+                    .equals(w.replaceAll("[`']",""))) continue;
 //            System.out.print(ok+":"+s+" ");
 
 //            if(ok.matches("[ёуеыаоэяию][^ёуеыаоэяию]ь?"))
@@ -81,8 +86,8 @@ public class Dictionary {
 //            if(ok.matches("[мнл]м"))
 //                ok=ok.replaceFirst("[^ёуеыаоэяию]","@");
 
-            if(ok.matches("[ёуеыаоэяию][^ёуеыаоэяию]ь?[^ёуеыаоэяию]ь?"))
-                ok=ok.replaceAll("[ёуеыаоэяию]","");
+//            if(ok.matches("[ёуеыаоэяию][^ёуеыаоэяию]ь?[^ёуеыаоэяию]ь?"))
+//                ok=ok.replaceAll("[ёуеыаоэяию]","");
 
             Set<String> set = rhythm.get(ok);
             if (set == null) rhythm.put(ok, new TreeSet<>(singleton(w)));
