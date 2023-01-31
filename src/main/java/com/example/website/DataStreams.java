@@ -144,11 +144,11 @@ public class DataStreams extends DataStrings {
 
     private static String join(String word, String o) {
         if (o.matches("`.+")) {
-            if (o.matches("`[ёуеыаоэяию].*"))
+            if (o.matches("`[ёуеыаоэяию]"))
                 if (word.matches(".*[ьёуеыаоэяию]$"))
                     return reverse(reverse(word).replaceFirst("[ьёуеыаоэяию]", o));
                 else if (word.matches(".+[^ёуеыаоэяию]$")) return word + o;
-            System.out.print(word + ":" + word.replaceFirst("(.+)`.*", "$1") + o + ", ");
+            return (word + ":" + word.replaceFirst("(.+)`.*", "$1") + o + ", ");
         } else if (word.matches(".+[ёуеыаоэяию]$"))
             return word.replaceFirst("(.+)[ёуеыаоэяию]$", "$1") + o;
         else if (word.matches(".+ь$"))
