@@ -81,12 +81,14 @@ public class DataStreams extends DataStrings {
                 do {
                     String[] record = reader.readLine().replace("...", "").toLowerCase().split("[#%]", 3);
                     if (record.length < 3) continue; // bad line
+                    if (record[0].matches("^-.+")) continue;
                     if (record[2].contains("часть сложных слов")) continue;
                     if (record[2].contains("приставка")) continue;
                     if (record[2].contains("пишется")) continue;
 //                    if (record[2].contains(record[1]+"...")) continue;
                     lopatin.addAll(List.of(record[1].split("[-\\s]"))); // split??? and add main words
                     String line = record[2]
+                            .replaceAll("\\[.+\\]", " ")
                             .replaceAll("\\(.+\\)?", " ")
 //                            .replaceAll(".+#", "") // .replaceAll(".+%","")
                             .replaceAll(" [ивск] ", " ")
