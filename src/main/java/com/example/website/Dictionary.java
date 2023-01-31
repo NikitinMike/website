@@ -58,7 +58,7 @@ public class Dictionary {
 
             if(key!=0) if(s.replaceAll("[^ёуеыаоэяию]","").length()!=key) continue;
 
-            String w = new Sentence(s).getHash(0)[1];
+            String w = new Sentence(s).getHash(0)[1].replaceFirst("`$","");
 //            if(!w.contains(" "))continue;
             if(w.contains(" ")) continue;
 
