@@ -19,17 +19,23 @@ public class Dictionary {
     @Value("${dictionary.source}")
     String dir = "\\DBWords\\";
     @Value("${dictionary.level}")
-    int level=2;
+    int level = 2;
 
     public Dictionary() {
         if (wordTable.isEmpty())
             switch (level) {
-                case 0: addSet("Dictionary words", readDictionary(dir + "wordbook.txt"));
-                case 1: addSet("Hagen words", readHagen(dir + "hagen-orf.txt"));
-                case 2: addSet("Lopatin words",readLopatin(dir + "lop1v2.utf8.txt"));
-                case 3: addSet("Small Thesaurus words",readThesaurus("texts\\thesaurus.txt"));
-                case 4: addSet("Big Thesaurus words",readThesaurus("thesaurus.txt"));
-                default: System.out.println("Dictionary:" + wordTable.size());
+                case 0:
+                    addSet("Dictionary words", readDictionary(dir + "wordbook.txt"));
+                case 1:
+                    addSet("Hagen words", readHagen(dir + "hagen-orf.txt"));
+                case 2:
+                    addSet("Lopatin words", readLopatin(dir + "lop1v2.utf8.txt"));
+                case 3:
+                    addSet("Small Thesaurus words", readThesaurus("texts\\thesaurus.txt"));
+                case 4:
+                    addSet("Big Thesaurus words", readThesaurus("thesaurus.txt"));
+                default:
+                    System.out.println("Dictionary:" + wordTable.size());
 //                    wordTable.forEach((k, v) -> System.out.print(k + ":" + v + ","));
             }
         showThesaurus = true;
@@ -46,36 +52,41 @@ public class Dictionary {
         else if (showThesaurus) System.out.print(word + ",");
     }
 
-    public static void addSet(String what,Set<String> words) {
+    public static void addSet(String what, Set<String> words) {
         words.forEach(Dictionary::putWord);
-        if(what!=null) System.out.println(what+" + "+words.size() + "\t" + wordTable.size());
+        if (what != null) System.out.println(what + " + " + words.size() + "\t" + wordTable.size());
     }
 
     public static Map<String, Set<String>> getRhythm(int key) {
         Map<String, Set<String>> rhythm = new TreeMap<>(Comparator.comparing(Utils::reverse));
         for (String s : wordTable.values().stream().filter(Objects::nonNull).collect(toSet())) {
 
-            if(key!=0) if(s.replaceAll("[^ёуеыаоэяию]","").length()!=key) continue;
+            if (key != 0) if (s.replaceAll("[^ёуеыаоэяию]", "").length() != key) continue;
 
             String w = new Sentence(s).getHash(0)[1]
-                    .replaceFirst("`$","")
+                    .replaceFirst("`$", "")
                     .replaceAll("(.)'", "`$1");
 
 //            if(w.contains(" ")) continue;
 
-            String ok = w.replaceFirst(".*`", "");
-            if(ok.matches("[ёуеыаоэяию]"))
+            String ok = (w.contains("-"))
+                    ? w.replaceFirst(".*[-\\s]", "")
+                    : w.replaceFirst(".*`", "");
+
+            if (ok.matches("[ёуеыаоэяию]"))
                 ok = w.replaceFirst(".*(.`.)", "$1");
 //                ok = w.replaceFirst(".*-", "");
+
+            if (glasCount(ok) > 1)
+                ok = ok.replaceFirst("[ёуеыаоэяию]-?", "");
+
+            if (ok.matches("[^ёуеыаоэяию]-.+"))
+                ok = ok.replaceFirst("[^ёуеыаоэяию]-(.+)", "$1");
 
 //            ok = ok.replaceAll("[^ёуеыаоэяию](.{2,})", "$1");
 
 //            if(ok.matches(".*[ёуеыаоэяию][^ёуеыаоэяию]+ь?$"))
 //                ok=ok.replaceAll(".*([ёуеыаоэяию][^ёуеыаоэяию]+ь?)$","$1");
-
-            if(ok.replaceAll("[`']","")
-                    .equals(w.replaceAll("[`']",""))) continue;
-//            System.out.print(ok+":"+s+" ");
 
 //            if(ok.matches("[ёуеыаоэяию][^ёуеыаоэяию]ь?"))
 //                ok=ok.replaceAll("[ёуеыаоэяию]","");
@@ -89,6 +100,14 @@ public class Dictionary {
 //            if(ok.matches("[ёуеыаоэяию][^ёуеыаоэяию]ь?[^ёуеыаоэяию]ь?"))
 //                ok=ok.replaceAll("[ёуеыаоэяию]","");
 
+            if (ok.matches(".+-.+"))
+                ok = ok.replaceFirst(".*-(.*)", "$1");
+
+//            if(w.equals(ok)) continue;
+            ok = ok.replaceAll("[`'-]", "");
+//            if(ok.equals(w.replaceAll("[`'-]",""))) continue;
+//            System.out.print(ok+":"+s+" ");
+
             Set<String> set = rhythm.get(ok);
             if (set == null) rhythm.put(ok, new TreeSet<>(singleton(w)));
             else set.add(w);
@@ -98,7 +117,8 @@ public class Dictionary {
 
     public static String getWord(String word) {
         word = word.replaceAll("`(.)", "$1'");
-        if (wordTable.containsKey(word)) word = wordTable.get(word); else putWord(word);
+        if (wordTable.containsKey(word)) word = wordTable.get(word);
+        else putWord(word);
         if (!word.contains("'"))
             if (word.length() - word.replaceAll("[ёуеыаоэяию]", "").length() == 1)
                 word = word.replaceFirst("([ёуеыаоэяию])", "$1'");
