@@ -61,52 +61,30 @@ public class Dictionary {
         Map<String, Set<String>> rhythm = new TreeMap<>(Comparator.comparing(Utils::reverse));
         for (String s : wordTable.values().stream().filter(Objects::nonNull).collect(toSet())) {
 
-            if (key != 0) if (s.replaceAll("[^ёуеыаоэяию]", "").length() != key) continue;
+            if (key != 0) if (glasCount(s) != key) continue;
 
             String w = new Sentence(s).getHash(0)[1]
                     .replaceFirst("`$", "")
                     .replaceAll("(.)'", "`$1");
 
-//            if(w.contains(" ")) continue;
+            if (w.contains(" ")) continue;
 
-            String ok = (w.contains("-"))
-                    ? w.replaceFirst(".*[-\\s]", "")
-                    : w.replaceFirst(".*`", "");
+            String ok = (w.contains("-")) ? w.replaceFirst(".*-", "")
+                    : w.replaceFirst(".*`", "`");
+//                    .replaceFirst("`[ёуеыаоэяию]([^ёуеыаоэяию][^ёуеыаоэяию])", "$1");
 
-            if (ok.matches("[ёуеыаоэяию]"))
-                ok = w.replaceFirst(".*(.`.)", "$1");
-//                ok = w.replaceFirst(".*-", "");
+            if (ok.length() > 3)
+                ok = ok.replaceFirst(".*`", "`");
 
-            if (glasCount(ok) > 1)
-                ok = ok.replaceFirst("[ёуеыаоэяию]-?", "");
+            if (ok.length() > 3)
+                ok = ok.replaceFirst("[^ёуеыаоэяию](.+)", "$1");
 
-            if (ok.matches("[^ёуеыаоэяию]-.+"))
-                ok = ok.replaceFirst("[^ёуеыаоэяию]-(.+)", "$1");
+            if(!ok.contains("`")) ok = ok.replace("ю","у")
+                    .replace("ё","о")
+//                    .replace("я","а")
+                    ;
 
-//            ok = ok.replaceAll("[^ёуеыаоэяию](.{2,})", "$1");
-
-//            if(ok.matches(".*[ёуеыаоэяию][^ёуеыаоэяию]+ь?$"))
-//                ok=ok.replaceAll(".*([ёуеыаоэяию][^ёуеыаоэяию]+ь?)$","$1");
-
-//            if(ok.matches("[ёуеыаоэяию][^ёуеыаоэяию]ь?"))
-//                ok=ok.replaceAll("[ёуеыаоэяию]","");
-//            if(ok.matches("[^ёуеыаоэяию][ёуеыаоэяию]"))
-//                ok=ok.replaceAll("[^ёуеыаоэяию]","");
-//            if(ok.matches("[^ёуеыаоэяию]ж"))
-//                ok=ok.replaceFirst("[^ёуеыаоэяию]","");
-//            if(ok.matches("[мнл]м"))
-//                ok=ok.replaceFirst("[^ёуеыаоэяию]","@");
-
-//            if(ok.matches("[ёуеыаоэяию][^ёуеыаоэяию]ь?[^ёуеыаоэяию]ь?"))
-//                ok=ok.replaceAll("[ёуеыаоэяию]","");
-
-            if (ok.matches(".+-.+"))
-                ok = ok.replaceFirst(".*-(.*)", "$1");
-
-//            if(w.equals(ok)) continue;
-            ok = ok.replaceAll("[`'-]", "");
-//            if(ok.equals(w.replaceAll("[`'-]",""))) continue;
-//            System.out.print(ok+":"+s+" ");
+//            ok = ok.replaceAll("[`'-]", "");
 
             Set<String> set = rhythm.get(ok);
             if (set == null) rhythm.put(ok, new TreeSet<>(singleton(w)));
