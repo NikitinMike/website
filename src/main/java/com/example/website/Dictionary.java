@@ -61,7 +61,7 @@ public class Dictionary {
         return Utils.reverse(str.replace("`",""));
     }
 
-    public static Map<String, Set<String>> getRhythm(int key) {
+    public static Map<String, Set<String>> getRhythm(int key,String chr) {
         Map<String, Set<String>> rhythm = new TreeMap<>(Comparator.comparing(Dictionary::reverseOk));
         for (String s : wordTable.values().stream().filter(Objects::nonNull).collect(toSet())) {
 
@@ -75,6 +75,8 @@ public class Dictionary {
 
             String ok = (w.contains("-")) ? w.replaceFirst(".*-", "")
                     : w.replaceFirst(".*`", "`");
+
+            if(!ok.matches(chr+"$")) continue;
 
             if(ok.matches("[^ёуеыаоэяию][ёуеыаоэяию][^ёуеыаоэяию]"))
                 ok = ok.replaceFirst("[^ёуеыаоэяию]", "");
@@ -90,7 +92,7 @@ public class Dictionary {
 //                    .replace("я","а")
                     ;
 
-            if(ok.matches("`.")) ok = ok.replaceAll("`", "");
+//            if(ok.matches("`.")) ok = ok.replaceAll("`", "");
 
             Set<String> set = rhythm.get(ok);
             if (set == null) rhythm.put(ok, new TreeSet<>(singleton(w)));

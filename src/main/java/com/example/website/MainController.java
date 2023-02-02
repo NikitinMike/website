@@ -33,13 +33,25 @@ public class MainController extends DataStreams {
         return new ModelAndView("listfiles");
     }
 
+    @GetMapping({"/rhythm2/{chr}", "/rhythm2"})
+    @ResponseBody
+    public ModelAndView rhythm2(Model model, @PathVariable @Nullable String chr) {
+        if (chr == null) chr = ".";
+        model.addAttribute("title", chr + " RHYTHM ");
+        model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщыэюя".split(""));
+        Map<String, Set<String>> rhythm = getRhythm(0,chr);
+//        rhythm.entrySet().removeIf(r -> r.getValue().size() > 1);
+        model.addAttribute("set", rhythm);
+        return new ModelAndView("rhythm2");
+    }
+
     @GetMapping({"/rhythm/{key}", "/rhythm"})
     @ResponseBody
     public ModelAndView rhythm(Model model, @PathVariable @Nullable Integer key) {
         if (key == null) key = 10;
         model.addAttribute("title", key + " RHYTHM ");
         model.addAttribute("number", "0123456789".split(""));
-        Map<String, Set<String>> rhythm = getRhythm(key);
+        Map<String, Set<String>> rhythm = getRhythm(key,".+");
 //        rhythm.entrySet().removeIf(r -> r.getValue().size() > 3);
         model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm");
