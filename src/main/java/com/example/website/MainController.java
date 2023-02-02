@@ -38,8 +38,8 @@ public class MainController extends DataStreams {
     public ModelAndView rhythm2(Model model, @PathVariable @Nullable String chr) {
         if (chr == null) chr = ".";
         model.addAttribute("title", chr + " RHYTHM ");
-        model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщыэюя".split(""));
-        Map<String, Set<String>> rhythm = getRhythm(0,chr);
+        model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщьъыэюя".split(""));
+        Map<String, Set<String>> rhythm = getRhythm(0,".*"+chr);
 //        rhythm.entrySet().removeIf(r -> r.getValue().size() > 1);
         model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm2");
