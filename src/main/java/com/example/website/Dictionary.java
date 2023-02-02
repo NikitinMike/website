@@ -57,8 +57,12 @@ public class Dictionary {
         if (what != null) System.out.println(what + " + " + words.size() + "\t" + wordTable.size());
     }
 
+    static String reverseOk(String str){
+        return Utils.reverse(str.replace("`",""));
+    }
+
     public static Map<String, Set<String>> getRhythm(int key) {
-        Map<String, Set<String>> rhythm = new TreeMap<>(Comparator.comparing(Utils::reverse));
+        Map<String, Set<String>> rhythm = new TreeMap<>(Comparator.comparing(Dictionary::reverseOk));
         for (String s : wordTable.values().stream().filter(Objects::nonNull).collect(toSet())) {
 
             if (key != 0) if (glasCount(s) != key) continue;
@@ -84,7 +88,7 @@ public class Dictionary {
 //                    .replace("я","а")
                     ;
 
-//            ok = ok.replaceAll("[`'-]", "");
+            if(ok.matches("`.")) ok = ok.replaceAll("`", "");
 
             Set<String> set = rhythm.get(ok);
             if (set == null) rhythm.put(ok, new TreeSet<>(singleton(w)));
