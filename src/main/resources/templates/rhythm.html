@@ -14,9 +14,9 @@
     </a>
     <hr/>
     <table class="row" border="0">
-        <tr th:each="entry : ${set}">
+        <tr th:each="entry : ${set}" th:class="${entry.getKey().length()==1}? 'odd'">
             <td align="right" color="blue" bgcolor="yellow"> [(${entry.getKey()})] </td>
-            <td align="center"> [(${entry.getValue()})] </td>
+            <td align="center" >[(${entry.getValue()})]</td>
             <td bgcolor="yellow"> [(${entry.getKey()})] </td>
         </tr>
     </table>

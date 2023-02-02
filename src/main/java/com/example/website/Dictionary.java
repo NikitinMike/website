@@ -75,7 +75,9 @@ public class Dictionary {
 
             String ok = (w.contains("-")) ? w.replaceFirst(".*-", "")
                     : w.replaceFirst(".*`", "`");
-//                    .replaceFirst("`[ёуеыаоэяию]([^ёуеыаоэяию][^ёуеыаоэяию])", "$1");
+
+            if(ok.matches("[^ёуеыаоэяию][ёуеыаоэяию][^ёуеыаоэяию]"))
+                ok = ok.replaceFirst("[^ёуеыаоэяию]", "");
 
             if (ok.length() > 3)
                 ok = ok.replaceFirst(".*`", "`");

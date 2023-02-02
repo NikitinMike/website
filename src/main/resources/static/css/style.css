@@ -2,6 +2,11 @@ body{
 	font-family: "Courier New";
 }
 
+.odd{
+	font-weight: bold;
+	background-color: lightgray;
+}
+
 p{
 	margin-block-start: 0em;
 	margin-block-end: 0em;
