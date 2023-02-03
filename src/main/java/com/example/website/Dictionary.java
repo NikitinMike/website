@@ -19,7 +19,7 @@ public class Dictionary {
     @Value("${dictionary.source}")
     String dir = "\\DBWords\\";
     @Value("${dictionary.level}")
-    int level = 2;
+    int level = 3;
 
     public Dictionary() {
         if (wordTable.isEmpty())

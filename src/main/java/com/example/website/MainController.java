@@ -39,10 +39,21 @@ public class MainController extends DataStreams {
         if (chr == null) chr = ".";
         model.addAttribute("title", chr + " RHYTHM ");
         model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщьъыэюя".split(""));
-        Map<String, Set<String>> rhythm = getRhythm(0,".*"+chr);
-//        rhythm.entrySet().removeIf(r -> r.getValue().size() > 1);
+        Map<String, Set<String>> rhythm = getRhythm(0, ".*" + chr);
+        rhythm.entrySet().removeIf(r -> r.getValue().size() > 1);
         model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm2");
+    }
+
+    @GetMapping({"/tab/{chr}", "/tab", "/tabs"})
+    public String tabs(Model model, @PathVariable @Nullable String chr) {
+
+        Cardrequest cardrequest = new Cardrequest();
+        cardrequest.setAgreeWithPersonalInformation(false);
+        cardrequest.setLocationProvince("Республика Марий Эл");
+        cardrequest.setPostalAddress(true);
+        model.addAttribute("cardrequest", cardrequest);
+        return "cards/cardrequest";
     }
 
     @GetMapping({"/rhythm/{key}", "/rhythm"})
