@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout" lang="ru">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Банк "Йошкар-Ола" (ПАО)</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../../css/bootstrap.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css"/>
+    <link rel="stylesheet" th:href="@{/css/jquery.simplewizard.css}" href="../../css/jquery.simplewizard.css"/>
+    <link rel="stylesheet" href="../../css/signin.css"/>
+</head>
+
+<body>
+<script src="../../js/jquery-1.12.0.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/card.js"></script>
+<script src="../../js/jquery.simplewizard.js"></script>
+<script src="../../js/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            autoclose: true,
+            language: "ru"
+        });
+    });
+</script>
+<div layout:fragment="content">
+    <div th:replace="fragments/header :: header">&nbsp;</div>
+
+    <div class="container">
+        <div class="col-sm-12">
+            <form id="wizard1" method="post" action="#" class="wizard form-signin" th:action="@{/cardrequest}"
+                  th:object="${cardrequest}">
+                <div class="row">
+                    <div class="wizard-header">
+                        <ul class="nav nav-tabs">
+                            <li role="presentation" class="wizard-step-indicator"><a href="#step1">Шаг 1</a></li>
+                            <li role="presentation" class="wizard-step-indicator"><a href="#step2">Шаг 2</a></li>
+                            <li role="presentation" class="wizard-step-indicator"><a href="#step3">Шаг 3</a></li>
+                            <li role="presentation" class="wizard-step-indicator"><a href="#step4">Шаг 4</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="wizard-content">
+
+                        <div id="step1" class="wizard-step">
+                            <div class="form-group">
+                                <label for="lastName" class="sr-only">Фамилия</label>
+                                <input type="text" placeholder="Фамилия" th:field="*{lastName}"
+                                       class="form-control required" id="lastName" name="lastName" maxlength="50"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="firstName" class="sr-only">Имя</label>
+                                <input type="text" placeholder="Имя" th:field="*{firstName}"
+                                       class="form-control required" id="firstName" name="firstName" maxlength="15"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="secondName" class="sr-only">Отчество</label>
+                                <input type="text" placeholder="Отчество" th:field="*{secondName}"
+                                       class="form-control required" id="secondName" name="secondName" maxlength="15"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="dateOfBirth" class="sr-only">Дата рождения</label>
+                                <input type="text" placeholder="Дата рождения" th:field="*{birthDay}"
+                                       class="form-control required datepicker" id="dateOfBirth" name="dateOfBirth"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="phoneNumber" class="sr-only">Мобильный телефон</label>
+                                <input type="text" placeholder="Мобильный телефон" th:field="*{mobilePhoneNumber}"
+                                       class="form-control required phoneNumber" id="phoneNumber" name="phoneNumber"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="sr-only">Электронная почта (e-mail)</label>
+                                <input type="email" placeholder="Электронная почта (e-mail)" th:field="*{email}"
+                                       class="form-control" id="email" name="email" maxlength="50"/>
+                            </div>
+                            <button type="button" class="wizard-next btn btn-primary">Продолжить</button>
+                        </div>
+
+                        <div id="step2" class="wizard-step">
+                            <div class="form-group"> Документ, удостоверяющий личность (паспорт): </div>
+                            <div class="form-group">
+                                <label for="inputPasportSeries" class="sr-only">Серия</label>
+                                <input type="text" placeholder="Серия" th:field="*{pasportSeries}"
+                                       class="form-control required paspSeries" id="inputPasportSeries"
+                                       name="inputPasportSeries" maxlength="4"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPasportNumber" class="sr-only">Номер</label>
+                                <input type="text" placeholder="Номер" th:field="*{pasportNumber}"
+                                       class="form-control required paspNumber" id="inputPasportNumber"
+                                       name="inputPasportNumber" maxlength="6"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPasportIssued" class="sr-only">Выдан</label>
+                                <input type="text" placeholder="Выдан" th:field="*{pasportIssued}"
+                                       class="form-control datepicker required" id="inputPasportIssued"
+                                       name="inputPasportIssued"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPasportCodeDevision" class="sr-only">Код подразделения</label>
+                                <input type="text" placeholder="Код подразделения" th:field="*{pasportCodeDevision}"
+                                       class="form-control required pasportCodeDevision" id="inputPasportCodeDevision"
+                                       name="inputPasportCodeDevision" maxlength="10"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPasportIssuedBy" class="sr-only">Кем</label>
+                                <input type="text" placeholder="Кем" th:field="*{pasportIssuedBy}"
+                                       class="form-control required" id="inputPasportIssuedBy"
+                                       name="inputPasportIssuedBy" maxlength="250"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="placeofbirth" class="sr-only">Укажите место рождения (по паспорту)</label>
+                                <input type="text" placeholder="Укажите место рождения (по паспорту)"
+                                       th:field="*{placeOfBirth}" class="form-control required" id="placeofbirth"
+                                       name="placeofbirth" maxlength="100"/>
+                            </div>
+                            <button type="button" class="wizard-next btn btn-primary">Продолжить</button>
+                        </div>
+
+                        <div id="step3" class="wizard-step">
+                            <div class="form-group">Адрес регистрации:</div>
+                            <div class="form-group">
+                                <label for="inputZipCode1" class="sr-only">Индекс</label>
+                                <input type="text" placeholder="Индекс" th:field="*{locationZipCode}"
+                                       class="form-control required zipCode" id="inputZipCode1" name="inputZipCode1" maxlength="8"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputProvince1" class="sr-only">Республика/Край</label>
+                                <input type="text" placeholder="Республика/Край" th:field="*{locationProvince}"
+                                       class="form-control" id="inputProvince1" name="inputProvince1" maxlength="100"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputDistrict1" class="sr-only">Район</label>
+                                <input type="text" placeholder="Район" th:field="*{locationDistrict}"
+                                       class="form-control" id="inputDistrict1" name="inputDistrict1" maxlength="100"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputCity1" class="sr-only">Город/Населенный пункт</label>
+                                <input type="text" placeholder="Город/Населенный пункт" th:field="*{locationCity}"
+                                       class="form-control required" id="inputCity1" name="inputCity1" maxlength="40"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputStreet1" class="sr-only">Улица</label>
+                                <input type="text" placeholder="Улица" th:field="*{locationStreet}"
+                                       class="form-control required" id="inputStreet1" name="inputStreet1" maxlength="50"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputHouse1" class="sr-only">Дом</label>
+                                <input type="text" placeholder="Дом" th:field="*{locationHouse}"
+                                       class="form-control required" id="inputHouse1" name="inputHouse1" maxlength="4"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputHousing1" class="sr-only">Корпус</label>
+                                <input type="text" placeholder="Корпус" th:field="*{locationHousing}"
+                                       class="form-control" id="inputHousing1" name="inputHousing1" maxlength="3"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputApartment1" class="sr-only">Квартира</label>
+                                <input type="text" placeholder="Квартира" th:field="*{locationAppartment}"
+                                       class="form-control" id="inputApartment1" name="inputApartment1" maxlength="4"/>
+                            </div>
+                            <div class="form-group"> Адрес места жительства: </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" th:field="*{postalAddress}" id="check_post_address" value="1"/>
+                                    Совпадает с адресом регистрации
+                                </label>
+                            </div>
+                            <div id="post_address" style="display: none">
+                                <div class="form-group">
+                                    <label for="inputZipCode2" class="sr-only">Индекс</label>
+                                    <input type="text" placeholder="Индекс" th:field="*{postalZipCode}"
+                                           class="form-control" id="inputZipCode2" name="inputZipCode2" maxlength="8"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputProvince2" class="sr-only">Республика/Край</label>
+                                    <input type="text" placeholder="Республика/Край" th:field="*{postalProvince}"
+                                           class="form-control" id="inputProvince2" name="inputProvince2" maxlength="100"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputDistrict2" class="sr-only">Район</label>
+                                    <input type="text" placeholder="Район" th:field="*{postalDistrict}"
+                                           class="form-control" id="inputDistrict2" name="inputDistrict2" maxlength="100"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputCity2" class="sr-only">Город/Населенный пункт</label>
+                                    <input type="text" placeholder="Город/Населенный пункт" th:field="*{postalCity}"
+                                           class="form-control" id="inputCity2" name="inputCity2" maxlength="40"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputStreet2" class="sr-only">Улица</label>
+                                    <input type="text" placeholder="Улица" th:field="*{postalStreet}"
+                                           class="form-control" id="inputStreet2" name="inputStreet2" maxlength="50"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputHouse2" class="sr-only">Дом</label>
+                                    <input type="text" placeholder="Дом" th:field="*{postalHouse}" class="form-control"
+                                           id="inputHouse2" name="inputHouse2" maxlength="4"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputHousing2" class="sr-only">Корпус</label>
+                                    <input type="text" placeholder="Корпус" th:field="*{postalHousing}"
+                                           class="form-control" id="inputHousing2" name="inputHousing2" maxlength="3"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputApartment2" class="sr-only">Квартира</label>
+                                    <input type="text" placeholder="Квартира" th:field="*{postalApartment}"
+                                           class="form-control" id="inputApartment2" name="inputApartment2" maxlength="4"/>
+                                </div>
+                            </div>
+                            <button type="button" class="wizard-next btn btn-primary">Продолжить</button>
+                        </div>
+
+                        <div id="step4" class="wizard-step">
+                            <div class="form-group">
+                                Контрольная информация (будет использоваться для идентификации клиента как Держателя карты по телефону)
+                            </div>
+                            <div class="form-group">
+                                <input type="text" th:field="*{controlInformation}" class="form-control required"
+                                       id="controlInformation" name="controlInformation" maxlength="10"/>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" th:field="*{agreeWithPersonalInformation}" class="required" value="1"/>
+                                        Я <a href="#" data-toggle="modal" data-target="#personalModal" id="agreeWithPersonalInformation">
+                                        согласен</a> на обработку и использования моих персональных данных.
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" th:field="*{agreementWithRules}" class="required" value="1"/>
+                                        Я согласен с <a href="#" data-toggle="modal" data-target="#rulesModal"> условиями заявления </a>.
+                                    </label>
+                                </div>
+                            </div>
+                            <input type="hidden" name="submitted_card_request" value="1"/>
+                            <button type="submit" class="btn btn-primary" value="Отправить">Отправить</button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

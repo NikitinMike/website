@@ -1,8 +1,59 @@
 body{
-	font-family: verdana;
+	font-family: "Courier New";
+}
+
+.odd{
+	font-weight: bold;
+	background-color: lightgray;
+}
+
+p{
+	margin-block-start: 0em;
+	margin-block-end: 0em;
+}
+
+b{
+	color: red;
+	font-weight: bold;
 }
 
 header{
+}
+
+td{
+	color: black;
+}
+
+.first {
+	font-weight: normal;
+}
+
+.second {
+	font-weight: bold;
+}
+
+tr.error {
+	background-color: red;
+	color: white;
+}
+
+tr.info {
+	background-color: gold;
+	color: black;
+}
+
+thead {
+	background-color: darkcyan;
+	color: white;
+}
+
+hr {
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #ccc;
+	margin: 1em 0;
+	padding: 0;
 }
 
 .menu {
@@ -171,6 +222,14 @@ header{
 	}
 }
 
+ tr.error {
+	 background-color: red;
+	 color: white;
+ }
+tr.info {
+	background-color: cyan;
+	color: black;
+}
 
 @media only screen and (max-width: 480px) {
 
