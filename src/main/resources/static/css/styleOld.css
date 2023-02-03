@@ -1,3 +1,82 @@
+
+.tabs {
+	font-size: 0;
+}
+
+.tabs>input[type="radio"] {
+	display: none;
+}
+
+.tabs>div {
+	/* скрыть контент по умолчанию */
+	display: none;
+	border: 1px solid #e0e0e0;
+	padding: 10px 15px;
+	font-size: 16px;
+}
+
+/* отобразить контент, связанный с вабранной радиокнопкой (input type="radio") */
+#tab-btn-1:checked~#content-1,
+#tab-btn-2:checked~#content-2,
+#tab-btn-3:checked~#content-3,
+#tab-btn-4:checked~#content-4,
+#tab-btn-5:checked~#content-5,
+#tab-btn-6:checked~#content-6,
+#tab-btn-7:checked~#content-7,
+#tab-btn-8:checked~#content-8,
+#tab-btn-9:checked~#content-9,
+#tab-btn-10:checked~#content-10,
+#tab-btn-11:checked~#content-11,
+#tab-btn-12:checked~#content-12,
+#tab-btn-13:checked~#content-13,
+#tab-btn-14:checked~#content-14,
+#tab-btn-15:checked~#content-15,
+#tab-btn-16:checked~#content-16,
+#tab-btn-17:checked~#content-17,
+#tab-btn-18:checked~#content-18,
+#tab-btn-19:checked~#content-19,
+#tab-btn-20:checked~#content-20,
+#tab-btn-21:checked~#content-21,
+#tab-btn-22:checked~#content-22,
+#tab-btn-23:checked~#content-23,
+#tab-btn-24:checked~#content-24,
+#tab-btn-25:checked~#content-25,
+#tab-btn-26:checked~#content-26,
+#tab-btn-27:checked~#content-27,
+#tab-btn-28:checked~#content-28,
+#tab-btn-29:checked~#content-29,
+#tab-btn-30:checked~#content-30,
+#tab-btn-31:checked~#content-31,
+#tab-btn-32:checked~#content-32,
+#tab-btn-33:checked~#content-33{
+	display: block;
+}
+
+.tabs>label {
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	user-select: none;
+	background-color: #f5f5f5;
+	border: 1px solid #e0e0e0;
+	padding: 2px 8px;
+	font-size: 16px;
+	line-height: 1.5;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+	cursor: pointer;
+	position: relative;
+	top: 1px;
+}
+
+.tabs>label:not(:first-of-type) {
+	border-left: none;
+}
+
+.tabs>input[type="radio"]:checked+label {
+	background-color: #fff;
+	border-bottom: 1px solid #fff;
+}
+
 body{
 	font-family: "Courier New";
 }

@@ -2,24 +2,41 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <title> [[${title}]] [[${set.size()}]]  </title>
+
     <link rel="stylesheet" type="text/css" th:href="@{/css/styleOld.css}">
+
     <style>
+        [(${style})]
     </style>
+
 </head>
 <body>
 <div class="container">
+
     <a href="/"> BACK </a>
-    <a th:each="chr : ${alphabet}" th:href="@{/rhythm2/{id}(id=${chr})}">
-        [[${chr}]]
-    </a>
+    <a th:each="chr : ${alphabet}" th:href="@{/rhythm2/{id}(id=${chr})}">[[${chr}]]</a>
     <hr/>
-    <table class="row" border="0">
-        <tr th:each="entry : ${set}" th:class="${entry.getKey().length()==1}? 'odd'">
-            <td align="right" color="blue" bgcolor="yellow"> [(${entry.getValue().size()})] </td>
-            <td align="center" >[(${entry.getValue()})]</td>
-            <td bgcolor="yellow"> [(${entry.getKey()})] </td>
-        </tr>
-    </table>
+
+<!--    <div class="tabs" th:each="chr,status : ${alphabet}" >-->
+<!--            <input type="radio" name="tab-btn" th:id="${'tab-btn-'+status.count}" value="">-->
+<!--            <label th:for="${'tab-btn-'+status.count}">[[${chr}]]</label>-->
+<!--            <div th:id="${'content-'+status.count}"> [[${chr}]] Содержимое </div>-->
+<!--    </div>-->
+
+        <div  class="tabs" th:each="entry,status : ${set}">
+
+            <input type="radio" name="tab-btn" th:id="${'tab-btn-'+status.count}" value="">
+            <label th:for="${'tab-btn-'+status.count}">[[${entry.getKey()}]]</label>
+            <div th:id="${'content-'+status.count}"> [[${entry.getValue()}]] </div>
+
+<!--            <p th:class="${entry.getKey().length()==1}? 'odd'">-->
+<!--            <td align="right" color="blue" bgcolor="yellow"> [(${entry.getValue().size()})] </td>-->
+<!--            <td align="center" >-->
+<!--                [(${entry.getValue()})]-->
+<!--            </td>-->
+<!--            <td bgcolor="yellow"> [(${entry.getKey()})] </td>-->
+        </div>
+
     <hr/>
 </div>
 </body>
