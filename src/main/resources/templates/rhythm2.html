@@ -23,17 +23,15 @@
 <!--            <div th:id="${'content-'+status.count}"> [[${chr}]] Содержимое </div>-->
 <!--    </div>-->
 
-        <div  class="tabs" th:each="entry,status : ${set}">
-
-            <input type="radio" name="tab-btn" th:id="${'tab-btn-'+status.count}" value="">
-            <label th:for="${'tab-btn-'+status.count}">[[${entry.getKey()}]]</label>
-            <div th:id="${'content-'+status.count}"> [[${entry.getValue()}]] </div>
-
 <!--            <p th:class="${entry.getKey().length()==1}? 'odd'">-->
+        <span class="tabs" th:each="entry,status : ${set}">
+                <input type="radio" name="tab-btn" th:id="${'tab-btn-'+status.count}" value="">
+                <label th:for="${'tab-btn-'+status.count}">[[${entry.getKey()}]]</label>
+                <div th:id="${'content-'+status.count}"> [[${entry.getValue()}]] </div>
 <!--            <td align="right" color="blue" bgcolor="yellow"> [(${entry.getValue().size()})] </td>-->
 <!--            <td align="center" >[(${entry.getValue()})]</td>-->
 <!--            <td bgcolor="yellow"> [(${entry.getKey()})] </td>-->
-        </div>
+        </span>
 
     <hr/>
 </div>
