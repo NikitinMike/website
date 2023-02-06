@@ -44,7 +44,7 @@ public class MainController extends DataStreams {
         rhythm.entrySet().removeIf(r -> r.getValue().size() > 10);
 
         String style = "#tab-btn-0:checked~#content-0";
-        for (int i = 1; i < rhythm.entrySet().size(); i++)
+        for (int i = 1; i <= rhythm.entrySet().size(); i++)
             style+=String.format(",%n#tab-btn-%d:checked~#content-%d",i,i);
 
         style+="{display: block;}";
