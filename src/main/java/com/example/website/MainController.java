@@ -36,17 +36,14 @@ public class MainController extends DataStreams {
     @GetMapping({"/rhythm2/{chr}", "/rhythm2"})
     @ResponseBody
     public ModelAndView rhythm2(Model model, @PathVariable @Nullable String chr) {
-
         if (chr == null) chr = ".";
         model.addAttribute("title", chr + " RHYTHM ");
         model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщьъыэюя".split(""));
         Map<String, Set<String>> rhythm = getRhythm(0, ".*" + chr);
-        rhythm.entrySet().removeIf(r -> r.getValue().size() > 10);
-
+//        rhythm.entrySet().removeIf(r -> r.getValue().size() > 10);
         String style = "#tab-btn-0:checked~#content-0";
         for (int i = 1; i <= rhythm.entrySet().size(); i++)
             style+=String.format(",%n#tab-btn-%d:checked~#content-%d",i,i);
-
         style+="{display: block;}";
         model.addAttribute("style", style);
         model.addAttribute("set", rhythm);
