@@ -83,7 +83,7 @@ public class Utils {
 
     public static String getGlas(String word) {
 //        return word.replaceAll("[йцкнгшщзхъфвпрлджчсмтьб]", "");
-        return word.replaceAll("[^ёуеыаоэяию]", "");
+        return word.replaceAll("[^ёуеыаоэяию`']", "");
     }
 
     public static String wordStrip(String word) {
