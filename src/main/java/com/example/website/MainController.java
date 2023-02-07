@@ -36,7 +36,7 @@ public class MainController extends DataStreams {
     @GetMapping({"/rhythm2/{chr}", "/rhythm2"})
     @ResponseBody
     public ModelAndView rhythm2(Model model, @PathVariable @Nullable String chr) {
-        if (chr == null) chr = ".";
+        if (chr == null) chr = "";
         model.addAttribute("title", chr + " RHYTHM ");
         model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщьъыэюя".split(""));
         Map<String, Set<String>> rhythm = getRhythm(0, ".*" + chr);
@@ -52,7 +52,6 @@ public class MainController extends DataStreams {
 
     @GetMapping({"/tab/{chr}", "/tab", "/tabs"})
     public String tabs(Model model, @PathVariable @Nullable String chr) {
-
         Cardrequest cardrequest = new Cardrequest();
         cardrequest.setAgreeWithPersonalInformation(false);
         cardrequest.setLocationProvince("Республика Марий Эл");

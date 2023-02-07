@@ -31,9 +31,9 @@ public class Dictionary {
                 case 2:
                     addSet("Lopatin words", readLopatin(dir + "lop1v2.utf8.txt"));
                 case 3:
-                    addSet("Small Thesaurus words", readThesaurus("texts\\thesaurus.txt"));
-                case 4:
                     addSet("Big Thesaurus words", readThesaurus("thesaurus.txt"));
+                case 4:
+                    addSet("Small Thesaurus words", readThesaurus("texts\\thesaurus.txt"));
                 default:
                     System.out.println("Dictionary:" + wordTable.size());
 //                    wordTable.forEach((k, v) -> System.out.print(k + ":" + v + ","));
