@@ -1,5 +1,9 @@
 package com.example.website;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -16,16 +20,20 @@ import static java.nio.charset.Charset.forName;
 import static java.nio.file.Files.newBufferedReader;
 import static java.util.Arrays.stream;
 
+@Service
 public class DataStreams extends DataStrings {
-    static WordsBookRepository wordsBookRepository;
+    @Autowired
+    WordsBookRepository wordsBookRepository;
     String[][] in = {hymn, sobaka, vorona, chuchelo, rossia, pushkin, tutchev};
 
-    static Hashtable<String, List<WordBookEntity>> readWordBook(String[] words) {
+    @Transactional
+    Hashtable<String, List<WordBookEntity>> readWordBook(List<String> words) {
         Hashtable<String, List<WordBookEntity>> wordsEntityHashMap = new Hashtable<>();
         for (String word : words) {
 //            String [] subWords = word.split("_");
 //            if(subWords.length>1) wordsEntity.addAll(readWordsBook(subWords));
 //            else wordsEntity.addAll(repository.findAllByWord(word));
+            word = word.replaceAll("[^а-яА-ЯёЁ]","");
             List<WordBookEntity> wordsBookEntities = wordsBookRepository.findAllByWord(word);
             if (wordsBookEntities == null || wordsBookEntities.isEmpty())
                 wordsBookEntities = Collections.singletonList(new WordBookEntity(word));

@@ -88,7 +88,7 @@ public class MainController extends DataStreams {
                 .collect(toList());
 //                .collect(toSet());
 //                .collect(Collectors.joining(", "));
-        model.addAttribute("words", words);
+        model.addAttribute("words", readWordBook(words));
 //        model.addAttribute("words", Collections.singleton(words));
         return new ModelAndView("dictionary");
     }
