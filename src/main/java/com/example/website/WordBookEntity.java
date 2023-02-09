@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import static com.example.website.Utils.wordAnalyse;
+
 @Entity
 @Getter
 @Setter
@@ -94,10 +96,19 @@ public class WordBookEntity {
         return (b == null || 0 == b) ? "" : String.format(",%s=%d", tag, b);
     }
 
+    public String getWord(){
+        if(type!=null)
+            switch (type){
+                case "сущ": return "<i>"+ wordAnalyse(word)+"</i>";
+                case "прл": return "<b>"+ wordAnalyse(word)+"</b>";
+            }
+        return wordAnalyse(word);
+    }
+
     @Override
     public String toString() {
         return "{" + word + ":" +
-                Utils.wordAnalyse(word)
+                wordAnalyse(word)
 //                + "iid=" + iid
 //                + ", word='" + word + '\''
                 + notNull("", code)

@@ -34,9 +34,14 @@ public class DataStreams extends DataStrings {
 //            if(subWords.length>1) wordsEntity.addAll(readWordsBook(subWords));
 //            else wordsEntity.addAll(repository.findAllByWord(word));
             word = word.replaceAll("[^а-яА-ЯёЁ]","");
-            List<WordBookEntity> wordsBookEntities = wordsBookRepository.findAllByWord(word);
+            List<WordBookEntity> wordsBookEntities = wordsBookRepository.findFirstByWord(word);
             if (wordsBookEntities == null || wordsBookEntities.isEmpty())
                 wordsBookEntities = Collections.singletonList(new WordBookEntity(word));
+            else {
+                for (WordBookEntity wordsBookEntity : wordsBookEntities) {
+//                    System.out.println(wordsBookEntity);
+                }
+            }
 //            System.out.println(wordsBookEntities);
             wordsEntityHashMap.put(word, wordsBookEntities);
         }
