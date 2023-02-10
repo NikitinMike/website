@@ -1,7 +1,7 @@
 package com.example.website;
 
 public class DataStrings {
-// 	<div class="entry-content poem-text" itemscope itemtype="http://schema.org/CreativeWork">
+    // 	<div class="entry-content poem-text" itemscope itemtype="http://schema.org/CreativeWork">
 // 	<div class="entry-content poem-text" itemscope itemtype="http://schema.org/CreativeWork">
     String[] tutchev = {
             "Нам не дано предугадать,",
@@ -77,5 +77,41 @@ public class DataStrings {
             "Только всем от_песенки_этой стало тошно",
             "Потому_что песенка чучела про_то_что",
             "Чучело-мяучело на_трубе сидело"
+    };
+
+    String[] partsRus = {  //        "Самостоятельные части речи" +
+            "существительное",
+            "прилагательное",
+            "числительное",
+            "Местоимение",
+            "Глагол",
+            "Наречие",
+            "Предикатив",// (слова категории состояния)" +
+            "Причастие",
+            "Деепричастие",
+
+//        "Служебные части речи" +
+            "Предлог",
+            "Союз",
+            "Частица",
+//        "модальные слова" +
+//        "междометия (и звукоподражательные слова)"
+    };
+
+    String[] partsEng = {
+        "noun",
+        "adjective",
+            "numeral",
+            "Pronoun",
+        "Verb",
+        "Adverb",
+            "Predicative", // (words of the state category)"
+        "Participle,",
+        "Adverbial participle",
+
+            // Service parts of speech
+            "Preposition",
+            "Soyuz",
+            "Particle"
     };
 }

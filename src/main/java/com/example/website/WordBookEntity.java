@@ -96,11 +96,27 @@ public class WordBookEntity {
         return (b == null || 0 == b) ? "" : String.format(",%s=%d", tag, b);
     }
 
+// set('част','межд','прл','прч','сущ','нар','гл','дееп','союз','предик','предл','ввод','мест','числ')
+// type_sub enum('поряд','кол','собир','неопр','врем','обст','опред','счет','неизм')
+// type_ssub enum('кач','спос','степ','места','напр','врем','цель','причин')
+// gender enum('муж','жен','ср','общ')
+// wcase enum('им','род','дат','вин','тв','пр','зват','парт','мест')
+//    comp enum('сравн','прев')
+//    transit enum('перех','непер','пер/не')
+//    face enum('1-е','2-е','3-е','безл')
+//    kind enum('1вид','2вид')
+//    time enum('прош','наст','буд')
+//    nakl enum('пов','страд')
+
     public String getWord(){
         if(type!=null)
             switch (type){
-                case "сущ": return "<i>"+ wordAnalyse(word)+"</i>";
-                case "прл": return "<b>"+ wordAnalyse(word)+"</b>";
+                case "сущ": return "<b class='noun'>"+ wordAnalyse(word)+"</b>";
+                case "прл": return "<b class='adj'>"+ wordAnalyse(word)+"</b>";
+                case "гл": return "<b class='verb'>"+ wordAnalyse(word)+"</b>";
+                case "нар": return "<i><b class='verb'>"+ wordAnalyse(word)+"</b></i>";
+                case "прч": return "<b class='part'>"+ wordAnalyse(word)+"</b>";
+                case "дееп": return "<i><b class='part'>"+ wordAnalyse(word)+"</b></i>";
             }
         return wordAnalyse(word);
     }
