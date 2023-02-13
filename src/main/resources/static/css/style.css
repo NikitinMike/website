@@ -1,3 +1,22 @@
+colors.my {
+	color:Black;
+	color:Gray;
+	color:Silver;
+	color:White;
+	color:Fuchsia;
+	color:Purple;
+	color:Red;
+	color:Maroon;
+	color:Yellow;
+	color:Olive;
+	color:Lime;
+	color:Green;
+	color:Aqua;
+	color:Teal;
+	color:Blue;
+	color:Navy;
+}
+
 body{
 	font-family: verdana;
 }
