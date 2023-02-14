@@ -27,9 +27,6 @@ public class WordBookEntity {
     @Basic
     @Column(name = "code_parent")
     private long codeParent;
-
-    public String getType() {return notNull("",type);}
-
     @Basic
     @Column(name = "type")
     private String type;
@@ -78,10 +75,10 @@ public class WordBookEntity {
     @Basic
     @Column(name = "nakl")
     private String nakl;
-
     public WordBookEntity(String word) {
         this.word = word;
 //        this.iid = (long) (5000000+Math.random()*1000000);
+        this.type = "";
 //        this.type= "сущ";
 //        this.gender = "ср";
 //        this.wcase = "им";
@@ -99,6 +96,8 @@ public class WordBookEntity {
         return (b == null || 0 == b) ? "" : String.format(",%s=%d", tag, b);
     }
 
+    public String getType() {return type==null?"":type;}
+
 // set('част','межд','прл','прч','сущ','нар','гл','дееп','союз','предик','предл','ввод','мест','числ')
 // type_sub enum('поряд','кол','собир','неопр','врем','обст','опред','счет','неизм')
 // type_ssub enum('кач','спос','степ','места','напр','врем','цель','причин')
@@ -111,17 +110,19 @@ public class WordBookEntity {
 //    time enum('прош','наст','буд')
 //    nakl enum('пов','страд')
 
-    public String getWord(){
-        if(type!=null)
-            switch (type){
-                case "сущ": return "<b class='noun'>"+ wordAnalyse(word)+"</b>";
-                case "прл": return "<b class='adj'>"+ wordAnalyse(word)+"</b>";
-                case "гл": return "<b class='verb'>"+ wordAnalyse(word)+"</b>";
-                case "нар": return "<i><b class='verb'>"+ wordAnalyse(word)+"</b></i>";
-                case "прч": return "<b class='part'>"+ wordAnalyse(word)+"</b>";
-                case "дееп": return "<i><b class='part'>"+ wordAnalyse(word)+"</b></i>";
+    public String getWord() {
+        if (type != null)
+            switch (type) {
+                case "сущ": return "<b class='noun'>" + wordAnalyse(word) + "</b>";
+                case "сущ,мест": return "<i class='noun'>" + wordAnalyse(word) + "</i>";
+                case "прл": return "<b class='adj'>" + wordAnalyse(word) + "</b>";
+                case "прл,мест": return "<i class='adj'>" + wordAnalyse(word) + "</i>";
+                case "гл": return "<b class='verb'>" + wordAnalyse(word) + "</b>";
+                case "нар": return "<i class='verb'>" + wordAnalyse(word) + "</i>";
+                case "прч": return "<b class='part'>" + wordAnalyse(word) + "</b>";
+                case "дееп": return "<i class='part'>" + wordAnalyse(word) + "</i>";
             }
-        return wordAnalyse(word);
+        return wordAnalyse(word) + ":" + type;
     }
 
     @Override

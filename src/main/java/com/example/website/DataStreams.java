@@ -173,20 +173,21 @@ public class DataStreams extends DataStrings {
 
     @Transactional
     List<WordBookEntity> readWordBook(List<String> words) {
-//        Hashtable<String, WordBookEntity> wordsEntityHashMap = new Hashtable<>();
-        List<WordBookEntity> wordsEntityHashMap = new ArrayList<>();
+//        Hashtable<String, WordBookEntity> wordBookEntities = new Hashtable<>();
+        List<WordBookEntity> wordBookEntities = new ArrayList<>();
         for (String word : words) {
 //            String [] subWords = word.split("_");
 //            if(subWords.length>1) wordsEntity.addAll(readWordsBook(subWords));
 //            else wordsEntity.addAll(repository.findAllByWord(word));
             word = word.replaceAll("[^а-яА-ЯёЁ]", "");
-            List<WordBookEntity> wordsBookEntities = wordsBookRepository.findFirstByWord(word);
-            if (wordsBookEntities == null || wordsBookEntities.isEmpty())
-                wordsEntityHashMap.add(new WordBookEntity(word));
-            else wordsEntityHashMap.addAll(wordsBookEntities);
+            List<WordBookEntity> entities = wordsBookRepository.findFirstByWord(word);
+            if (entities == null || entities.isEmpty())
+                wordBookEntities.add(new WordBookEntity(word));
+            else wordBookEntities.addAll(entities);
+//            System.out.println(entities);
         }
-        wordsEntityHashMap.sort(Comparator.comparing(WordBookEntity::getType).reversed());
-        return wordsEntityHashMap;
+//        wordBookEntities.sort(Comparator.comparing(WordBookEntity::getType));
+        return wordBookEntities;
     }
 
     List<File> textFilesExtra(String dir) throws IOException {
