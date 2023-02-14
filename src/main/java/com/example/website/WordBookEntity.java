@@ -113,14 +113,17 @@ public class WordBookEntity {
     public String getWord() {
         if (type != null)
             switch (type) {
-                case "сущ": return "<b class='noun'>" + wordAnalyse(word) + "</b>";
-                case "сущ,мест": return "<i class='noun'>" + wordAnalyse(word) + "</i>";
-                case "прл": return "<b class='adj'>" + wordAnalyse(word) + "</b>";
-                case "прл,мест": return "<i class='adj'>" + wordAnalyse(word) + "</i>";
-                case "гл": return "<b class='verb'>" + wordAnalyse(word) + "</b>";
-                case "нар": return "<i class='verb'>" + wordAnalyse(word) + "</i>";
-                case "прч": return "<b class='part'>" + wordAnalyse(word) + "</b>";
-                case "дееп": return "<i class='part'>" + wordAnalyse(word) + "</i>";
+                case "сущ": return "<i class='noun'>" + wordAnalyse(word) + "</i>";
+                case "сущ,мест": return "<b class='noun'>" + wordAnalyse(word) + "</b>";
+
+                case "прл": return "<i class='adj'>" + wordAnalyse(word) + "</i>";
+                case "прл,мест": return "<b class='adj'>" + wordAnalyse(word) + "</b>";
+
+                case "гл": return "<i class='verb'>" + wordAnalyse(word) + "</i>";
+                case "нар": return "<b class='verb'>" + wordAnalyse(word) + "</b>";
+
+                case "прч": return "<i class='part'>" + wordAnalyse(word) + "</i>";
+                case "дееп": return "<b class='part'>" + wordAnalyse(word) + "</b>";
             }
         return wordAnalyse(word) + ":" + type;
     }
