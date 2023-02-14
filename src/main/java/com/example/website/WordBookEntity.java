@@ -27,6 +27,9 @@ public class WordBookEntity {
     @Basic
     @Column(name = "code_parent")
     private long codeParent;
+
+    public String getType() {return notNull("",type);}
+
     @Basic
     @Column(name = "type")
     private String type;

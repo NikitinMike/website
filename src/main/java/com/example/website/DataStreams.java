@@ -26,28 +26,6 @@ public class DataStreams extends DataStrings {
     WordsBookRepository wordsBookRepository;
     String[][] in = {hymn, sobaka, vorona, chuchelo, rossia, pushkin, tutchev};
 
-    @Transactional
-    Hashtable<String, List<WordBookEntity>> readWordBook(List<String> words) {
-        Hashtable<String, List<WordBookEntity>> wordsEntityHashMap = new Hashtable<>();
-        for (String word : words) {
-//            String [] subWords = word.split("_");
-//            if(subWords.length>1) wordsEntity.addAll(readWordsBook(subWords));
-//            else wordsEntity.addAll(repository.findAllByWord(word));
-            word = word.replaceAll("[^а-яА-ЯёЁ]","");
-            List<WordBookEntity> wordsBookEntities = wordsBookRepository.findFirstByWord(word);
-            if (wordsBookEntities == null || wordsBookEntities.isEmpty())
-                wordsBookEntities = Collections.singletonList(new WordBookEntity(word));
-            else {
-                for (WordBookEntity wordsBookEntity : wordsBookEntities) {
-//                    System.out.println(wordsBookEntity);
-                }
-            }
-//            System.out.println(wordsBookEntities);
-            wordsEntityHashMap.put(word, wordsBookEntities);
-        }
-        return wordsEntityHashMap;
-    }
-
     static Set<String> readDictionary(String file) {
         Set<String> wordSet = new HashSet<>();
         if (new File(file).isFile())
@@ -123,22 +101,22 @@ public class DataStreams extends DataStrings {
     private static Set<String> wordExtend(String[] words) {
         Set<String> wordSet = new HashSet<>();
         if (words == null || words.length == 0) return wordSet;
-        String baseWord=null;
+        String baseWord = null;
         for (String word : words)
             if (word.matches(".")) ;
             else if (word.matches("-.+")) {
                 String o = word.substring(1); // окончание
-                if (baseWord!=null)
+                if (baseWord != null)
                     if (o.matches("[`ёуеыаоэяию].*")) {
                         String w = join(baseWord, o);
                         if (w.contains("+")) System.out.println(baseWord + " [" + o + "] " + w);
                         else wordSet.add(w);
                     } else wordSet.add(joinOk(baseWord, o));
-            }
-            else if (word.matches(".*-")) System.out.print(word + ","); // check pipe
-            else if (word.contains("`")||word.contains("ё")||glasCount(word)==1)
-                { wordSet.add(word); baseWord=word; }
-            else wordSet.add(word.replaceFirst("([ёуеыаоэяию])", "`$1"));
+            } else if (word.matches(".*-")) System.out.print(word + ","); // check pipe
+            else if (word.contains("`") || word.contains("ё") || glasCount(word) == 1) {
+                wordSet.add(word);
+                baseWord = word;
+            } else wordSet.add(word.replaceFirst("([ёуеыаоэяию])", "`$1"));
         return wordSet;
     }
 
@@ -191,6 +169,24 @@ public class DataStreams extends DataStrings {
 
     static Stream<String> getTextStream(String fileName) throws IOException {
         return newBufferedReader(Path.of(fileName)).lines().map(String::trim);
+    }
+
+    @Transactional
+    List<WordBookEntity> readWordBook(List<String> words) {
+//        Hashtable<String, WordBookEntity> wordsEntityHashMap = new Hashtable<>();
+        List<WordBookEntity> wordsEntityHashMap = new ArrayList<>();
+        for (String word : words) {
+//            String [] subWords = word.split("_");
+//            if(subWords.length>1) wordsEntity.addAll(readWordsBook(subWords));
+//            else wordsEntity.addAll(repository.findAllByWord(word));
+            word = word.replaceAll("[^а-яА-ЯёЁ]", "");
+            List<WordBookEntity> wordsBookEntities = wordsBookRepository.findFirstByWord(word);
+            if (wordsBookEntities == null || wordsBookEntities.isEmpty())
+                wordsEntityHashMap.add(new WordBookEntity(word));
+            else wordsEntityHashMap.addAll(wordsBookEntities);
+        }
+        wordsEntityHashMap.sort(Comparator.comparing(WordBookEntity::getType).reversed());
+        return wordsEntityHashMap;
     }
 
     List<File> textFilesExtra(String dir) throws IOException {
