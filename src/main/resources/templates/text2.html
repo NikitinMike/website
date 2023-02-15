@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <title th:text="${title}">COMBINER</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styleOld.css}">
+    <style>
+    </style>
+</head>
+<body>
+<div class="container" align="left">
+    <a href="/">BACK</a>
+    <hr/>
+    <div class="row">
+        <table>
+            <tr th:each="sentence,status : ${sentences}">
+<!--                <td align="left"> [[${sentence}]] </td>-->
+                <td align="right"> [[${status.count}]] </td>
+                <td class="first"><i>[(${sentence})]</i></td>
+            </tr>
+        </table>
+    </div>
+    <hr/>
+</div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package com.example.website;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.website.Dictionary.getWord;
 import static com.example.website.Utils.*;
@@ -36,6 +37,11 @@ public class Sentence {
                 .filter(p -> !p.isEmpty())
                 .map(w -> w.contains("'") || w.matches("[^ёуеыаоэяию]+") ? w : "<b>" + w + "</b>")
                 .collect(joining(" "));
+    }
+
+    public List<String> outWords(int v) {
+        return stream(combines[v]).mapToObj(j -> words[j])
+                .filter(p -> !p.isEmpty()).collect(Collectors.toList());
     }
 
     String outStrip(int[] a) {
