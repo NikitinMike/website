@@ -113,17 +113,21 @@ public class WordBookEntity {
     public String getWord() {
         if (type != null)
             switch (type) {
-                case "сущ": return "<i class='noun'>" + wordAnalyse(word) + "</i>";
-                case "сущ,мест": return "<b class='noun'>" + wordAnalyse(word) + "</b>";
-
-                case "прл": return "<i class='adj'>" + wordAnalyse(word) + "</i>";
-                case "прл,мест": return "<b class='adj'>" + wordAnalyse(word) + "</b>";
-
-                case "гл": return "<i class='verb'>" + wordAnalyse(word) + "</i>";
-                case "нар": return "<b class='verb'>" + wordAnalyse(word) + "</b>";
-
-                case "прч": return "<i class='part'>" + wordAnalyse(word) + "</i>";
-                case "дееп": return "<b class='part'>" + wordAnalyse(word) + "</b>";
+                case "союз": return "<b class=union>" + wordAnalyse(word) + "</b>";
+                case "предл": return "<b class=prep>" + wordAnalyse(word) + "</b>";
+                case "част": return "<b class=art>" + wordAnalyse(word) + "</b>";
+                case "сущ": return "<i class=noun>" + wordAnalyse(word) + "</i>";
+                case "прл": return "<i class=adj>" + wordAnalyse(word) + "</i>";
+                case "гл": return "<i class=verb>" + wordAnalyse(word) + "</i>";
+                case "нар": return "<b class=verb>" + wordAnalyse(word) + "</b>";
+                case "прч": return "<i class=part>" + wordAnalyse(word) + "</i>";
+                case "дееп": return "<b class=part>" + wordAnalyse(word) + "</b>";
+                default:
+//                    case "сущ,мест": return "<b class='noun'>" + wordAnalyse(word) + "</b>";
+//                    case "прл,мест": return "<b class='adj'>" + wordAnalyse(word) + "</b>";
+//                    case "нар,мест": return "<b class='verb'>" + wordAnalyse(word) + "</b>";
+                    if(type.contains("мест"))
+                        return "<b class=pron>" + wordAnalyse(word) + "</b>";
             }
         return wordAnalyse(word) + ":" + type;
     }

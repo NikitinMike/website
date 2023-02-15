@@ -3,11 +3,19 @@ b.noun { color: red; }
 b.verb { color: blue; }
 b.adj { color: green; }
 b.part { color: purple; }
+b.union { color: Fuchsia; }
+b.prep { color: Olive; }
+b.art { color: Maroon; }
+b.pron { color: Teal; }
 /* */
 i.noun { color: red; }
 i.verb { color: blue; }
 i.adj { color: green; }
 i.part { color: purple; }
+i.union { color: Fuchsia; }
+i.prep { color: Olive; }
+i.art { color: Maroon; }
+i.pron { color: Teal; }
 
 .tabs {
 	font-size: 0;

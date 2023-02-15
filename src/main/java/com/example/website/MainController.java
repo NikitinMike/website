@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.example.website.Dictionary.getRhythm;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -132,7 +133,7 @@ public class MainController extends DataStreams {
         return new ModelAndView("page");
     }
 
-    @GetMapping("/file/{file}")
+    @GetMapping("/file2/{file}")
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) throws IOException {
         Dictionary.addSet(file,extractWordSet(source + file));
@@ -143,6 +144,25 @@ public class MainController extends DataStreams {
         model.addAttribute("sentences", text);
 //        model.addAttribute("title", "START:" + text.size());
         return new ModelAndView("text");
+    }
+
+    @GetMapping("/file/{file}")
+    @ResponseBody
+    public ModelAndView startPage2(Model model, @PathVariable String file) throws IOException {
+        Dictionary.addSet(file,extractWordSet(source + file));
+//        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
+
+        List<String> text = getTextStream(source + file)
+                .map(s -> readWordBook(new Sentence(s).outWords(0)))
+                .map(list -> list.stream() // .replaceAll("[^а-яё]+", "")
+                    .map(WordBookEntity::getWord)
+                    .collect(Collectors.joining(" "))
+                ).collect(toList());
+
+        System.out.println(file + " #" + text.size());
+        model.addAttribute("sentences", text);
+//        model.addAttribute("title", "START:" + text.size());
+        return new ModelAndView("text2");
     }
 
     @GetMapping("/page/{i}")
