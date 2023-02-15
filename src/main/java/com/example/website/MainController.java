@@ -104,8 +104,8 @@ public class MainController extends DataStreams {
 //            Files.write(thesaurus, Collections.singleton("\n<"+file.getPath()+">"), UTF_8,APPEND);
             Set<String> set = thesaurusExtract(file.getAbsolutePath());
 //            Set<String> set = extractWordSet(file.getAbsolutePath());
-            Dictionary.addSet(null,set);
-            System.out.println(file + " : +" + set.size()); // Dictionary.wordTable.size()
+            Dictionary.addSet(file.getName(),set);
+//            System.out.println(file + " : +" + set.size()); // Dictionary.wordTable.size()
 //            Files.write(thesaurus, set, UTF_8, APPEND);
             wordSet.addAll(set);
         }
@@ -135,13 +135,11 @@ public class MainController extends DataStreams {
     @GetMapping("/file/{file}")
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) throws IOException {
-        Set<String> wordSet = extractWordSet(source + file);
-        Dictionary.addSet(file,wordSet);
+        Dictionary.addSet(file,extractWordSet(source + file));
 //        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
         List<String[]> text = getTextStream(source + file)
                 .map(s -> new Sentence(s).getHash(0)).collect(toList());
         System.out.println(file + " #" + text.size());
-//        System.out.println(wordSet);
         model.addAttribute("sentences", text);
 //        model.addAttribute("title", "START:" + text.size());
         return new ModelAndView("text");
