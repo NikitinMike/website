@@ -1,5 +1,6 @@
 package com.example.website;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,8 +41,10 @@ public class Sentence {
     }
 
     public List<String> outWords(int v) {
-        return stream(combines[v]).mapToObj(j -> words[j])
-                .filter(p -> !p.isEmpty()).collect(Collectors.toList());
+        if(combines.length>0)
+            return stream(combines[v]).mapToObj(j -> words[j])
+                    .filter(p -> !p.isEmpty()).collect(Collectors.toList());
+        return new ArrayList<>();
     }
 
     String outStrip(int[] a) {
