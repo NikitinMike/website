@@ -149,7 +149,7 @@ public class MainController extends DataStreams {
     @GetMapping("/file/{file}")
     @ResponseBody
     public ModelAndView startPage2(Model model, @PathVariable String file) throws IOException {
-        Dictionary.addSet(file,extractWordSet(source + file));
+//        Dictionary.addSet(file,extractWordSet(source + file));
 //        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
 
         List<String> text = getTextStream(source + file)

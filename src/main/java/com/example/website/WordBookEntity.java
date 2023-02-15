@@ -129,7 +129,7 @@ public class WordBookEntity {
                     if(type.contains("мест"))
                         return "<b class=pron>" + wordAnalyse(word) + "</b>";
             }
-        return wordAnalyse(word) + ":" + type;
+        return "<a href='/'>"+wordAnalyse(word) + ":" + type+"</a>";
     }
 
     @Override
