@@ -148,7 +148,7 @@ public class MainController extends DataStreams {
     }
 
     Stream<String> getSentence(Stream<String> textStream){
-        return  textStream.map(s -> readWordBook(new Sentence(s).outWords(0))) // .replaceAll("[^а-яё]+", "")
+        return textStream.map(s -> readWordBook(new Sentence(s).outWords(0))) // .replaceAll("[^а-яё]+", "")
                 .map(list -> list.stream().map(WordBookEntity::getWordType)
                         .collect(Collectors.joining(" ")));
     }
