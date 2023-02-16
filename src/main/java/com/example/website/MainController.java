@@ -155,7 +155,7 @@ public class MainController extends DataStreams {
         List<String> text = getTextStream(source + file)
                 .map(s -> readWordBook(new Sentence(s).outWords(0)))
                 .map(list -> list.stream() // .replaceAll("[^а-яё]+", "")
-                    .map(WordBookEntity::getWord)
+                    .map(WordBookEntity::getWordType)
                     .collect(Collectors.joining(" "))
                 ).collect(toList());
 

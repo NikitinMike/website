@@ -8,6 +8,18 @@ import javax.persistence.*;
 
 import static com.example.website.Utils.wordAnalyse;
 
+// set('част','межд','прл','прч','сущ','нар','гл','дееп','союз','предик','предл','ввод','мест','числ')
+// type_sub enum('поряд','кол','собир','неопр','врем','обст','опред','счет','неизм')
+// type_ssub enum('кач','спос','степ','места','напр','врем','цель','причин')
+// gender enum('муж','жен','ср','общ')
+// wcase enum('им','род','дат','вин','тв','пр','зват','парт','мест')
+//    comp enum('сравн','прев')
+//    transit enum('перех','непер','пер/не')
+//    face enum('1-е','2-е','3-е','безл')
+//    kind enum('1вид','2вид')
+//    time enum('прош','наст','буд')
+//    nakl enum('пов','страд')
+
 @Entity
 @Getter
 @Setter
@@ -98,49 +110,7 @@ public class WordBookEntity {
 
     public String getType() {return type==null?"":type;}
 
-// set('част','межд','прл','прч','сущ','нар','гл','дееп','союз','предик','предл','ввод','мест','числ')
-// type_sub enum('поряд','кол','собир','неопр','врем','обст','опред','счет','неизм')
-// type_ssub enum('кач','спос','степ','места','напр','врем','цель','причин')
-// gender enum('муж','жен','ср','общ')
-// wcase enum('им','род','дат','вин','тв','пр','зват','парт','мест')
-//    comp enum('сравн','прев')
-//    transit enum('перех','непер','пер/не')
-//    face enum('1-е','2-е','3-е','безл')
-//    kind enum('1вид','2вид')
-//    time enum('прош','наст','буд')
-//    nakl enum('пов','страд')
-
-    public String getWord() {
-        if (type != null)
-            switch (type) {
-
-                case "сущ": return "<i class=noun>" + wordAnalyse(word) + "</i>";
-
-                case "прл": return "<i class=adj>" + wordAnalyse(word) + "</i>";
-                case "числ": return "<b class=adj>" + wordAnalyse(word) + "</b>";
-
-                case "гл": return "<i class=verb>" + wordAnalyse(word) + "</i>";
-                case "нар": return "<b class=verb>" + wordAnalyse(word) + "</b>";
-                case "ввод": return "<i class=verb><s>" + wordAnalyse(word) + "</s></i>";
-
-                case "межд": return "<i class=union>" + wordAnalyse(word) + "</i>";
-                case "союз": return "<b class=union>" + wordAnalyse(word) + "</b>";
-                case "предл": return "<b class=prep>" + wordAnalyse(word) + "</b>";
-                case "част": return "<b class=art>" + wordAnalyse(word) + "</b>";
-
-                case "прч": return "<i class=part>" + wordAnalyse(word) + "</i>";
-                case "предик": return "<i class=part><s>" + wordAnalyse(word) + "</s></i>";
-                case "дееп": return "<b class=part>" + wordAnalyse(word) + "</b>";
-
-                default:
-                    if(type.contains("мест"))
-                        return "<b class=pron>" + wordAnalyse(word) + "</b>";
-//                    case "сущ,мест": return "<b class='noun'>" + wordAnalyse(word) + "</b>";
-//                    case "прл,мест": return "<b class='adj'>" + wordAnalyse(word) + "</b>";
-//                    case "нар,мест": return "<b class='verb'>" + wordAnalyse(word) + "</b>";
-            }
-        return "<a href='/'>"+wordAnalyse(word) + ":" + type+"</a>";
-    }
+    public String getWordType() {return Utils.formatWordType(word,type);}
 
     @Override
     public String toString() {
