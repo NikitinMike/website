@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.example.website.Dictionary.getRhythm;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -136,7 +137,7 @@ public class MainController extends DataStreams {
     @GetMapping("/file2/{file}")
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) throws IOException {
-        Dictionary.addSet(file,extractWordSet(source + file));
+//        Dictionary.addSet(file,extractWordSet(source + file));
 //        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
         List<String[]> text = getTextStream(source + file)
                 .map(s -> new Sentence(s).getHash(0)).collect(toList());
@@ -146,22 +147,18 @@ public class MainController extends DataStreams {
         return new ModelAndView("text");
     }
 
+    Stream<String> getSentence(Stream<String> textStream){
+        return  textStream.map(s -> readWordBook(new Sentence(s).outWords(0))) // .replaceAll("[^а-яё]+", "")
+                .map(list -> list.stream().map(WordBookEntity::getWordType)
+                        .collect(Collectors.joining(" ")));
+    }
+
     @GetMapping("/file/{file}")
     @ResponseBody
     public ModelAndView startPage2(Model model, @PathVariable String file) throws IOException {
-//        Dictionary.addSet(file,extractWordSet(source + file));
-//        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
-
-        List<String> text = getTextStream(source + file)
-                .map(s -> readWordBook(new Sentence(s).outWords(0)))
-                .map(list -> list.stream() // .replaceAll("[^а-яё]+", "")
-                    .map(WordBookEntity::getWordType)
-                    .collect(Collectors.joining(" "))
-                ).collect(toList());
-
+        List<String> text = getSentence(getTextStream(source + file)).collect(toList());;
         System.out.println(file + " #" + text.size());
         model.addAttribute("sentences", text);
-//        model.addAttribute("title", "START:" + text.size());
         return new ModelAndView("text2");
     }
 
