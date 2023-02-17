@@ -48,7 +48,7 @@ public class Utils {
 //                    case "прл,мест": return "<b class='adj'>" + wordAnalyse(word) + "</b>";
 //                    case "нар,мест": return "<b class='verb'>" + wordAnalyse(word) + "</b>";
             }
-        return "<a href='/'>"+wordAnalyse(word) + ":" + type+"</a>";
+        return "<a href='/'>"+wordAnalyse(word) + (type.isEmpty()?"":":") + type+"</a>";
     }
 
     List<String> getResourceFiles() throws IOException {
