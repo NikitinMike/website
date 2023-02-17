@@ -134,7 +134,7 @@ public class MainController extends DataStreams {
         return new ModelAndView("page");
     }
 
-    @GetMapping("/file2/{file}")
+    @GetMapping("/file/{file}")
     @ResponseBody
     public ModelAndView startPage(Model model, @PathVariable String file) throws IOException {
 //        Dictionary.addSet(file,extractWordSet(source + file));
@@ -153,7 +153,7 @@ public class MainController extends DataStreams {
                         .collect(Collectors.joining(" ")));
     }
 
-    @GetMapping("/file/{file}")
+    @GetMapping("/file2/{file}")
     @ResponseBody
     public ModelAndView startPage2(Model model, @PathVariable String file) throws IOException {
         List<String> text = getSentence(getTextStream(source + file)).collect(toList());;
