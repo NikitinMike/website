@@ -16,7 +16,7 @@
     <hr/>
     <div class="row">
         <span th:each="word : ${words}">
-            [(${word.getWord()})]
+            [(${word.getWordType()})]:[(${word.getType()})]
         </span>
     </div>
     <hr/>

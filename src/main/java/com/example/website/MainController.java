@@ -25,6 +25,7 @@ import static java.util.stream.Collectors.toList;
 @Controller
 public class MainController extends DataStreams {
     String source = "texts/";
+    private String order="";
 
     @GetMapping("/")
     @ResponseBody
@@ -90,7 +91,10 @@ public class MainController extends DataStreams {
                 .collect(toList());
 //                .collect(toSet());
 //                .collect(Collectors.joining(", "));
-        model.addAttribute("words", readWordBook(words));
+        List<WordBookEntity> wbWords = readWordBook(words);
+        if(from.equals(order)) wbWords.sort(Comparator.comparing(WordBookEntity::getType).reversed());
+        order=from;
+        model.addAttribute("words", wbWords);
 //        model.addAttribute("words", Collections.singleton(words));
         return new ModelAndView("dictionary");
     }
