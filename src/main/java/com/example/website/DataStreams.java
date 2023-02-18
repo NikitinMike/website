@@ -181,10 +181,11 @@ public class DataStreams extends DataStrings {
 //            else wordsEntity.addAll(repository.findAllByWord(word));
             word = word.replaceAll("[^а-яА-ЯёЁ]", "");
             List<WordBookEntity> entities = wordsBookRepository.findFirstByWord(word);
+//            if (entities != null && !entities.isEmpty())
+//                System.out.print(entities.get(0).getWord()+",");
             if (entities == null || entities.isEmpty())
                 wordBookEntities.add(new WordBookEntity(word));
             else wordBookEntities.addAll(entities);
-//            System.out.println(entities);
         }
 //        wordBookEntities.sort(Comparator.comparing(WordBookEntity::getType));
         return wordBookEntities;
