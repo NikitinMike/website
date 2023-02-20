@@ -110,7 +110,7 @@ public class WordBookEntity {
 
     public String getType() {return type==null?"":type;}
 
-    public String getWordType() {return Utils.formatWordType(word,type);}
+    public String getWordType() {return Utils.formatWordType(Dictionary.getWord(word),type);}
 
     @Override
     public String toString() {
