@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 @Controller
 public class MainController extends DataStreams {
     String source = "texts/";
-    private String order="";
+    private String order = "";
 
     @GetMapping("/")
     @ResponseBody
@@ -46,8 +46,8 @@ public class MainController extends DataStreams {
 //        rhythm.entrySet().removeIf(r -> r.getValue().size() > 10);
         String style = "#tab-btn-0:checked~#content-0";
         for (int i = 1; i <= rhythm.entrySet().size(); i++)
-            style+=String.format(",%n#tab-btn-%d:checked~#content-%d",i,i);
-        style+="{display: block;}";
+            style += String.format(",%n#tab-btn-%d:checked~#content-%d", i, i);
+        style += "{display: block;}";
         model.addAttribute("style", style);
         model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm2");
@@ -69,7 +69,7 @@ public class MainController extends DataStreams {
         if (key == null) key = 10;
         model.addAttribute("title", key + " RHYTHM ");
         model.addAttribute("number", "0123456789".split(""));
-        Map<String, Set<String>> rhythm = getRhythm(key,".+");
+        Map<String, Set<String>> rhythm = getRhythm(key, ".+");
 //        rhythm.entrySet().removeIf(r -> r.getValue().size() > 3);
         model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm");
@@ -92,8 +92,8 @@ public class MainController extends DataStreams {
 //                .collect(toSet());
 //                .collect(Collectors.joining(", "));
         List<WordBookEntity> wbWords = readWordBook(words);
-        if(from.equals(order)) wbWords.sort(Comparator.comparing(WordBookEntity::getType).reversed());
-        order=from;
+        if (from.equals(order)) wbWords.sort(Comparator.comparing(WordBookEntity::getType).reversed());
+        order = from;
         model.addAttribute("words", wbWords);
 //        model.addAttribute("words", Collections.singleton(words));
         return new ModelAndView("dictionary");
@@ -110,7 +110,7 @@ public class MainController extends DataStreams {
 //            Files.write(thesaurus, Collections.singleton("\n<"+file.getPath()+">"), UTF_8,APPEND);
             Set<String> set = thesaurusExtract(file.getAbsolutePath());
 //            Set<String> set = extractWordSet(file.getAbsolutePath());
-            Dictionary.addSet(file.getName(),set);
+            Dictionary.addSet(file.getName(), set);
 //            System.out.println(file + " : +" + set.size()); // Dictionary.wordTable.size()
 //            Files.write(thesaurus, set, UTF_8, APPEND);
             wordSet.addAll(set);
@@ -151,16 +151,24 @@ public class MainController extends DataStreams {
         return new ModelAndView("text");
     }
 
-    Stream<String> makeSentence(Stream<String> textStream){
+    Stream<String> makeSentence(Stream<String> textStream) {
         return textStream.map(s -> readWordBook(new Sentence(s).outWords(0))) // .replaceAll("[^а-яё]+", "")
                 .map(list -> list.stream().map(WordBookEntity::getWordType)
                         .collect(Collectors.joining(" ")));
     }
 
+    Stream<String> makeSentenceStrip(Stream<String> textStream) {
+        return textStream.map(s -> readWordBook(new Sentence(s).outWords(0)))
+                .map(list -> list.stream().map(WordBookEntity::getWordType)
+                        .collect(Collectors.joining(""))
+                        .replaceAll("[бвгджзйклмнпрстфхцчшщьъы-]+", "")
+                );
+    }
+
     @GetMapping("/file2/{file}")
     @ResponseBody
     public ModelAndView startPage2(Model model, @PathVariable String file) throws IOException {
-        List<String> text = makeSentence(getTextStream(source + file)).collect(toList());;
+        List<String> text = makeSentence(getTextStream(source + file)).collect(toList());
         System.out.println(file + " #" + text.size());
         model.addAttribute("sentences", text);
         return new ModelAndView("text2");

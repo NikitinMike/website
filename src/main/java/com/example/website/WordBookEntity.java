@@ -110,7 +110,12 @@ public class WordBookEntity {
 
     public String getType() {return type==null?"":type;}
 
-    public String getWordType() {return Utils.formatWordType(Dictionary.getWord(word),type);}
+    public String getWordType() {
+//        Utils.tag(word).split("=+")
+//            .map(s-> s.matches(".'|`.") ? s.toUpperCase() : s)
+//            .filter(p -> !p.isEmpty()).collect(joining())) // new Locale("en", "EN")
+        return Utils.formatWordType(Dictionary.getWord(word),type);
+    }
 
     @Override
     public String toString() {
