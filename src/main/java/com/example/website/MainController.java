@@ -151,24 +151,25 @@ public class MainController extends DataStreams {
         return new ModelAndView("text");
     }
 
-    Stream<String> makeSentence(Stream<String> textStream) {
-        return textStream.map(s -> readWordBook(new Sentence(s).outWords(0))) // .replaceAll("[^а-яё]+", "")
-                .map(list -> list.stream().map(WordBookEntity::getWordType)
-                        .collect(Collectors.joining(" ")));
+    Stream<String> makeSentence(String file) throws IOException {
+        return getSentence(file).map(list -> list.stream().map(WordBookEntity::getWordType)
+                .collect(Collectors.joining(" ")));
     }
 
-    Stream<String> makeSentenceStrip(Stream<String> textStream) {
-        return textStream.map(s -> readWordBook(new Sentence(s).outWords(0)))
-                .map(list -> list.stream().map(WordBookEntity::getWordType)
-                        .collect(Collectors.joining(""))
-                        .replaceAll("[бвгджзйклмнпрстфхцчшщьъы-]+", "")
-                );
+    Stream<List<WordBookEntity>> getSentence(String file) throws IOException {
+        return getTextStream(source + file).map(s -> readWordBook(new Sentence(s).outWords(0)));
+    }
+
+    Stream<String> makeSentenceStrip(String file) throws IOException {
+        return getSentence(file).map(list -> list.stream().map(WordBookEntity::getWordType)
+                .collect(Collectors.joining(""))
+                .replaceAll("[бвгджзйклмнпрстфхцчшщьъы-]+", ""));
     }
 
     @GetMapping("/file2/{file}")
     @ResponseBody
     public ModelAndView startPage2(Model model, @PathVariable String file) throws IOException {
-        List<String> text = makeSentence(getTextStream(source + file)).collect(toList());
+        List<String> text = makeSentence(file).collect(toList());
         System.out.println(file + " #" + text.size());
         model.addAttribute("sentences", text);
         return new ModelAndView("text2");
