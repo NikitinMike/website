@@ -14,9 +14,9 @@
     <div class="row">
         <table>
             <tr th:each="sentence,status : ${sentences}">
-                <td align="left"> [[${sentence[0]}]] </td>
-                <td align="right"> [[${status.count}]] | </td>
-                <td class="first"><i>[(${sentence[1]})]</i></td>
+                <td> [[${status.count}]] </td>
+                <td> | [[${sentence[0]}]] </td>
+                <td> | [(${sentence[1]})] </td>
             </tr>
         </table>
     </div>

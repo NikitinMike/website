@@ -10,13 +10,14 @@
 <div class="container" align="left">
     <a href="/">BACK</a>
     <a th:href="@{/file/{id}(id=${file})}"> [[${file}]] </a>
+    <a th:href="@{/file2/{id}(id=${file})}"> long </a>
+    <a th:href="@{/file3/{id}(id=${file})}"> short </a>
     <hr/>
     <div class="row">
         <table>
             <tr th:each="sentence,status : ${sentences}">
-<!--                <td align="left"> [[${sentence}]] </td>-->
-                <td align="right"> [[${status.count}]] </td>
-                <td class="first"> [(${sentence})] </td>
+                <td> [(${status.count})] </td>
+                <td> | [(${sentence})] </td>
             </tr>
         </table>
     </div>

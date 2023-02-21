@@ -160,6 +160,15 @@ public class MainController extends DataStreams {
         return new ModelAndView("text2");
     }
 
+    @GetMapping("/file3/{file}")
+    @ResponseBody
+    public ModelAndView page3(Model model, @PathVariable String file) throws IOException {
+        List<String> text = makeSentenceStrip(file).collect(toList());
+        System.out.println(file + " #" + text.size());
+        model.addAttribute("sentences", text);
+        return new ModelAndView("text2");
+    }
+
     Stream<String> makeSentence(String file) throws IOException {
         return getSentence(file).map(list -> list.stream().map(WordBookEntity::getWordType)
                 .collect(Collectors.joining(" ")));
@@ -171,8 +180,10 @@ public class MainController extends DataStreams {
 
     Stream<String> makeSentenceStrip(String file) throws IOException {
         return getSentence(file).map(list -> list.stream().map(WordBookEntity::getWordType)
-                .collect(Collectors.joining(""))
-                .replaceAll("[бвгджзйклмнпрстфхцчшщьъы-]+", ""));
+                .map(s->s.replaceAll("[бвгджзйклмнпрстфхцчшщьъ-]", "")
+//                        .replaceAll("(.)'","`$1")
+                ).collect(Collectors.joining(""))
+        );
     }
 
     @GetMapping("/page/{i}")
