@@ -176,7 +176,8 @@ public class MainController extends DataStreams {
     }
 
     Stream<List<WordBookEntity>> getSentence(String file) throws IOException {
-        return getTextStream(source + file).map(s -> readWordBook(new Sentence(s).outWords(0)));
+        return getTextStream(source + file)
+                .map(s -> readWordBook(new Sentence(s).outWords(0)));
     }
 
     Stream<String> makeSentenceStrip(String file) throws IOException {
