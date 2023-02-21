@@ -140,7 +140,7 @@ public class MainController extends DataStreams {
 
     @GetMapping("/file/{file}")
     @ResponseBody
-    public ModelAndView startPage(Model model, @PathVariable String file) throws IOException {
+    public ModelAndView page1(Model model, @PathVariable String file) throws IOException {
 //        Dictionary.addSet(file,extractWordSet(source + file));
 //        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
         List<String[]> text = getTextStream(source + file)
@@ -149,6 +149,15 @@ public class MainController extends DataStreams {
         model.addAttribute("sentences", text);
 //        model.addAttribute("title", "START:" + text.size());
         return new ModelAndView("text");
+    }
+
+    @GetMapping("/file2/{file}")
+    @ResponseBody
+    public ModelAndView page2(Model model, @PathVariable String file) throws IOException {
+        List<String> text = makeSentence(file).collect(toList());
+        System.out.println(file + " #" + text.size());
+        model.addAttribute("sentences", text);
+        return new ModelAndView("text2");
     }
 
     Stream<String> makeSentence(String file) throws IOException {
@@ -164,15 +173,6 @@ public class MainController extends DataStreams {
         return getSentence(file).map(list -> list.stream().map(WordBookEntity::getWordType)
                 .collect(Collectors.joining(""))
                 .replaceAll("[бвгджзйклмнпрстфхцчшщьъы-]+", ""));
-    }
-
-    @GetMapping("/file2/{file}")
-    @ResponseBody
-    public ModelAndView startPage2(Model model, @PathVariable String file) throws IOException {
-        List<String> text = makeSentence(file).collect(toList());
-        System.out.println(file + " #" + text.size());
-        model.addAttribute("sentences", text);
-        return new ModelAndView("text2");
     }
 
     @GetMapping("/page/{i}")
