@@ -170,7 +170,8 @@ public class MainController extends DataStreams {
     }
 
     Stream<String> makeSentence(String file) throws IOException {
-        return getSentence(file).map(list -> list.stream().map(WordBookEntity::getWordType)
+        return getSentence(file)
+                .map(list -> list.stream().map(WordBookEntity::getWordType)
                 .collect(Collectors.joining(" ")));
     }
 
@@ -179,7 +180,8 @@ public class MainController extends DataStreams {
     }
 
     Stream<String> makeSentenceStrip(String file) throws IOException {
-        return getSentence(file).map(list -> list.stream().map(WordBookEntity::getWordType)
+        return getSentence(file)
+                .map(list -> list.stream().map(WordBookEntity::getWordType)
                 .map(s->s.replaceAll("[бвгджзйклмнпрстфхцчшщьъ-]", "")
                         .replaceAll("(.)'","`$1")
                 ).collect(Collectors.joining(""))
