@@ -154,7 +154,7 @@ public class MainController extends DataStreams {
     @GetMapping("/file2/{file}")
     @ResponseBody
     public ModelAndView page2(Model model, @PathVariable String file) throws IOException {
-        List<String> text = makeSentence(file).collect(toList());
+        List<String> text = makeSentence(file, false).collect(toList());
         System.out.println(file + " #" + text.size());
         model.addAttribute("sentences", text);
         return new ModelAndView("text2");
@@ -163,30 +163,18 @@ public class MainController extends DataStreams {
     @GetMapping("/file3/{file}")
     @ResponseBody
     public ModelAndView page3(Model model, @PathVariable String file) throws IOException {
-        List<String> text = makeSentenceStrip(file).collect(toList());
+        List<String> text = makeSentence(file, true).collect(toList());
         System.out.println(file + " #" + text.size());
         model.addAttribute("sentences", text);
         return new ModelAndView("text2");
     }
 
-    Stream<String> makeSentence(String file) throws IOException {
-        return getSentence(file)
+    Stream<String> makeSentence(String file, boolean strip) throws IOException {
+        return getTextStream(source + file).map(s -> readWordBook(new Sentence(s).outWords(0)))
                 .map(list -> list.stream().map(WordBookEntity::getWordType)
-                .collect(Collectors.joining(" ")));
-    }
-
-    Stream<List<WordBookEntity>> getSentence(String file) throws IOException {
-        return getTextStream(source + file)
-                .map(s -> readWordBook(new Sentence(s).outWords(0)));
-    }
-
-    Stream<String> makeSentenceStrip(String file) throws IOException {
-        return getSentence(file)
-                .map(list -> list.stream().map(WordBookEntity::getWordType)
-                .map(s->s.replaceAll("[бвгджзйклмнпрстфхцчшщьъ-]", "")
-                        .replaceAll("(.)'","`$1")
-                ).collect(Collectors.joining(""))
-        );
+                        .map(s -> strip ? s.replaceAll("[бвгджзйклмнпрстфхцчшщьъ-]", "") : s)
+                        .map(s -> s.replaceAll("(.)'", "`$1"))
+                        .collect(Collectors.joining(strip ? "" : " ")));
     }
 
     @GetMapping("/page/{i}")
