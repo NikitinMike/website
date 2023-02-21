@@ -181,7 +181,7 @@ public class MainController extends DataStreams {
     Stream<String> makeSentenceStrip(String file) throws IOException {
         return getSentence(file).map(list -> list.stream().map(WordBookEntity::getWordType)
                 .map(s->s.replaceAll("[бвгджзйклмнпрстфхцчшщьъ-]", "")
-//                        .replaceAll("(.)'","`$1")
+                        .replaceAll("(.)'","`$1")
                 ).collect(Collectors.joining(""))
         );
     }
