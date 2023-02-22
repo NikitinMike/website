@@ -170,12 +170,14 @@ public class MainController extends DataStreams {
     }
 
     Stream<String> makeSentence(String file, boolean strip) throws IOException {
-        return getTextStream(source + file).map(s -> readWordBook(new Sentence(s).outWords(0)))
-                .map(list -> list.stream().map(WordBookEntity::getWordType)
+        return getTextStream(source + file)
+                .map(s -> readWordBook(new Sentence(s).outWords(0)))
+                .map(words -> words.stream().map(WordBookEntity::getWordType)
                         .map(s -> strip ? s.replaceAll("[бвгджзйклмнпрстфхцчшщьъ]", "") : s)
                         .map(s -> s.replaceAll("(.)'", "`$1"))
-//                        .map(s -> s.replaceAll("-", ""))
-                        .collect(Collectors.joining(" ")));
+                        .map(s -> strip ? s.replaceAll("-", "") : s)
+                        .collect(Collectors.joining(strip ? "" : " "))
+                );
     }
 
     @GetMapping("/page/{i}")
