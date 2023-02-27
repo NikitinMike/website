@@ -120,9 +120,10 @@ public class MainController extends DataStreams {
         return new ModelAndView("redirect:/" + page.toLowerCase());
     }
 
-    @GetMapping("/random/{i}")
+    @GetMapping({"/random/{i}", "/random"})
     @ResponseBody
-    public ModelAndView randomPageGet(Model model,@PathVariable int i) {
+    public ModelAndView randomPageGet(Model model, @PathVariable @Nullable Integer i) {
+        if (i == null) i = (int) (in.length * Math.random());
         String[] text = in[i % in.length];
         String s = text[(int) (text.length * Math.random())].replaceAll("[_,!.—]+", " ");
 //        String s = vorona[(int) (vorona.length * Math.random())].replaceAll("_"," ");
