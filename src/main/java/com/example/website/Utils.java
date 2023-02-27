@@ -127,16 +127,16 @@ public class Utils {
     }
 
     public static String wordAnalyse(String word) {
-        return String.join("-", tag(word).split("=+")); // .replaceAll("(.)'","`$1");
+        return String.join("-", tag(word).split("=+"));
     }
 
     public static String[] wordsExpander(List<WordBookEntity> words) {
         StringJoiner full = new StringJoiner(" ");
         StringJoiner strip = new StringJoiner("");
         for (WordBookEntity wordBookEntity : words) {
-            String word = wordBookEntity.getWordType().replaceAll("(.)'", "`$1");
-            full.add(word);
-            strip.add(word.replaceAll("[бвгджзйклмнпрстфхцчшщьъ]", "").replaceAll("-", ""));
+            String word = wordBookEntity.getWordType();
+            full.add(word.replaceAll("(.)'", "`$1"));
+            strip.add(word.replaceAll("[бвгджзйклмнпрстфхцчшщьъ-]", ""));
         }
         return new String[]{full.toString(), strip.toString()};
     }
