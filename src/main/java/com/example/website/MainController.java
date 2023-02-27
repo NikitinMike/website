@@ -14,8 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.example.website.Dictionary.getRhythm;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -154,25 +152,12 @@ public class MainController extends DataStreams {
     @GetMapping("/file2/{file}")
     @ResponseBody
     public ModelAndView page2(Model model, @PathVariable String file) throws IOException {
-        List<String[]> text = makeSentence(file).collect(toList());
+        List<String[]> text = getTextStream(source + file)
+                .map(s -> readWordBook(new Sentence(s).outWords(0)))
+                .map(Utils::wordsExpander).collect(toList());
         System.out.println(file + " #" + text.size());
         model.addAttribute("sentences", text);
         return new ModelAndView("text2");
-    }
-
-    Stream<String[]> makeSentence(String file) throws IOException {
-        return getTextStream(source + file)
-                .map(s -> readWordBook(new Sentence(s).outWords(0)))
-                .map(words -> new String[]{
-                        words.stream().map(WordBookEntity::getWordType)
-                                .map(s -> s.replaceAll("(.)'", "`$1"))
-                                .collect(Collectors.joining(" ")),
-                        words.stream().map(WordBookEntity::getWordType)
-                                .map(s -> s.replaceAll("(.)'", "`$1"))
-                                .map(s -> s.replaceAll("[бвгджзйклмнпрстфхцчшщьъ]", ""))
-                                .map(s -> s.replaceAll("-", ""))
-                                .collect(Collectors.joining(""))
-                });
     }
 
     @GetMapping("/page/{i}")

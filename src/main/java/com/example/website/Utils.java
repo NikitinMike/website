@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -20,8 +21,8 @@ public class Utils {
     }
 
     public static String formatWordType(String word, String type) {
-        if (type != null)
-            switch (type) {
+        if (type == null) type = "";
+        else switch (type) {
 
                 case "сущ": return "<i class=noun>" + wordAnalyse(word) + "</i>";
 
@@ -127,5 +128,16 @@ public class Utils {
 
     public static String wordAnalyse(String word) {
         return String.join("-", tag(word).split("=+")); // .replaceAll("(.)'","`$1");
+    }
+
+    public static String[] wordsExpander(List<WordBookEntity> words) {
+        StringJoiner full = new StringJoiner(" ");
+        StringJoiner strip = new StringJoiner("");
+        for (WordBookEntity wordBookEntity : words) {
+            String word = wordBookEntity.getWordType().replaceAll("(.)'", "`$1");
+            full.add(word);
+            strip.add(word.replaceAll("[бвгджзйклмнпрстфхцчшщьъ]", "").replaceAll("-", ""));
+        }
+        return new String[]{full.toString(), strip.toString()};
     }
 }
