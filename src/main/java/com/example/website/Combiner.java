@@ -17,8 +17,8 @@ public class Combiner {
         amount = length > 1 ? combInit(length) : 1;
     }
 
-    public int[] getRandom(int v) {
-        if (v > 0 && amount > 1) return combines[(int) (random() * amount)];
+    public int[] getRandom() {
+        if (amount > 1) return combines[(int) (random() * amount)];
         return combines[0];
     }
 

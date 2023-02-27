@@ -3,18 +3,18 @@ package com.example.website;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.website.Dictionary.getWord;
 import static com.example.website.Utils.*;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 //@Data
 public class Sentence {
     String sentence;
     int amount;
-    int[] combines;
+    int[] combine;
     String[] words; // слова
 //    int[] parts; // какой части речи принадлежит
 //    Hashtable<String, List<WordBookEntity>> wordsEntityHashMap;
@@ -28,8 +28,8 @@ public class Sentence {
 //        System.out.println(wordsEntityHashMap);
 //        if (wordsEntityHashMap != null) wordsEntityHashMap.forEach((k, v) -> System.out.println(v));
         amount = words.length;
-        combines = new int[amount];
-        for (int i = 0; i < amount; i++) combines[i] = i;
+        combine = new int[amount];
+        for (int i = 0; i < amount; i++) combine[i] = i;
     }
 
     String out(int[] a) {
@@ -39,11 +39,9 @@ public class Sentence {
                 .collect(joining(" "));
     }
 
-    public List<String> outWords(int v) {
-        if(combines.length>0)
-            return stream(combines).mapToObj(j -> words[j])
-                    .filter(p -> !p.isEmpty()).collect(Collectors.toList());
-        return new ArrayList<>();
+    public List<String> outWords() {
+        if (combine.length == 0) return new ArrayList<>();
+        return stream(combine).mapToObj(j -> words[j]).filter(p -> !p.isEmpty()).collect(toList());
     }
 
     String outStrip(int[] a) {
@@ -53,18 +51,19 @@ public class Sentence {
                 .replaceAll("[ёуеыаоэяию]", "-");
     }
 
-    public String[] getHash(int v) {
+    public String[] getHash() {
         if (words.length < 2) return new String[]{"", sentence};
-        return new String[]{outStrip(combines), out(combines)};
+        return new String[]{outStrip(combine), out(combine)};
     }
 
-    public String randomOut(int v) {
-        if (v > 0 && amount > 1) return out(combines); // (int) (amount * amount * random())
-        return out(combines);
+    public String random(boolean random) {
+        if (random) return out(new Combiner(amount).getRandom());
+        return out(combine);
     }
 
-    List<String> fullOut() {
-//        return stream(combines).map(a -> out(a)).collect(toList());
-        return Collections.singletonList(out(combines));
+    List<String> out(boolean full) {
+        if (full) return Collections.singletonList(out(combine));
+        return stream(new Combiner(amount).getCombines())
+                .limit(999).map(this::out).collect(toList());
     }
 }

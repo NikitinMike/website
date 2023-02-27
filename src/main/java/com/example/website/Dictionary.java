@@ -67,7 +67,7 @@ public class Dictionary {
 
             if (key != 0) if (glasCount(s) != key) continue;
 
-            String w = new Sentence(s).getHash(0)[1]
+            String w = new Sentence(s).getHash()[1]
                     .replaceFirst("`$", "")
                     .replaceAll("(.)'", "`$1");
 

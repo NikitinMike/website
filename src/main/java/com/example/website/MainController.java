@@ -120,10 +120,11 @@ public class MainController extends DataStreams {
         return new ModelAndView("redirect:/" + page.toLowerCase());
     }
 
-    @GetMapping("/random")
+    @GetMapping("/random/{i}")
     @ResponseBody
-    public ModelAndView randomPageGet(Model model) {
-        String s = hymn[(int) (hymn.length * Math.random())].replaceAll("[_,!.—]+", " ");
+    public ModelAndView randomPageGet(Model model,@PathVariable int i) {
+        String[] text = in[i % in.length];
+        String s = text[(int) (text.length * Math.random())].replaceAll("[_,!.—]+", " ");
 //        String s = vorona[(int) (vorona.length * Math.random())].replaceAll("_"," ");
 //        String s = sobaka[(int) (sobaka.length * Math.random())];
 //        String s = chuchelo[(int) (chuchelo.length * Math.random())];
@@ -133,7 +134,7 @@ public class MainController extends DataStreams {
         Sentence data = new Sentence(s);
 //    Sentence data = new Sentence("вихри враждебные веют над_нами");
         model.addAttribute("title", "COMBINER:" + data.words.length + "/" + factorial(data.amount));
-        model.addAttribute("messages", data.fullOut());
+        model.addAttribute("messages", data.out(false));
         return new ModelAndView("page");
     }
 
@@ -143,7 +144,7 @@ public class MainController extends DataStreams {
 //        Dictionary.addSet(file,extractWordSet(source + file));
 //        System.out.println("Dictionary size:" + Dictionary.wordTable.size());
         List<String[]> text = getTextStream(source + file)
-                .map(s -> new Sentence(s).getHash(0)).collect(toList());
+                .map(s -> new Sentence(s).getHash()).collect(toList());
         System.out.println(file + " #" + text.size());
         model.addAttribute("sentences", text);
 //        model.addAttribute("title", "START:" + text.size());
@@ -154,7 +155,7 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView page2(Model model, @PathVariable String file) throws IOException {
         List<String[]> text = getTextStream(source + file)
-                .map(s -> readWordBook(new Sentence(s).outWords(0)))
+                .map(s -> readWordBook(new Sentence(s).outWords()))
                 .map(Utils::wordsExpander).collect(toList());
         System.out.println(file + " #" + text.size());
         model.addAttribute("sentences", text);
@@ -165,7 +166,7 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView startPageGet(Model model, @PathVariable int i) {
         List<String> list = Arrays.stream(in[i % in.length])
-                .map(s -> new Sentence(s).randomOut(1)).collect(toList());
+                .map(s -> new Sentence(s).random(true)).collect(toList());
         model.addAttribute("messages", list);
         model.addAttribute("title", "START:" + list.size());
         return new ModelAndView("page");
