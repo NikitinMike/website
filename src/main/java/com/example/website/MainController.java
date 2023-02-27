@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import static com.example.website.Dictionary.getRhythm;
+import static com.example.website.Utils.factorial;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toList;
@@ -131,7 +132,7 @@ public class MainController extends DataStreams {
         System.out.println("---------------------------------------------");
         Sentence data = new Sentence(s);
 //    Sentence data = new Sentence("вихри враждебные веют над_нами");
-        model.addAttribute("title", "COMBINER:" + data.words.length + "/" + data.amount);
+        model.addAttribute("title", "COMBINER:" + data.words.length + "/" + factorial(data.amount));
         model.addAttribute("messages", data.fullOut());
         return new ModelAndView("page");
     }
