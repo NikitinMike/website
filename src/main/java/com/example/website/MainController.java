@@ -42,11 +42,11 @@ public class MainController extends DataStreams {
         model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщьъыэюя".split(""));
         Map<String, Set<String>> rhythm = getRhythm(0, ".*" + chr);
 //        rhythm.entrySet().removeIf(r -> r.getValue().size() > 10);
-        String style = "#tab-btn-0:checked~#content-0";
+        StringBuilder style = new StringBuilder("#tab-btn-0:checked~#content-0");
         for (int i = 1; i <= rhythm.entrySet().size(); i++)
-            style += String.format(",%n#tab-btn-%d:checked~#content-%d", i, i);
-        style += "{display: block;}";
-        model.addAttribute("style", style);
+            style.append(String.format(",%n#tab-btn-%d:checked~#content-%d", i, i));
+        style.append("{display: block;}");
+        model.addAttribute("style", style.toString());
         model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm2");
     }
