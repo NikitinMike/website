@@ -1,23 +1,22 @@
 package com.example.website;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.website.Dictionary.getWord;
 import static com.example.website.Utils.*;
-import static java.lang.Math.random;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 
 //@Data
 public class Sentence {
     String sentence;
     int amount;
-    int[][] combines;
+    int[] combines;
     String[] words; // слова
-    int[] parts; // какой части речи принадлежит
+//    int[] parts; // какой части речи принадлежит
 //    Hashtable<String, List<WordBookEntity>> wordsEntityHashMap;
 
     public Sentence(String source) {
@@ -29,8 +28,8 @@ public class Sentence {
 //        System.out.println(wordsEntityHashMap);
 //        if (wordsEntityHashMap != null) wordsEntityHashMap.forEach((k, v) -> System.out.println(v));
         amount = words.length;
-        combines = new int[amount][amount];
-        for (int i = 0; i < amount; i++) combines[0][i] = i;
+        combines = new int[amount];
+        for (int i = 0; i < amount; i++) combines[i] = i;
     }
 
     String out(int[] a) {
@@ -42,7 +41,7 @@ public class Sentence {
 
     public List<String> outWords(int v) {
         if(combines.length>0)
-            return stream(combines[v]).mapToObj(j -> words[j])
+            return stream(combines).mapToObj(j -> words[j])
                     .filter(p -> !p.isEmpty()).collect(Collectors.toList());
         return new ArrayList<>();
     }
@@ -55,16 +54,17 @@ public class Sentence {
     }
 
     public String[] getHash(int v) {
-        if (words.length == 0) return new String[]{"", sentence};
-        return new String[]{outStrip(combines[v]), out(combines[v])};
+        if (words.length < 2) return new String[]{"", sentence};
+        return new String[]{outStrip(combines), out(combines)};
     }
 
     public String randomOut(int v) {
-        if (v > 0 && amount > 1) return out(combines[(int) (random() * amount)]);
-        return out(combines[0]);
+        if (v > 0 && amount > 1) return out(combines); // (int) (amount * amount * random())
+        return out(combines);
     }
 
     List<String> fullOut() {
-        return stream(combines).map(this::out).collect(toList());
+//        return stream(combines).map(a -> out(a)).collect(toList());
+        return Collections.singletonList(out(combines));
     }
 }
