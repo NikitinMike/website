@@ -18,7 +18,9 @@
     <hr/>
     <div class="row">
         <table>
-            <tr th:each="file : ${files}">
+            <tr th:each="file,status : ${files}">
+                <td align="right"> [[${status.count}]] </td>
+                <td>|</td>
                 <td align="right">[[${file.length()}]]</td>
                 <td>|</td>
                 <td>

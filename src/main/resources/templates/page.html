@@ -14,7 +14,9 @@
     <a href="/page"> PAGE </a>
     <div class="row">
         <table>
-            <tr th:each="message : ${messages}">
+            <tr th:each="message,status : ${messages}">
+                <td align="right"> [[${status.count}]] </td>
+                <td>|</td>
                 <td> [(${message})] </td>
             </tr>
         </table>
