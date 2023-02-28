@@ -163,9 +163,10 @@ public class MainController extends DataStreams {
         return new ModelAndView("text2");
     }
 
-    @GetMapping("/page/{i}")
+    @GetMapping({"/page/{i}","/page"})
     @ResponseBody
-    public ModelAndView startPageGet(Model model, @PathVariable int i) {
+    public ModelAndView startPageGet(Model model, @Nullable @PathVariable Integer i) {
+        if (i == null) i = (int) (in.length * Math.random());
         List<String> list = Arrays.stream(in[i % in.length])
                 .map(s -> new Sentence(s).random(true)).collect(toList());
         model.addAttribute("messages", list);
