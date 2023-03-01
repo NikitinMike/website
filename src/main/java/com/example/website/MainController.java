@@ -120,25 +120,6 @@ public class MainController extends DataStreams {
         return new ModelAndView("redirect:/" + page.toLowerCase());
     }
 
-    @GetMapping({"/random/{i}", "/random"})
-    @ResponseBody
-    public ModelAndView randomPageGet(Model model, @PathVariable @Nullable Integer i) {
-        if (i == null) i = (int) (in.length * Math.random());
-        String[] text = in[i % in.length];
-        String s = text[(int) (text.length * Math.random())].replaceAll("[_,!.—]+", " ");
-//        String s = vorona[(int) (vorona.length * Math.random())].replaceAll("_"," ");
-//        String s = sobaka[(int) (sobaka.length * Math.random())];
-//        String s = chuchelo[(int) (chuchelo.length * Math.random())];
-        System.out.println();
-        System.out.println(s);
-        System.out.println("---------------------------------------------");
-        Sentence data = new Sentence(s);
-//    Sentence data = new Sentence("вихри враждебные веют над_нами");
-        model.addAttribute("title", "COMBINER:" + data.words.length + "/" + factorial(data.amount));
-        model.addAttribute("messages", data.out(false));
-        return new ModelAndView("page");
-    }
-
     @GetMapping("/file/{file}")
     @ResponseBody
     public ModelAndView page1(Model model, @PathVariable String file) throws IOException {
@@ -163,7 +144,7 @@ public class MainController extends DataStreams {
         return new ModelAndView("text2");
     }
 
-    @GetMapping({"/page/{i}","/page"})
+    @GetMapping({"/random/{i}", "/random"})
     @ResponseBody
     public ModelAndView startPageGet(Model model, @Nullable @PathVariable Integer i) {
         if (i == null) i = (int) (in.length * Math.random());
@@ -171,6 +152,25 @@ public class MainController extends DataStreams {
                 .map(s -> new Sentence(s).random(true)).collect(toList());
         model.addAttribute("messages", list);
         model.addAttribute("title", "START:" + list.size());
+        return new ModelAndView("page");
+    }
+
+    @GetMapping({"/page/{i}","/page"})
+    @ResponseBody
+    public ModelAndView randomPageGet(Model model, @PathVariable @Nullable Integer i) {
+        if (i == null) i = (int) (in.length * Math.random());
+        String[] text = in[i % in.length];
+        String s = text[(int) (text.length * Math.random())].replaceAll("[_,!.—]+", " ");
+//        String s = vorona[(int) (vorona.length * Math.random())].replaceAll("_"," ");
+//        String s = sobaka[(int) (sobaka.length * Math.random())];
+//        String s = chuchelo[(int) (chuchelo.length * Math.random())];
+        System.out.println();
+        System.out.println(s);
+        System.out.println("---------------------------------------------");
+        Sentence data = new Sentence(s);
+//    Sentence data = new Sentence("вихри враждебные веют над_нами");
+        model.addAttribute("title", "COMBINER:" + data.words.length + "/" + factorial(data.amount));
+        model.addAttribute("messages", data.out(false));
         return new ModelAndView("page");
     }
 }
