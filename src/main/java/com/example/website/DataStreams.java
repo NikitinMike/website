@@ -24,7 +24,7 @@ import static java.util.Arrays.stream;
 public class DataStreams extends DataStrings {
     @Autowired
     WordsBookRepository wordsBookRepository;
-    String[][] in = {hymn, sobaka, vorona, chuchelo, rossia, pushkin, tutchev};
+    String[][] in = {hymn, sobaka, vorona, porosenok, chuchelo, rossia, pushkin, tutchev};
 
     static Set<String> readDictionary(String file) {
         Set<String> wordSet = new HashSet<>();

@@ -1,7 +1,7 @@
 package com.example.website;
 
 public class DataStrings {
-// 	<div class="entry-content poem-text" itemscope itemtype="http://schema.org/CreativeWork">
+    // 	<div class="entry-content poem-text" itemscope itemtype="http://schema.org/CreativeWork">
     String[] tutchev = {
             "Нам не дано предугада'ть,",
             "Как слово наше отзовётся,-",
@@ -70,6 +70,11 @@ public class DataStrings {
             "Положил ее на_мост",
             "Пусть ворона сохнет"
     };
+    String[] porosenok = {
+            "Купи поросёнка за грош, ",
+            "пусти его в рожь, ",
+            "будет он хорош"
+    };
     String[] chuchelo = {
             "Чучело-мя`учело на_трубе сид`ело",
             "Чучело-мя`учело песенку зап`ело",
@@ -88,11 +93,11 @@ public class DataStrings {
             "Предикатив", // (слова категории состояния)"
             "Причастие",
             "Деепричастие",
-    //        "Служебные части речи"
+            //        "Служебные части речи"
             "Предлог",
             "Союз",
             "Частица",
-    //        "модальные слова"
+            //        "модальные слова"
             "междометия" // (и звукоподражательные слова)
     };
 
@@ -106,14 +111,14 @@ public class DataStrings {
             "Predicative", // (words of the state category)"
             "Participle,",
             "Adverbial participle",
-    // Service parts of speech
+            // Service parts of speech
             "Preposition",
             "Soyuz",
             "Particle"
     };
 
     String[] colors = { // https://colorscheme.ru/html-colors.html
-    // "Основные цвета:"
+            // "Основные цвета:"
             "Black #000000 0,0,0 ",
             "Gray #808080 128,128,128 ",
             "Silver #C0C0C0 192,192,192 ",
@@ -130,7 +135,7 @@ public class DataStrings {
             "Teal #008080 0,128,128 ",
             "Blue #0000FF 0,0,255 ",
             "Navy #000080 0,0,128",
-    //"Красные тона:" ,
+            //"Красные тона:" ,
             "IndianRed #CD5C5C 205,92,92",
             "LightCoral #F08080 240,128,128",
             "Salmon #FA8072 250,128,114",
@@ -140,21 +145,21 @@ public class DataStrings {
             "Red #FF0000 255,0,0",
             "FireBrick #B22222 178,34,34",
             "DarkRed #8B0000 139,0,0",
-    // "Розовые тона:" ,
+            // "Розовые тона:" ,
             "Pink #FFC0CB 255,192,203",
             "LightPink #FFB6C1 255,182,193",
             "HotPink #FF69B4 255,105,180",
             "DeepPink #FF1493 255,20,147",
             "MediumVioletRed #C71585 199,21,133",
             "PaleVioletRed #DB7093 219,112,147",
-    // "Оранжевые тона:" ,
+            // "Оранжевые тона:" ,
             "LightSalmon #FFA07A 255,160,122",
             "Coral #FF7F50 255,127,80",
             "Tomato #FF6347 255,99,71",
             "OrangeRed #FF4500 255,69,0",
             "DarkOrange #FF8C00 255,140,0",
             "Orange #FFA500 255,165,0",
-    // "Жёлтые тона:" ,
+            // "Жёлтые тона:" ,
             "Gold #FFD700 255,215,0",
             "Yellow #FFFF00 255,255,0",
             "LightYellow #FFFFE0 255,255,224",
@@ -166,7 +171,7 @@ public class DataStrings {
             "PaleGoldenrod #EEE8AA 238,232,170",
             "Khaki #F0E68C 240,230,140",
             "DarkKhaki #BDB76B 189,183,107",
-    // "Фиолетовые тона:" ,
+            // "Фиолетовые тона:" ,
             "Lavender #E6E6FA 230,230,250",
             "Thistle #D8BFD8 216,191,216",
             "Plum #DDA0DD 221,160,221",
@@ -184,7 +189,7 @@ public class DataStrings {
             "Indigo #4B0082 75,0,130",
             "SlateBlue #6A5ACD 106,90,205",
             "DarkSlateBlue #483D8B 72,61,139",
-    // "Коричневые тона:" ,
+            // "Коричневые тона:" ,
             "Cornsilk #FFF8DC 255,248,220",
             "BlanchedAlmond #FFEBCD 255,235,205",
             "Bisque #FFE4C4 255,228,196",
@@ -202,7 +207,7 @@ public class DataStrings {
             "Sienna #A0522D 160,82,45",
             "Brown #A52A2A 165,42,42",
             "Maroon #800000 128,0,0",
-    // "Зелёные тона:\n" ,
+            // "Зелёные тона:\n" ,
             "GreenYellow #ADFF2F 173,255,47",
             "Chartreuse #7FFF00 127,255,0",
             "LawnGreen #7CFC00 124,252,0",
@@ -226,7 +231,7 @@ public class DataStrings {
             "LightSeaGreen #20B2AA 32,178,170",
             "DarkCyan #008B8B 0,139,139",
             "Teal #008080 0,128,128",
-    // "Синие тона:" ,
+            // "Синие тона:" ,
             "Aqua #00FFFF 0,255,255",
             "Cyan #00FFFF 0,255,255",
             "LightCyan #E0FFFF 224,255,255",
@@ -252,7 +257,7 @@ public class DataStrings {
             "DarkBlue #00008B 0,0,139",
             "Navy #000080 0,0,128",
             "MidnightBlue #191970 25,25,112",
-    // "Белые тона:" ,
+            // "Белые тона:" ,
             "White #FFFFFF 255,255,255",
             "Snow #FFFAFA 255,250,250",
             "Honeydew #F0FFF0 240,255,240",
@@ -270,7 +275,7 @@ public class DataStrings {
             "Linen #FAF0E6 250,240,230",
             "LavenderBlush #FFF0F5 255,240,245",
             "MistyRose #FFE4E1 255,228,225",
-    // "Серые тона:" ,
+            // "Серые тона:" ,
             "Gainsboro #DCDCDC 220,220,220",
             "LightGrey #D3D3D3 211,211,211",
             "LightGray #D3D3D3 211,211,211",
