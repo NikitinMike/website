@@ -14,8 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.example.website.Utils.glasCount;
-import static com.example.website.Utils.reverse;
+import static com.example.website.Lopatin.wordExtend;
 import static java.nio.charset.Charset.forName;
 import static java.nio.file.Files.newBufferedReader;
 import static java.util.Arrays.stream;
@@ -79,14 +78,11 @@ public class DataStreams extends DataStrings {
 //                    if (record[2].contains(record[1]+"...")) continue;
                     lopatin.addAll(List.of(record[1].split("[-\\s]"))); // split??? and add main words
                     String line = record[2]
-                            .replaceAll("\\[.+\\]", " ")
-                            .replaceAll("\\(.+\\)?", " ")
+                            .replaceAll("\\[.+\\]|\\(.+\\)?", " ")
 //                            .replaceAll(".+#", "") // .replaceAll(".+%","")
                             .replaceAll(" [ивск] ", " ")
-                            .replaceAll("союз|частица", "")
-                            .replaceAll("[а-я]+\\.", "")
-                            .replace(" тв ", " ")
-                            .replace(" мн ", " ")
+                            .replaceAll("союз|частица|[а-я]+\\.", "")
+                            .replaceAll("\\s(тв|мн)\\s", " ")
                             .replaceAll(":.+", "")
 //                        .replaceAll(";.+", " ")
                             .replaceAll("[^а-яё`'-]+", " ");
@@ -96,61 +92,6 @@ public class DataStreams extends DataStrings {
                 throw new RuntimeException(e);
             }
         return lopatin;
-    }
-
-    private static Set<String> wordExtend(String[] words) {
-        Set<String> wordSet = new HashSet<>();
-        if (words == null || words.length == 0) return wordSet;
-        String baseWord = null;
-        for (String word : words)
-            if (word.matches(".")) ;
-            else if (word.matches("-.+")) {
-                String o = word.substring(1); // окончание
-                if (baseWord != null)
-                    if (o.matches("[`ёуеыаоэяию].*")) {
-                        String w = join(baseWord, o);
-                        if (w.contains("+")) System.out.println(baseWord + " [" + o + "] " + w);
-                        else wordSet.add(w);
-                    } else wordSet.add(joinOk(baseWord, o));
-            } else if (word.matches(".*-")) System.out.print(word + ","); // check pipe
-            else if (word.contains("`") || word.contains("ё") || glasCount(word) == 1) {
-                wordSet.add(word);
-                baseWord = word;
-            } else wordSet.add(word.replaceFirst("([ёуеыаоэяию])", "`$1"));
-        return wordSet;
-    }
-
-    private static String joinOk(String word, String o) {
-        int l = word.lastIndexOf(o.charAt(0));
-        if (l < 0) return word;
-        String subword = word.substring(l);
-        if (subword.contains("`")) o = o.replaceFirst("([ёуеыаоэяию])", "`$1");
-        String w = word.replaceFirst(subword, o).replaceFirst("``", "`");
-        if (!w.contains("`") && !w.contains("ё")) System.out.printf(" %s [%s] %s, ", word, o, w);
-        return w;
-    }
-
-    private static String join(String word, String o) {
-        if (o.matches("`.+")) {
-            if (o.matches("`[ёуеыаоэяию]"))
-                if (word.matches(".*[ьёуеыаоэяию]$"))
-                    return reverse(reverse(word).replaceFirst("[ьёуеыаоэяию]", o));
-                else if (word.matches(".+[^ёуеыаоэяию]$")) return word + o;
-            return word.replaceFirst("(.+)`.*", "$1") + o + ", ";
-        } else if (word.matches(".+[ёуеыаоэяию]$"))
-            return word.replaceFirst("(.+)[ёуеыаоэяию]$", "$1") + o;
-        else if (word.matches(".+ь$"))
-            return word.replaceFirst("(.+)ь$", "$1") + o;
-        else if (word.matches(".+й$"))
-            if (o.contains("я")) return word + o;
-            else if (word.contains("ный")) return word.replaceFirst("..ный", o);
-            else if (word.contains("ий")) return word.replaceFirst("ий", o);
-            else if (word.contains("ый")) return word.replaceFirst("ый", o);
-            else if (word.contains("ей") && o.matches("и|а|ю|е.")) return word.replaceFirst("ей", o);
-            else if (word.contains("ой") && o.matches("а|ю|ы|е.|ёв")) return word.replaceFirst("ой", o);
-            else if (word.contains("ай") && o.matches("ю")) return word.replaceFirst("ай", o);
-            else return word + " +" + o;
-        return word + o;
     }
 
     static Set<String> readThesaurus(String file) {
