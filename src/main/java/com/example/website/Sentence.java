@@ -1,8 +1,7 @@
 package com.example.website;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.example.website.Dictionary.getWord;
 import static com.example.website.Utils.*;
@@ -39,9 +38,9 @@ public class Sentence {
                 .collect(joining(" "));
     }
 
-    public List<String> outWords() {
-        if (combine.length == 0) return new ArrayList<>();
-        return stream(combine).mapToObj(j -> words[j]).filter(p -> !p.isEmpty()).collect(toList());
+    public Set<String> outWords() {
+        if (combine.length == 0) return new TreeSet<>();
+        return stream(combine).mapToObj(j -> words[j]).filter(p -> !p.isEmpty()).collect(Collectors.toSet());
     }
 
     String outStrip(int[] a) {
