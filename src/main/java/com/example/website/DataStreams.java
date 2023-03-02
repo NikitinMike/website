@@ -113,7 +113,7 @@ public class DataStreams extends DataStrings {
     }
 
     @Transactional
-    List<WordBookEntity> readWordBook(List<String> words) {
+    List<WordBookEntity> readWordBook(Set<String> words,boolean all) {
 //        Hashtable<String, WordBookEntity> wordBookEntities = new Hashtable<>();
         List<WordBookEntity> wordBookEntities = new ArrayList<>();
         for (String word : words) {
@@ -121,7 +121,8 @@ public class DataStreams extends DataStrings {
 //            if(subWords.length>1) wordsEntity.addAll(readWordsBook(subWords));
 //            else wordsEntity.addAll(repository.findAllByWord(word));
             word = word.replaceAll("[^а-яА-ЯёЁ]", "");
-            List<WordBookEntity> entities = wordsBookRepository.findFirstByWord(word);
+            List<WordBookEntity> entities = all ? wordsBookRepository.findAllByWord(word)
+                    :wordsBookRepository.findFirstByWord(word);
 //            if (entities != null && !entities.isEmpty())
 //                System.out.print(entities.get(0).getWord()+",");
             if (entities == null || entities.isEmpty())
