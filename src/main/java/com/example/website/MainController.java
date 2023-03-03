@@ -78,22 +78,19 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView dictionary(Model model, @PathVariable @Nullable String from) {
         if (from == null || from.isEmpty()) from = "ё";
-        String to = Character.toString((char) (from.charAt(0) + 1));
         model.addAttribute("title", from.toUpperCase());
         model.addAttribute("files", singleton(""));
         model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщыэюя".split(""));
-        SortedSet<String> words = new TreeSet<>(Dictionary.wordTable.values()).subSet(from, to);
-
+//        Set<String> words = new TreeSet<>(Dictionary.wordTable.values()).subSet(from, Character.toString((char) (from.charAt(0) + 1)));
 //                .map(s -> new Sentence(s).getHash(0)[1])// .randomOut(0)
 //                .map(s -> s.replaceAll("(.)'", "`$1"))
 //                .sorted(Comparator.comparing(Utils::reverse)) // .reversed()
 //                .collect(toSet());
 //                .collect(Collectors.joining(", "));
-
-        List<WordBookEntity> wbWords = readWordBook(words,false);
-        if (from.equals(order)) wbWords.sort(Comparator.comparing(WordBookEntity::getType).reversed());
+        List<WordBookEntity> words = readWordBook(Dictionary.getValues(from), false);
+        if (from.equals(order)) words.sort(Comparator.comparing(WordBookEntity::getType).reversed());
         order = from;
-        model.addAttribute("words", wbWords);
+        model.addAttribute("words", words);
 //        model.addAttribute("words", words);
 //        model.addAttribute("words", Collections.singleton(words));
         return new ModelAndView("dictionary");
@@ -138,7 +135,7 @@ public class MainController extends DataStreams {
     @ResponseBody
     public ModelAndView page2(Model model, @PathVariable String file) throws IOException {
         List<String[]> text = getTextStream(source + file)
-                .map(s -> readWordBook(new Sentence(s).outWords(),false))
+                .map(s -> readWordBook(new Sentence(s).outWords(), false))
                 .map(Utils::wordsExpander).collect(toList());
         System.out.println(file + " #" + text.size());
         model.addAttribute("sentences", text);
@@ -156,7 +153,7 @@ public class MainController extends DataStreams {
         return new ModelAndView("page");
     }
 
-    @GetMapping({"/page/{i}","/page"})
+    @GetMapping({"/page/{i}", "/page"})
     @ResponseBody
     public ModelAndView randomPageGet(Model model, @PathVariable @Nullable Integer i) {
         if (i == null) i = (int) (in.length * Math.random());
