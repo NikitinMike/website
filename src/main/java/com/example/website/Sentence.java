@@ -1,7 +1,6 @@
 package com.example.website;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.example.website.Dictionary.getWord;
@@ -56,14 +55,14 @@ public class Sentence {
         return new String[]{outStrip(combine), out(combine)};
     }
 
-    public String random(boolean random) {
-        if (random) return out(new Combiner(amount).getRandom());
-        return out(combine);
-    }
+//    List<String> out() {return Collections.singletonList(out(combine));}
+//    public String out() {return out(combine);}
+    public String randomOut() {return out(new Combiner(amount).getRandom());}
 
-    List<String> out(boolean full) {
-        if (full) return Collections.singletonList(out(combine));
+    List<String> fullOut() {
         return stream(new Combiner(amount).getCombines())
                 .limit(999).map(this::out).collect(toList());
     }
+
+    public String getInfo() {return words.length + "/" + factorial(amount);}
 }

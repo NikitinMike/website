@@ -16,7 +16,6 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import static com.example.website.Dictionary.getRhythm;
-import static com.example.website.Utils.factorial;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toList;
@@ -147,7 +146,10 @@ public class MainController extends DataStreams {
     public ModelAndView startPageGet(Model model, @Nullable @PathVariable Integer i) {
         if (i == null) i = (int) (in.length * Math.random());
         List<String> list = Arrays.stream(in[i % in.length])
-                .map(s -> new Sentence(s).random(true)).collect(toList());
+                .map(s -> new Sentence(s).randomOut()) // .collect(toList());
+//                .map(s -> readWordBook(new Sentence(s).outWords(), false))
+//                .map(Utils::wordsExpander)
+                .collect(toList());
         model.addAttribute("messages", list);
         model.addAttribute("title", "START:" + list.size());
         return new ModelAndView("page");
@@ -159,16 +161,11 @@ public class MainController extends DataStreams {
         if (i == null) i = (int) (in.length * Math.random());
         String[] text = in[i % in.length];
         String s = text[(int) (text.length * Math.random())].replaceAll("[_,!.—]+", " ");
-//        String s = vorona[(int) (vorona.length * Math.random())].replaceAll("_"," ");
-//        String s = sobaka[(int) (sobaka.length * Math.random())];
-//        String s = chuchelo[(int) (chuchelo.length * Math.random())];
-        System.out.println();
         System.out.println(s);
-        System.out.println("---------------------------------------------");
         Sentence data = new Sentence(s);
 //    Sentence data = new Sentence("вихри враждебные веют над_нами");
-        model.addAttribute("title", "COMBINER:" + data.words.length + "/" + factorial(data.amount));
-        model.addAttribute("messages", data.out(false));
+        model.addAttribute("title", "COMBINER:" + data.getInfo());
+        model.addAttribute("messages", data.fullOut());
         return new ModelAndView("page");
     }
 }
