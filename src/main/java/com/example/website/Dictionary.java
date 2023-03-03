@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import static com.example.website.DataStreams.*;
 import static com.example.website.Utils.glasCount;
+import static com.example.website.Utils.wordAnalyse;
 import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toSet;
 
@@ -78,9 +79,9 @@ public class Dictionary {
 
             if (key != 0) if (glasCount(s) != key) continue;
 
-            String w = new Sentence(s).getHash()[1]
+            String w = wordAnalyse(new Sentence(s).getHash()[1]
                     .replaceFirst("`$", "")
-                    .replaceAll("(.)'", "`$1");
+                    .replaceAll("(.)'", "`$1"));
 
             if (w.contains(" ")) continue;
 
@@ -106,8 +107,7 @@ public class Dictionary {
 //            if(ok.matches("`.")) ok = ok.replaceAll("`", "");
 
             Set<String> set = rhythm.get(ok);
-            if (set == null) rhythm.put(ok, new TreeSet<>(singleton(w)));
-            else set.add(w);
+            if (set == null) rhythm.put(ok, new TreeSet<>(singleton(w)));else set.add(w);
         }
         return rhythm;
     }
