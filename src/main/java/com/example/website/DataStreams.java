@@ -113,7 +113,7 @@ public class DataStreams extends DataStrings {
     }
 
     @Transactional
-    List<WordBookEntity> readWordBook(Set<String> words,boolean all) {
+    List<WordBookEntity> readWordBook(List<String> words,boolean all) {
 //        Hashtable<String, WordBookEntity> wordBookEntities = new Hashtable<>();
         List<WordBookEntity> wordBookEntities = new ArrayList<>();
         for (String word : words) {
