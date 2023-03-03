@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.example.website.DataStreams.*;
 import static com.example.website.Utils.glasCount;
@@ -19,7 +20,7 @@ public class Dictionary {
     @Value("${dictionary.source}")
     String dir = "\\DBWords\\";
     @Value("${dictionary.level}")
-    int level = 2;
+    int level = 3;
 
     public Dictionary() {
         if (wordTable.isEmpty())
@@ -41,6 +42,15 @@ public class Dictionary {
         showThesaurus = true;
     }
 
+    static public Set<String> getValues() {
+//        return (Set<String>) wordTable.values();
+        return wordTable.values().stream().filter(Objects::nonNull).collect(toSet());
+    }
+
+    static public List<String> getValues(String v) {
+        return wordTable.values().stream().filter(w -> w.startsWith(v)).sorted().collect(Collectors.toList());
+    }
+
     static void putWord(String word) {
         if (word.matches("[^ёуеыаоэяию]*")) return; //  System.out.printf(" [%s] ",word);
         word = word.trim().replaceAll("`(.)", "$1'");
@@ -57,13 +67,14 @@ public class Dictionary {
         if (what != null) System.out.println(what + " + " + words.size() + "\t" + wordTable.size());
     }
 
-    static String reverseOk(String str){
-        return Utils.reverse(str.replace("`",""));
+    static String reverseOk(String str) {
+        return Utils.reverse(str.replace("`", ""));
     }
 
-    public static Map<String, Set<String>> getRhythm(int key,String chr) {
+    public static Map<String, Set<String>> getRhythm(int key, String chr) {
         Map<String, Set<String>> rhythm = new TreeMap<>(Comparator.comparing(Dictionary::reverseOk));
-        for (String s : wordTable.values().stream().filter(Objects::nonNull).collect(toSet())) {
+//        for (String s : wordTable.values().stream().filter(Objects::nonNull).collect(toSet())) {
+        for (String s : Dictionary.getValues()) {
 
             if (key != 0) if (glasCount(s) != key) continue;
 
@@ -76,9 +87,9 @@ public class Dictionary {
             String ok = (w.contains("-")) ? w.replaceFirst(".*-", "")
                     : w.replaceFirst(".*`", "`");
 
-            if(!ok.matches(chr+"$")) continue;
+            if (!ok.matches(chr + "$")) continue;
 
-            if(ok.matches("[^ёуеыаоэяию][ёуеыаоэяию][^ёуеыаоэяию]"))
+            if (ok.matches("[^ёуеыаоэяию][ёуеыаоэяию][^ёуеыаоэяию]"))
                 ok = ok.replaceFirst("[^ёуеыаоэяию]", "");
 
             if (ok.length() > 3)
@@ -87,8 +98,8 @@ public class Dictionary {
             if (ok.length() > 3)
                 ok = ok.replaceFirst("[^ёуеыаоэяию](.+)", "$1");
 
-            if(!ok.contains("`")) ok = ok.replace("ю","у")
-                    .replace("ё","о")
+            if (!ok.contains("`")) ok = ok.replace("ю", "у")
+                    .replace("ё", "о")
 //                    .replace("я","а")
                     ;
 
