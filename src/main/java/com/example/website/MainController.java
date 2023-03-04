@@ -34,6 +34,16 @@ public class MainController extends DataStreams {
         return new ModelAndView("listfiles");
     }
 
+    @GetMapping({"/tab/{chr}", "/tab", "/tabs"})
+    public String tabs(Model model, @PathVariable @Nullable String chr) {
+        Cardrequest cardrequest = new Cardrequest();
+        cardrequest.setAgreeWithPersonalInformation(false);
+        cardrequest.setLocationProvince("Республика Марий Эл");
+        cardrequest.setPostalAddress(true);
+        model.addAttribute("cardrequest", cardrequest);
+        return "cards/cardrequest";
+    }
+
     @GetMapping({"/rhythm2/{chr}", "/rhythm2"})
     @ResponseBody
     public ModelAndView rhythm2(Model model, @PathVariable @Nullable String chr) {
@@ -49,16 +59,6 @@ public class MainController extends DataStreams {
         model.addAttribute("style", style.toString());
         model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm2");
-    }
-
-    @GetMapping({"/tab/{chr}", "/tab", "/tabs"})
-    public String tabs(Model model, @PathVariable @Nullable String chr) {
-        Cardrequest cardrequest = new Cardrequest();
-        cardrequest.setAgreeWithPersonalInformation(false);
-        cardrequest.setLocationProvince("Республика Марий Эл");
-        cardrequest.setPostalAddress(true);
-        model.addAttribute("cardrequest", cardrequest);
-        return "cards/cardrequest";
     }
 
     @GetMapping({"/rhythm/{key}", "/rhythm"})

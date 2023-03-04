@@ -101,6 +101,7 @@ body{
 
 .odd{
 	font-weight: bold;
+	color:magenta;
 	background-color: lightgray;
 }
 

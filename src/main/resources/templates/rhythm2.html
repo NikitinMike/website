@@ -14,7 +14,10 @@
     <hr/>
         <span class="tabs" th:each="entry,status : ${set}">
                 <input type="radio" name="tab-btn" th:id="${'tab-btn-'+status.count}" value="">
-                <label th:for="${'tab-btn-'+status.count}">[[${entry.getKey()}]]</label>
+                <label th:for="${'tab-btn-'+status.count}"
+                       th:class="${entry.getKey().length()==1}? 'odd'">
+                    [[${entry.getKey()}]]
+                </label>
                 <div th:id="${'content-'+status.count}"> [[${entry.getValue()}]] </div>
         </span>
     <hr/>

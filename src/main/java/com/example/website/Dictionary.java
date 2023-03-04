@@ -77,9 +77,9 @@ public class Dictionary {
 //        for (String s : wordTable.values().stream().filter(Objects::nonNull).collect(toSet())) {
         for (String s : Dictionary.getValues()) {
 
-            if (key != 0) if (glasCount(s) != key) continue;
+            if (key != 0 && key != glasCount(s)) continue;
 
-            String w = wordAnalyse(new Sentence(s).getHash()[1]
+            String w = wordAnalyse(new Sentence(s).getHash()[1].strip()
                     .replaceFirst("`$", "")
                     .replaceAll("(.)'", "`$1"));
 
@@ -99,15 +99,18 @@ public class Dictionary {
             if (ok.length() > 3)
                 ok = ok.replaceFirst("[^ёуеыаоэяию](.+)", "$1");
 
-            if (!ok.contains("`")) ok = ok.replace("ю", "у")
-                    .replace("ё", "о")
+//            if (!ok.contains("`")) ok = ok.replace("ю", "у")
+//                    .replace("ё", "о")
 //                    .replace("я","а")
-                    ;
+//                    ;
 
 //            if(ok.matches("`.")) ok = ok.replaceAll("`", "");
 
+            ok = ok.replaceAll("(.)'", "`$1");
             Set<String> set = rhythm.get(ok);
-            if (set == null) rhythm.put(ok, new TreeSet<>(singleton(w)));else set.add(w);
+            w = w.replaceAll("(.)'", "`$1");
+            if (set != null) set.add(w);
+            else rhythm.put(ok, new TreeSet<>(singleton(w)));
         }
         return rhythm;
     }
