@@ -107,7 +107,7 @@ public class Utils {
     }
 
     static int glasCount(String word){
-        return word.replaceAll("([^ёуеыаоэяию])", "").length();
+        return word.replaceAll("[^ёуеыаоэяию]+", "").length();
 //        return getGlas(word.replaceAll("'`","")).length();
 //        int count=0;
 //        for (Byte b : word.getBytes()) if ("ёуеыаоэяию".contains(b.toString())) count++;
