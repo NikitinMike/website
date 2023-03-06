@@ -57,10 +57,11 @@ public class Dictionary {
         if (word.matches("[^ёуеыаоэяию]*")) return; //  System.out.printf(" [%s] ",word);
 //        if(word.matches("`[^ёуеыаоэяию]"))
 //        word = word.replaceAll("([ёуеыаоэяию])`([^ёуеыаоэяию])","$1'$2");
-        word = word.trim().replaceAll("`(.)", "$1'");
+        word = word.trim().replaceAll("`([ёуеыаоэяию])", "$1'");
 //        if (word.contains("ё")) putWord(word.replaceAll("ё", "е'")); // Ё -> `E
         if (glasCount(word) == 1) word = word.replaceAll("([ёуеыаоэяию])", "$1'");
-//        word = word.replaceAll("''", "'");
+        word = word.replaceAll("''", "'");
+//        word = word.replaceAll("--", "-");
         if (word.contains("'") || word.contains("ё"))
             wordTable.put(word.replace("'", ""), word);
         else if (showThesaurus) System.out.print(word + ",");
