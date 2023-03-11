@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static com.example.website.Dictionary.getRhythm;
+//import static com.example.website.Dictionary.getRhythm;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toList;
@@ -50,7 +50,7 @@ public class MainController extends DataStreams {
         if (chr == null) chr = "";
         model.addAttribute("title", chr + " RHYTHM ");
         model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщьъыэюя".split(""));
-        Map<String, Set<String>> rhythm = getRhythm(0, ".*" + chr);
+        Map<String, Set<String>> rhythm = Rhythm.getRhythm(0, ".*" + chr);
 //        rhythm.entrySet().removeIf(r -> r.getValue().size() > 10);
         StringBuilder style = new StringBuilder("#tab-btn-0:checked~#content-0");
         for (int i = 1; i <= rhythm.entrySet().size(); i++)
@@ -67,7 +67,7 @@ public class MainController extends DataStreams {
         if (key == null) key = 10;
         model.addAttribute("title", key + " RHYTHM ");
         model.addAttribute("number", "0123456789".split(""));
-        Map<String, Set<String>> rhythm = getRhythm(key, ".+");
+        Map<String, Set<String>> rhythm = Rhythm.getRhythm(key, ".+");
 //        rhythm.entrySet().removeIf(r -> r.getValue().size() > 3);
         model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm");

@@ -3,12 +3,14 @@ package com.example.website;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.example.website.DataStreams.*;
-import static com.example.website.Utils.*;
-import static java.util.Collections.singleton;
+import static com.example.website.Utils.glasCount;
 import static java.util.stream.Collectors.toSet;
 
 @Repository
@@ -20,7 +22,7 @@ public class Dictionary {
     @Value("${dictionary.source}")
     String dir = "\\DBWords\\";
     @Value("${dictionary.level}")
-    int level = 3;
+    int level = 0;
 
     public Dictionary() {
         if (wordTable.isEmpty())
@@ -70,59 +72,6 @@ public class Dictionary {
     public static void addSet(String what, Set<String> words) {
         words.forEach(Dictionary::putWord);
         if (what != null) System.out.println(what + " + " + words.size() + "\t" + wordTable.size());
-    }
-
-    static String reverseOk(String str) {
-        return Utils.reverse(str.replace("`", ""));
-    }
-
-    public static Map<String, Set<String>> getRhythm(int key, String chr) {
-        Map<String, Set<String>> rhythm = new TreeMap<>(Comparator.comparing(Dictionary::reverseOk));
-//        Set<String> rhythmSet = new TreeSet<>(Comparator.comparing(Utils::getGlas));
-//        for (String s : wordTable.values().stream().filter(Objects::nonNull).collect(toSet())) {
-        for (String s : Dictionary.getValues()) {
-
-            if (key != 0 && key != glasCount(s)) continue;
-
-            String w = wordAnalyse(s) // new Sentence(s).getHash()[1].strip()
-                    .replaceAll("(.)'", "`$1")
-                    .replaceFirst("`+$", "");
-//            if (!w.contains("-")) System.out.print(w + ",");
-//            if (w.contains(" ")) continue;
-
-            String ok = w.contains("-") ? w.replaceFirst(".*-", "")
-                    : w.replaceFirst(".*`", "`");
-//                    : w.replaceFirst(".+([ёуеыаоэяию].*)", "$1");
-
-//            if (!ok.matches(chr + "$")) continue;
-
-            if (ok.matches("[^ёуеыаоэяию][ёуеыаоэяию][^ёуеыаоэяию]"))
-                ok = ok.replaceFirst("[^ёуеыаоэяию]", "");
-
-            if (ok.length() > 3)
-                ok = ok.replaceFirst(".*`", "`");
-
-            if (ok.length() > 3)
-                ok = ok.replaceFirst("[^ёуеыаоэяию](.+)", "$1");
-
-//            if (!ok.contains("`")) ok = ok.replace("ю", "у")
-//                    .replace("ё", "о")
-//                    .replace("я","а")
-//                    ;
-
-//            if(ok.matches("`.")) ok = ok.replaceAll("`", "");
-
-//            ok = ok.replaceAll("(.)'", "`$1");
-            ok = ok.replaceAll("['`]", "");
-            Set<String> set = rhythm.get(ok);
-            w = w.replaceAll("(.)'", "`$1");
-            if (set != null) set.add(w);
-            else rhythm.put(ok, new TreeSet<>(singleton(w)));
-//            else set = rhythm.put(ok, new TreeSet<>(Comparator.comparing(
-//                    word -> Utils.getGlas(word).length())));
-//            if (set != null) set.add(w);
-        }
-        return rhythm;
     }
 
     public static String getWord(String word) {
