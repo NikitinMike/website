@@ -1,6 +1,7 @@
 package com.example.website;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.example.website.Dictionary.getWord;
@@ -22,6 +23,7 @@ public class Sentence {
 //        System.out.println(str); str.replaceAll("[^а-яА-ЯёЁ`']+", " ")
         sentence = source.replaceAll("[_,!.—?;:]+", " ");
         words = sentence.toLowerCase().replaceAll("[^а-яё`']+", " ").split("\\s+");
+        Arrays.setAll(words, i -> correct(words[i]));
 //        System.out.println(stream(words).sorted().collect(joining(",")));
 //        wordsEntityHashMap = readWordBook(words);
 //        System.out.println(wordsEntityHashMap);
@@ -29,6 +31,16 @@ public class Sentence {
         amount = words.length;
         combine = new int[amount];
         for (int i = 0; i < amount; i++) combine[i] = i;
+    }
+
+    String correct(String word) {
+        if (Dictionary.check(word) != null || !word.contains("е")) return word;
+        if (word.contains("ё") || word.contains("'") || word.contains("`")) return word;
+        if (word.equals("ее")) return "её";
+        if (word.equals("еще")) return "ещё";
+        String w = Dictionary.check(word.replaceFirst("е", "ё"));
+        if (w == null) w =  Dictionary.check(reverse(reverse(word).replaceFirst("е", "ё")));
+        return w == null ? word : w;
     }
 
     String out(int[] a) {
@@ -55,14 +67,18 @@ public class Sentence {
         return new String[]{outStrip(combine), out(combine)};
     }
 
-//    List<String> out() {return Collections.singletonList(out(combine));}
+    //    List<String> out() {return Collections.singletonList(out(combine));}
 //    public String out() {return out(combine);}
-    public String randomOut() {return out(new Combiner(amount).getRandom());}
+    public String randomOut() {
+        return out(new Combiner(amount).getRandom());
+    }
 
     List<String> fullOut() {
         return stream(new Combiner(amount).getCombines())
                 .limit(999).map(this::out).collect(toList());
     }
 
-    public String getInfo() {return words.length + "/" + factorial(amount);}
+    public String getInfo() {
+        return words.length + "/" + factorial(amount);
+    }
 }

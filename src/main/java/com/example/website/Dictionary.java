@@ -128,12 +128,16 @@ public class Dictionary {
     public static String getWord(String word) {
         word = word.replaceAll("`(.)", "$1'");
         if (wordTable.containsKey(word)) word = wordTable.get(word);
-        else putWord(word);
+//        else putWord(word);
         if (!word.contains("'"))
             if (word.length() - word.replaceAll("[ёуеыаоэяию]", "").length() == 1)
                 word = word.replaceFirst("([ёуеыаоэяию])", "$1'");
             else word = word.replaceFirst("(ё)", "$1'");
         // getWord(reverse(reverse(word).replaceFirst("е", "ё")));
         return word;
+    }
+
+    public static String check(String word) {
+        return wordTable.get(word);
     }
 }
