@@ -120,7 +120,7 @@ public class DataStreams extends DataStrings {
 //            String [] subWords = word.split("_");
 //            if(subWords.length>1) wordsEntity.addAll(readWordsBook(subWords));
 //            else wordsEntity.addAll(repository.findAllByWord(word));
-            word = word.replaceAll("[^а-яА-ЯёЁ]", "");
+            word = word.replaceAll("[^а-яА-ЯёЁ]", "").replace("ё","е");
             List<WordBookEntity> entities = all ? wordsBookRepository.findAllByWord(word)
                     :wordsBookRepository.findFirstByWord(word);
 //            if (entities != null && !entities.isEmpty())
