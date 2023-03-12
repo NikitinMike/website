@@ -34,12 +34,12 @@ public class Sentence {
     }
 
     String correct(String word) {
-        if (Dictionary.check(word) != null || !word.contains("е")) return word;
+        if (Dictionary.get(word) != null || !word.contains("е")) return word;
         if (word.contains("ё") || word.contains("'") || word.contains("`")) return word;
         if (word.equals("ее")) return "её";
         if (word.equals("еще")) return "ещё";
-        String w = Dictionary.check(word.replaceFirst("е", "ё"));
-        if (w == null) w =  Dictionary.check(reverse(reverse(word).replaceFirst("е", "ё")));
+        String w = Dictionary.get(word.replaceFirst("е", "ё"));
+        if (w == null) w =  Dictionary.get(reverse(reverse(word).replaceFirst("е", "ё")));
         return w == null ? word : w;
     }
 

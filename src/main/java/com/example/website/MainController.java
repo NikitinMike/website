@@ -50,7 +50,7 @@ public class MainController extends DataStreams {
         if (chr == null) chr = "";
         model.addAttribute("title", chr + " RHYTHM ");
         model.addAttribute("alphabet", "абвгдеёжзийклмнопрстуфхцчшщьъыэюя".split(""));
-        Map<String, Set<String>> rhythm = Rhythm.getRhythm(0, ".*" + chr);
+        Map<String, Set<String>> rhythm = Rhythm.get(0, ".*" + chr);
 //        rhythm.entrySet().removeIf(r -> r.getValue().size() > 10);
         StringBuilder style = new StringBuilder("#tab-btn-0:checked~#content-0");
         for (int i = 1; i <= rhythm.entrySet().size(); i++)
@@ -67,7 +67,7 @@ public class MainController extends DataStreams {
         if (key == null) key = 10;
         model.addAttribute("title", key + " RHYTHM ");
         model.addAttribute("number", "0123456789".split(""));
-        Map<String, Set<String>> rhythm = Rhythm.getRhythm(key, ".+");
+        Map<String, Set<String>> rhythm = Rhythm.get(key, ".+");
 //        rhythm.entrySet().removeIf(r -> r.getValue().size() > 3);
         model.addAttribute("set", rhythm);
         return new ModelAndView("rhythm");
@@ -86,7 +86,7 @@ public class MainController extends DataStreams {
 //                .sorted(Comparator.comparing(Utils::reverse)) // .reversed()
 //                .collect(toSet());
 //                .collect(Collectors.joining(", "));
-        List<WordBookEntity> words = readWordBook(Dictionary.getValues(from), false);
+        List<WordBookEntity> words = readWordBook(Dictionary.getValuesList(from), false);
         if (from.equals(order)) words.sort(Comparator.comparing(WordBookEntity::getType).reversed());
         order = from;
         model.addAttribute("words", words);

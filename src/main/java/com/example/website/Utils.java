@@ -130,6 +130,10 @@ public class Utils {
         return String.join("-", tag(word).split("=+"));
     }
 
+    static String reverseOk(String str) {
+        return Utils.reverse(str.replace("`", ""));
+    }
+
     public static String[] wordsExpander(List<WordBookEntity> words) {
         StringJoiner full = new StringJoiner(" ");
         StringJoiner strip = new StringJoiner("");

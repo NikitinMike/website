@@ -22,7 +22,7 @@ public class Dictionary {
     @Value("${dictionary.source}")
     String dir = "\\DBWords\\";
     @Value("${dictionary.level}")
-    int level = 0;
+    int level = 3;
 
     public Dictionary() {
         if (wordTable.isEmpty())
@@ -44,12 +44,12 @@ public class Dictionary {
         showThesaurus = true;
     }
 
-    static public Set<String> getValues() {
+    static public Set<String> getValuesSet() {
 //        return (Set<String>) wordTable.values();
         return wordTable.values().stream().filter(Objects::nonNull).collect(toSet());
     }
 
-    static public List<String> getValues(String v) {
+    static public List<String> getValuesList(String v) {
         return wordTable.values().stream().filter(w -> w.startsWith(v)).sorted().collect(Collectors.toList());
     }
 
@@ -76,8 +76,7 @@ public class Dictionary {
 
     public static String getWord(String word) {
         word = word.replaceAll("`(.)", "$1'");
-        if (wordTable.containsKey(word)) word = wordTable.get(word);
-//        else putWord(word);
+        if (wordTable.containsKey(word)) word = get(word); // else putWord(word);
         if (!word.contains("'"))
             if (word.length() - word.replaceAll("[ёуеыаоэяию]", "").length() == 1)
                 word = word.replaceFirst("([ёуеыаоэяию])", "$1'");
@@ -86,7 +85,7 @@ public class Dictionary {
         return word;
     }
 
-    public static String check(String word) {
+    public static String get(String word) {
         return wordTable.get(word);
     }
 }
